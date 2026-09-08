@@ -32,14 +32,14 @@
     "href": "organisation.html#rules-for-using-ai",
     "title": "Organisation",
     "section": "Rules for using AI",
-    "text": "Rules for using AI\n\nLabs 1–4: switch the AI assistance in Colab off (Settings → AI assistance). You write the code yourself, because the point of these labs is to understand what the algorithm does — including when the code is later written by an agent.\nLabs 5–12: a coding agent is part of the work. The faculty provides access, so no subscription of your own is needed; the setup is done in lab 5. Git is mandatory from lab 5 on.\nTests: no AI tools and no materials during the theoretical tests. The practical tests are about understanding and checking code, which is exactly what you have to do with an agent’s output anyway.\nProject: you may use any tool; the result is what is graded. Be able to explain every line you submit."
+    "text": "Rules for using AI\n\nLabs 1–4: switch the AI assistance in Colab off (Settings → AI assistance). You write the code yourself, because the point of these labs is to understand what the algorithm does — including when the code is later written by an agent.\nLabs 5–12: a coding agent is part of the work; the setup is done in lab 5. Git is mandatory from lab 5 on.\nTests: no AI tools and no materials during the theoretical tests. The practical tests are about understanding and checking code, which is exactly what you have to do with an agent’s output anyway.\nProject: you may use any tool; the result is what is graded. Be able to explain every line you submit."
   },
   {
     "objectID": "organisation.html#workload",
     "href": "organisation.html#workload",
     "title": "Organisation",
     "section": "Workload",
-    "text": "Workload\nOne credit corresponds to 26 hours of work, so five credits are roughly two hours of lectures, two hours of lab and about four hours of your own preparation per week, plus the preparation for the exam (directive on credits)."
+    "text": "Workload\nOne credit corresponds to 26 hours of work, so five credits are roughly two hours of lectures, three hours of lab and about four hours of your own preparation per week, plus the preparation for the exam (directive on credits)."
   },
   {
     "objectID": "lectures.html",

@@ -41,7 +41,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-1029f39da2d55f5ceeb6fb50dd021353.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-e0f5f20a1d9aab2f119c3e365b6a29fc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -228,7 +228,12 @@ window.Quarto = {
 <section id="by-hand" class="level2">
 <h2 class="anchored" data-anchor-id="by-hand">By hand</h2>
 <p>Six known leaves and one new one whose type we want to guess.</p>
-<p><strong>One feature.</strong> Use the leaf height only. Fill in the column <span class="math inline">\(d\)</span> — how far each leaf is from the new one — take the smallest, and read off the class.</p>
+<p><strong>One feature.</strong> Use the leaf height only — the picture shows what it is. Fill in the column <span class="math inline">\(d\)</span> — how far each leaf is from the new one — take the smallest, and read off the class.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="../data/leaf_measurement_height.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="220"></p>
+</figure>
+</div>
 <div class="hand-table">
 <table class="caption-top table">
 <thead>
@@ -285,7 +290,12 @@ window.Quarto = {
 </tbody>
 </table>
 </div>
-<p><strong>Two features.</strong> Now use the height and the width. Fill in <span class="math inline">\(d\)</span> again — the distance of each leaf from the new one in the plane — and compare: does the second feature change the answer?</p>
+<p><strong>Two features.</strong> Now use the height and the width: the two sides of the smallest box containing the blade. Fill in <span class="math inline">\(d\)</span> again — the distance of each leaf from the new one in the plane — and compare: does the second feature change the answer?</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="../data/leaf_measurement.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="220"></p>
+</figure>
+</div>
 <div class="hand-table">
 <table class="caption-top table">
 <thead>
@@ -356,14 +366,9 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="data">Data</h2>
 <ul>
 <li><a href="https://docs.google.com/spreadsheets/d/1UIYIodTK0hCvdZFyx4051phcyNWgVxPIc8CtR6eKAmU/edit">Shared spreadsheet of the leaves</a> — the dataset of this course, measured by you. Columns: <code>Leaf height</code> (cm), <code>Leaf width</code> (cm), <code>Tree type</code> (<code>maple</code>, <code>cherry</code> or <code>walnut</code>). It starts with three example rows, one per tree type; every student adds three more.</li>
-<li><a href="https://raw.githubusercontent.com/tomasvicar/MLR-public/master/exercises/data/leaves_small.csv"><code>leaves_small.csv</code></a> — the seven leaves of the by-hand task; the column <code>Role</code> says which six are the training set and which one is the new leaf.</li>
+<li><a href="../data/leaves_small.csv" download=""><code>leaves_small.csv</code></a> — the seven leaves of the by-hand task (download); the column <code>Role</code> says which six are the training set and which one is the new leaf.</li>
+<li><a href="../data/leaf_measurement.png" download=""><code>leaf_measurement.png</code></a>, <a href="../data/leaf_measurement_height.png" download=""><code>leaf_measurement_height.png</code></a> — how a leaf is measured (the pictures above): in centimetres with one decimal place.</li>
 </ul>
-<p>How a leaf is measured: the height and the width are the sides of the smallest box containing the blade, in centimetres with one decimal place.</p>
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><img src="../data/leaf_measurement.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="260"></p>
-</figure>
-</div>
 </section>
 <section id="further-resources" class="level2">
 <h2 class="anchored" data-anchor-id="further-resources">Further resources</h2>

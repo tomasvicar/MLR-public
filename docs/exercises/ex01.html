@@ -41,7 +41,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-e0f5f20a1d9aab2f119c3e365b6a29fc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-1029f39da2d55f5ceeb6fb50dd021353.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -219,7 +219,7 @@ window.Quarto = {
 <ol type="1">
 <li><strong>Libraries</strong> — a quick tour of NumPy, Matplotlib, pandas and scikit-learn, with two small exercises to try.</li>
 <li><strong>Measure your leaves</strong> — measure the height and the width of three leaves and enter them into the <a href="https://docs.google.com/spreadsheets/d/1UIYIodTK0hCvdZFyx4051phcyNWgVxPIc8CtR6eKAmU/edit">shared spreadsheet</a>; this is the dataset used today and in the next lab.</li>
-<li><strong>Nearest neighbour by hand</strong> — six known leaves, one new leaf: compute the six distances on paper, then the same six with one formula in a spreadsheet.</li>
+<li><strong>Nearest neighbour by hand</strong> — six known leaves, one new leaf: compute the six distances on paper, first from the height alone, then from the height and the width; then the same six with one formula in a spreadsheet.</li>
 <li><strong>Nearest neighbour in NumPy</strong> — write <code>euk_dist</code>, loop over the six leaves, use <code>np.argmin</code>, and check that the numbers match the blackboard.</li>
 <li><strong>The whole dataset</strong> — repeat it with all the measured leaves and classify two new ones.</li>
 <li><strong>Objects</strong> — a first look at classes and methods, the preview of next week’s lab.</li>
@@ -227,16 +227,67 @@ window.Quarto = {
 </section>
 <section id="by-hand" class="level2">
 <h2 class="anchored" data-anchor-id="by-hand">By hand</h2>
-<p>Six known leaves and one new one. Fill in the column <span class="math inline">\(d\)</span> — the distance of each leaf from the new one — take the smallest, and read off the class.</p>
+<p>Six known leaves and one new one whose type we want to guess.</p>
+<p><strong>One feature.</strong> Use the leaf height only. Fill in the column <span class="math inline">\(d\)</span> — how far each leaf is from the new one — take the smallest, and read off the class.</p>
 <div class="hand-table">
 <table class="caption-top table">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">#</th>
+<th style="text-align: right;">Leaf height <span class="math inline">\(h\)</span> [cm]</th>
+<th style="text-align: left;">Tree type</th>
+<th style="text-align: left;"><span class="math inline">\(d\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">maple</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: left;">maple</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">cherry</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">cherry</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: left;">walnut</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: left;">walnut</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>new</strong></td>
+<td style="text-align: right;"><strong>15</strong></td>
+<td style="text-align: left;"><strong>?</strong></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Two features.</strong> Now use the height and the width. Fill in <span class="math inline">\(d\)</span> again — the distance of each leaf from the new one in the plane — and compare: does the second feature change the answer?</p>
+<div class="hand-table">
+<table class="caption-top table">
 <thead>
 <tr class="header">
 <th style="text-align: left;">#</th>
@@ -252,7 +303,7 @@ window.Quarto = {
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">14</td>
 <td style="text-align: left;">maple</td>
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">2</td>

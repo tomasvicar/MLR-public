@@ -60,7 +60,7 @@
     "href": "exercises/ex01.html",
     "title": "Exercise 1 — Introduction, libraries, nearest neighbour",
     "section": "",
-    "text": "Week 1 · builds on the first lecture · bring three leaves (maple, cherry, walnut), a ruler, a laptop — and paper and a pen, the first computation is done by hand\n▶ Open the notebook in Google Colab"
+    "text": "Week 1 · builds on the first lecture\n▶ Open the notebook in Google Colab"
   },
   {
     "objectID": "exercises/ex01.html#what-you-will-learn",
@@ -81,21 +81,14 @@
     "href": "exercises/ex01.html#tasks",
     "title": "Exercise 1 — Introduction, libraries, nearest neighbour",
     "section": "Tasks",
-    "text": "Tasks\n\nLibraries — a quick tour of NumPy, Matplotlib, pandas and scikit-learn, with two small exercises to try.\nMeasure your leaves — measure the height and the width of three leaves and enter them into the shared spreadsheet; this is the dataset used today and in the next lab.\nNearest neighbour by hand — six known leaves, one new leaf: compute the six distances on paper, first from the height alone, then from the height and the width; then the same six with one formula in a spreadsheet.\nNearest neighbour in NumPy — write euk_dist, loop over the six leaves, use np.argmin, and check that the numbers match the blackboard.\nThe whole dataset — repeat it with all the measured leaves and classify two new ones.\nObjects — a first look at classes and methods, the preview of next week’s lab."
-  },
-  {
-    "objectID": "exercises/ex01.html#by-hand",
-    "href": "exercises/ex01.html#by-hand",
-    "title": "Exercise 1 — Introduction, libraries, nearest neighbour",
-    "section": "By hand",
-    "text": "By hand\nSix known leaves and one new one whose type we want to guess.\nOne feature. Use the leaf height only — the picture shows what it is. Fill in the column \\(d\\) — how far each leaf is from the new one — take the smallest, and read off the class.\n\n\n\n\n\n\n\n\n\n#\nLeaf height \\(h\\) [cm]\nTree type\n\\(d\\)\n\n\n\n\n1\n10\nmaple\n\n\n\n2\n14\nmaple\n\n\n\n3\n8\ncherry\n\n\n\n4\n10\ncherry\n\n\n\n5\n16\nwalnut\n\n\n\n6\n18\nwalnut\n\n\n\nnew\n15\n?\n\n\n\n\n\nTwo features. Now use the height and the width: the two sides of the smallest box containing the blade. Fill in \\(d\\) again — the distance of each leaf from the new one in the plane — and compare: does the second feature change the answer?\n\n\n\n\n\n\n\n\n\n#\nLeaf height \\(h\\) [cm]\nLeaf width \\(w\\) [cm]\nTree type\n\\(d\\)\n\n\n\n\n1\n10\n14\nmaple\n\n\n\n2\n14\n16\nmaple\n\n\n\n3\n8\n5\ncherry\n\n\n\n4\n10\n6\ncherry\n\n\n\n5\n16\n8\nwalnut\n\n\n\n6\n18\n9\nwalnut\n\n\n\nnew\n15\n7\n?\n\n\n\n\n\nThe same seven rows are in the notebook."
+    "text": "Tasks\nA quick tour of NumPy, Matplotlib, pandas and scikit-learn comes first, with two small exercises to try. Then:\n\nMeasure your leaves — measure the height and the width of three leaves and enter them into the shared spreadsheet; this is the dataset used today and in the next lab. Look at the table before trusting it and clean up what the class mistyped.\nNearest neighbour by hand — six known leaves, one new leaf: compute the six distances on paper, first from the height alone, then from the height and the width; then the same six with one formula in a spreadsheet.\nThe same six leaves in NumPy — write euk_dist, loop over the six leaves, use np.argmin, and check that the numbers match the blackboard.\nThe whole dataset — repeat it with all the measured leaves and classify two new ones.\n\nAt the end, a first look at classes and methods — the preview of next week’s lab."
   },
   {
     "objectID": "exercises/ex01.html#data",
     "href": "exercises/ex01.html#data",
     "title": "Exercise 1 — Introduction, libraries, nearest neighbour",
     "section": "Data",
-    "text": "Data\n\nShared spreadsheet of the leaves — the dataset of this course, measured by you. Columns: Leaf height (cm), Leaf width (cm), Tree type (maple, cherry or walnut). It starts with three example rows, one per tree type; every student adds three more.\nleaves_small.csv — the seven leaves of the by-hand task (download); the column Role says which six are the training set and which one is the new leaf.\nleaf_measurement.png, leaf_measurement_height.png — how a leaf is measured (the pictures above): in centimetres with one decimal place."
+    "text": "Data\n\nShared spreadsheet of the leaves — the dataset of this course, measured by you. Columns: Leaf height (cm), Leaf width (cm), Tree type (maple, cherry or walnut). It starts with three example rows, one per tree type; every student adds three more.\nleaves_small.csv — the seven leaves of the by-hand task (download); the column Role says which six are the training set and which one is the new leaf.\nleaf_measurement.png, leaf_measurement_height.png — how a leaf is measured: the height alone, and the height and the width as the sides of the smallest box containing the blade; in centimetres with one decimal place."
   },
   {
     "objectID": "exercises/ex01.html#further-resources",

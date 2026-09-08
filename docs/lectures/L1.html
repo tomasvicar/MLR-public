@@ -4175,4 +4175,20 @@ window.QuartoSupport = function () {
       </script>
     
 
+<!-- Opened with ?print-pdf (the "PDF export" button on the course web): once reveal.js
+     has laid the slides out for print, open the browser's print dialog so that
+     "Save as PDF" is one click away. -->
+<script id="mlr-print-pdf">
+(function () {
+  if (!/[?&]print-pdf/.test(window.location.search)) return;
+  var done = false;
+  var timer = setInterval(function () {
+    var ready = document.querySelector('.reveal.ready');
+    if (!ready || done) return;
+    done = true;
+    clearInterval(timer);
+    setTimeout(function () { window.print(); }, 2500);  // MathJax and images
+  }, 300);
+})();
+</script>
 </body></html>

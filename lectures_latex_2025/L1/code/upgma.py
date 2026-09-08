@@ -26,8 +26,8 @@ for i, n in enumerate(labels):
 
 while len(clusters) > 1:
     # find the closest pair (ignore the zero diagonal)
-    pracovni = np.where(np.eye(len(clusters), dtype=bool), np.inf, matrix)
-    i, j = np.unravel_index(pracovni.argmin(), pracovni.shape)
+    working = np.where(np.eye(len(clusters), dtype=bool), np.inf, matrix)
+    i, j = np.unravel_index(working.argmin(), working.shape)
     i, j = sorted((i, j))
     height = matrix[i, j]
 
@@ -35,15 +35,15 @@ while len(clusters) > 1:
     print(f"\nmerge {''.join(clusters[i])} + {''.join(clusters[j])} at d = {height:.2f}")
 
     # size-weighted average of the two rows — this is the UPGMA update rule
-    nova = (ni * matrix[i] + nj * matrix[j]) / (ni + nj)
-    matrix = np.vstack([matrix, nova])
-    matrix = np.column_stack([matrix, np.append(nova, 0.0)])
+    new_row = (ni * matrix[i] + nj * matrix[j]) / (ni + nj)
+    matrix = np.vstack([matrix, new_row])
+    matrix = np.column_stack([matrix, np.append(new_row, 0.0)])
     keep = [k for k in range(len(clusters) + 1) if k not in (i, j)]
     matrix = matrix[np.ix_(keep, keep)]
 
-    novy = tuple(sorted(clusters[i] + clusters[j]))
-    sizes[novy] = ni + nj
-    clusters = [c for k, c in enumerate(clusters) if k not in (i, j)] + [novy]
+    merged = tuple(sorted(clusters[i] + clusters[j]))
+    sizes[merged] = ni + nj
+    clusters = [c for k, c in enumerate(clusters) if k not in (i, j)] + [merged]
     labels = ["".join(c) for c in clusters]
 
     print("     " + "  ".join(f"{n:>5}" for n in labels))

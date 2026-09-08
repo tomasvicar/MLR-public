@@ -209,7 +209,7 @@ window.Quarto = {
 <section id="before-the-lab" class="level2">
 <h2 class="anchored" data-anchor-id="before-the-lab">Before the lab</h2>
 <ul>
-<li>Recall from the <a href="../lectures/L1.html">first lecture</a>: the Euclidean distance <span class="math inline">\(\|\mathbf x\|_2=\sqrt{\sum_i x_i^2}\)</span> as the norm of the difference vector, and the 1-NN rule — find the closest training sample, predict its class.</li>
+<li>Recall from the <a href="../lectures/L1.html">first lecture</a> how the Euclidean distance between two points is computed, and the 1-NN rule — find the closest training sample, predict its class.</li>
 <li>If Python is new to you, watch the crash course below before the lab; we will not teach the language itself.</li>
 <li>In Colab, switch off the AI features: <em>Tools → Settings → AI Assistance</em>, uncheck everything.</li>
 </ul>
@@ -218,7 +218,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="tasks">Tasks</h2>
 <ol type="1">
 <li><strong>Libraries</strong> — a quick tour of NumPy, Matplotlib, pandas and scikit-learn, with two small exercises to try.</li>
-<li><strong>Measure your leaves</strong> — measure the height and the width of three leaves and enter them into the shared spreadsheet; this is the dataset used today and in the next lab.</li>
+<li><strong>Measure your leaves</strong> — measure the height and the width of three leaves and enter them into the <a href="https://docs.google.com/spreadsheets/d/SHEET_ID_TBD/edit">shared spreadsheet</a>; this is the dataset used today and in the next lab.</li>
 <li><strong>Nearest neighbour by hand</strong> — six known leaves, one new leaf: compute the six distances on paper, then the same six with one formula in a spreadsheet.</li>
 <li><strong>Nearest neighbour in NumPy</strong> — write <code>euk_dist</code>, loop over the six leaves, use <code>np.argmin</code>, and check that the numbers match the blackboard.</li>
 <li><strong>The whole dataset</strong> — repeat it with all the measured leaves and classify two new ones.</li>
@@ -227,15 +227,23 @@ window.Quarto = {
 </section>
 <section id="by-hand" class="level2">
 <h2 class="anchored" data-anchor-id="by-hand">By hand</h2>
-<p>Six known leaves and one new one. Compute <span class="math inline">\(d_i^2=(h_i-15)^2+(w_i-7)^2\)</span> for each row, take the smallest, and read off the class. The square root is only needed for the winner — it does not change which distance is smallest.</p>
+<p>Six known leaves and one new one. Fill in the column <span class="math inline">\(d\)</span> — the distance of each leaf from the new one — take the smallest, and read off the class.</p>
 <div class="hand-table">
 <table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">#</th>
 <th style="text-align: right;">Leaf height <span class="math inline">\(h\)</span> [cm]</th>
 <th style="text-align: right;">Leaf width <span class="math inline">\(w\)</span> [cm]</th>
 <th style="text-align: left;">Tree type</th>
+<th style="text-align: left;"><span class="math inline">\(d\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -244,55 +252,67 @@ window.Quarto = {
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">14</td>
 <td style="text-align: left;">maple</td>
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">2</td>
 <td style="text-align: right;">14</td>
 <td style="text-align: right;">16</td>
 <td style="text-align: left;">maple</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">3</td>
 <td style="text-align: right;">8</td>
 <td style="text-align: right;">5</td>
 <td style="text-align: left;">cherry</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">4</td>
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">6</td>
 <td style="text-align: left;">cherry</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">5</td>
 <td style="text-align: right;">16</td>
 <td style="text-align: right;">8</td>
 <td style="text-align: left;">walnut</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">6</td>
 <td style="text-align: right;">18</td>
 <td style="text-align: right;">9</td>
 <td style="text-align: left;">walnut</td>
+<td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><strong>new</strong></td>
 <td style="text-align: right;"><strong>15</strong></td>
 <td style="text-align: right;"><strong>7</strong></td>
 <td style="text-align: left;"><strong>?</strong></td>
+<td style="text-align: left;"></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>The same seven rows are in the notebook and in <a href="https://raw.githubusercontent.com/tomasvicar/MLR-public/master/exercises/data/leaves_small.csv"><code>leaves_small.csv</code></a>.</p>
+<p>The same seven rows are in the notebook.</p>
 </section>
 <section id="data" class="level2">
 <h2 class="anchored" data-anchor-id="data">Data</h2>
 <ul>
-<li><a href="https://raw.githubusercontent.com/tomasvicar/MLR-public/master/exercises/data/leaves.csv"><code>leaves.csv</code></a> — 518 leaves measured by the students of this course last year. Columns: <code>Leaf height</code> (cm), <code>Leaf width</code> (cm), <code>Tree type</code> (<code>maple</code>, <code>cherry</code> or <code>walnut</code>). The notebook falls back to this file when the shared spreadsheet of this year is not available yet.</li>
+<li><a href="https://docs.google.com/spreadsheets/d/SHEET_ID_TBD/edit">Shared spreadsheet of the leaves</a> — the dataset of this course, measured by you. Columns: <code>Leaf height</code> (cm), <code>Leaf width</code> (cm), <code>Tree type</code> (<code>maple</code>, <code>cherry</code> or <code>walnut</code>). It starts with three example rows, one per tree type; every student adds three more.</li>
 <li><a href="https://raw.githubusercontent.com/tomasvicar/MLR-public/master/exercises/data/leaves_small.csv"><code>leaves_small.csv</code></a> — the seven leaves of the by-hand task; the column <code>Role</code> says which six are the training set and which one is the new leaf.</li>
-<li><a href="https://raw.githubusercontent.com/tomasvicar/MLR-public/master/exercises/data/leaf_measurement.png"><code>leaf_measurement.png</code></a> — how a leaf is measured: the height and the width are the sides of the smallest box containing the blade.</li>
 </ul>
+<p>How a leaf is measured: the height and the width are the sides of the smallest box containing the blade, in centimetres with one decimal place.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="../data/leaf_measurement.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="260"></p>
+</figure>
+</div>
 </section>
 <section id="further-resources" class="level2">
 <h2 class="anchored" data-anchor-id="further-resources">Further resources</h2>

@@ -74,7 +74,7 @@
     "href": "exercises/ex01.html#before-the-lab",
     "title": "Exercise 1 — Introduction, libraries, nearest neighbour",
     "section": "Before the lab",
-    "text": "Before the lab\n\nRecall from the first lecture: the Euclidean distance \\(\\|\\mathbf x\\|_2=\\sqrt{\\sum_i x_i^2}\\) as the norm of the difference vector, and the 1-NN rule — find the closest training sample, predict its class.\nIf Python is new to you, watch the crash course below before the lab; we will not teach the language itself.\nIn Colab, switch off the AI features: Tools → Settings → AI Assistance, uncheck everything."
+    "text": "Before the lab\n\nRecall from the first lecture how the Euclidean distance between two points is computed, and the 1-NN rule — find the closest training sample, predict its class.\nIf Python is new to you, watch the crash course below before the lab; we will not teach the language itself.\nIn Colab, switch off the AI features: Tools → Settings → AI Assistance, uncheck everything."
   },
   {
     "objectID": "exercises/ex01.html#tasks",
@@ -88,14 +88,14 @@
     "href": "exercises/ex01.html#by-hand",
     "title": "Exercise 1 — Introduction, libraries, nearest neighbour",
     "section": "By hand",
-    "text": "By hand\nSix known leaves and one new one. Compute \\(d_i^2=(h_i-15)^2+(w_i-7)^2\\) for each row, take the smallest, and read off the class. The square root is only needed for the winner — it does not change which distance is smallest.\n\n\n\n\n#\nLeaf height \\(h\\) [cm]\nLeaf width \\(w\\) [cm]\nTree type\n\n\n\n\n1\n10\n14\nmaple\n\n\n2\n14\n16\nmaple\n\n\n3\n8\n5\ncherry\n\n\n4\n10\n6\ncherry\n\n\n5\n16\n8\nwalnut\n\n\n6\n18\n9\nwalnut\n\n\nnew\n15\n7\n?\n\n\n\n\nThe same seven rows are in the notebook and in leaves_small.csv."
+    "text": "By hand\nSix known leaves and one new one. Fill in the column \\(d\\) — the distance of each leaf from the new one — take the smallest, and read off the class.\n\n\n\n\n\n\n\n\n\n\n\n#\nLeaf height \\(h\\) [cm]\nLeaf width \\(w\\) [cm]\nTree type\n\\(d\\)\n\n\n\n\n1\n10\n14\nmaple\n        \n\n\n2\n14\n16\nmaple\n\n\n\n3\n8\n5\ncherry\n\n\n\n4\n10\n6\ncherry\n\n\n\n5\n16\n8\nwalnut\n\n\n\n6\n18\n9\nwalnut\n\n\n\nnew\n15\n7\n?\n\n\n\n\n\nThe same seven rows are in the notebook."
   },
   {
     "objectID": "exercises/ex01.html#data",
     "href": "exercises/ex01.html#data",
     "title": "Exercise 1 — Introduction, libraries, nearest neighbour",
     "section": "Data",
-    "text": "Data\n\nleaves.csv — 518 leaves measured by the students of this course last year. Columns: Leaf height (cm), Leaf width (cm), Tree type (maple, cherry or walnut). The notebook falls back to this file when the shared spreadsheet of this year is not available yet.\nleaves_small.csv — the seven leaves of the by-hand task; the column Role says which six are the training set and which one is the new leaf.\nleaf_measurement.png — how a leaf is measured: the height and the width are the sides of the smallest box containing the blade."
+    "text": "Data\n\nShared spreadsheet of the leaves — the dataset of this course, measured by you. Columns: Leaf height (cm), Leaf width (cm), Tree type (maple, cherry or walnut). It starts with three example rows, one per tree type; every student adds three more.\nleaves_small.csv — the seven leaves of the by-hand task; the column Role says which six are the training set and which one is the new leaf.\n\nHow a leaf is measured: the height and the width are the sides of the smallest box containing the blade, in centimetres with one decimal place."
   },
   {
     "objectID": "exercises/ex01.html#further-resources",

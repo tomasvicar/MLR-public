@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Lectures – MPA-MLR · Machine Learning</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-e0f5f20a1d9aab2f119c3e365b6a29fc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./obrazky/logo.svg" alt="MPA-MLR" class="navbar-logo light-content">
+    <img src="./obrazky/logo.svg" alt="MPA-MLR" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">MPA-MLR · Machine Learning</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./lectures.html" aria-current="page"> 
+<span class="menu-text">Lectures</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./exercises.html"> 
+<span class="menu-text">Exercises</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./materials.html"> 
+<span class="menu-text">Materials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./organisation.html"> 
+<span class="menu-text">Organisation</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/tomasvicar/MLR-public"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#lectures-202627" id="toc-lectures-202627" class="nav-link active" data-scroll-target="#lectures-202627">Lectures 2026/27</a></li>
+  <li><a href="#archive" id="toc-archive" class="nav-link" data-scroll-target="#archive">Archive</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lectures</h1>
+<p class="subtitle lead">Slides for the 2026/27 run, downloadable as HTML or PDF, and the archive of previous years</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Each lecture is an HTML presentation (open it in the browser, press <kbd>F</kbd> for full screen, <kbd>E</kbd> for a print-ready view, <kbd>?</kbd> for help). It can also be downloaded as a single self-contained HTML file that works offline, or as a PDF with one page per slide. Lectures 4 and 12 are new this year and are being prepared. The slides of previous years, 2025 included, are in the <a href="#archive">archive</a>.</p>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>The slides of lectures 5–11 still carry last year’s numbers 4–10 on their title page; they will be renumbered once the new lecture 4 is in place. The content is current.</p>
+</div>
+</div>
+</div>
+<section id="lectures-202627" class="level2">
+<h2 class="anchored" data-anchor-id="lectures-202627">Lectures 2026/27</h2>
+<div class="grid-cards">
+<div id="l1" class="card-item">
+<p><span class="num">Lecture 1</span></p>
+<section id="introduction-optimization-how-we-code-now" class="level3">
+<h3 class="anchored" data-anchor-id="introduction-optimization-how-we-code-now">Introduction, optimization, how we code now</h3>
+<p>What machine learning is; supervised, unsupervised and reinforcement learning. Distances, 1-NN, k-NN, k-means, UPGMA. Optimization: convexity, closed-form vs.&nbsp;iterative solutions. Why we compute by hand and validate what an agent writes.</p>
+<p><span class="who">Tomáš Vičar</span></p>
+<div class="links">
+<a class="btn-pill solid" href="lectures/L1.html">Slides</a> <a class="btn-pill" href="lectures/L1.html" download="MLR_L1.html">Download HTML</a> <a class="btn-pill" href="lectures/L1.pdf" download="MLR_L1.pdf">Download PDF</a>
+</div>
+</section>
+</div>
+<div id="l2" class="card-item soon">
+<p><span class="num">Lecture 2</span></p>
+<section id="performance-evaluation-metrics-preprocessing" class="level3">
+<h3 class="anchored" data-anchor-id="performance-evaluation-metrics-preprocessing">Performance evaluation, metrics, preprocessing</h3>
+<p>The supervised pipeline; train / validation / test. Confusion-matrix metrics, ROC and precision–recall, R². Class imbalance, cross-validation, scaling, missing values, outliers, and where information leaks.</p>
+<p><span class="who">Tomáš Vičar</span></p>
+<div class="links">
+<span class="btn-pill muted">not published yet</span>
+</div>
+</section>
+</div>
+<div id="l3" class="card-item soon">
+<p><span class="num">Lecture 3</span></p>
+<section id="feature-extraction-selection-and-dimensionality-reduction" class="level3">
+<h3 class="anchored" data-anchor-id="feature-extraction-selection-and-dimensionality-reduction">Feature extraction, selection and dimensionality reduction</h3>
+<p>Curse of dimensionality. Filter methods (correlation, entropy, mutual information, mRMR), wrappers (forward selection, backward elimination), embedded methods. PCA, LDA, t-SNE and UMAP, feature expansion.</p>
+<p><span class="who">Tomáš Vičar</span></p>
+<div class="links">
+<span class="btn-pill muted">not published yet</span>
+</div>
+</section>
+</div>
+<div id="l4" class="card-item soon">
+<p><span class="num">Lecture 4 · new</span></p>
+<section id="vibecoding-how-coding-agents-work" class="level3">
+<h3 class="anchored" data-anchor-id="vibecoding-how-coding-agents-work">Vibecoding — how coding agents work</h3>
+<p>What a coding agent is: context, tools, the agent loop. What the models can and cannot do. Specifying a task, reviewing a diff, tests as the contract, version control as the safety net. Telling correct code from plausible-looking code.</p>
+<span class="who">in preparation</span>
+<div class="links">
+<span class="btn-pill muted">not published yet</span>
+</div>
+</section>
+</div>
+<div id="l5" class="card-item soon">
+<p><span class="num">Lecture 5</span></p>
+<section id="linear-models-and-kernels" class="level3">
+<h3 class="anchored" data-anchor-id="linear-models-and-kernels">Linear models and kernels</h3>
+<p>Linear regression and linear classification as one equation. OLS, LAD, ridge and lasso; polynomial regression. The kernel trick, primal vs.&nbsp;dual ridge regression. LDA, MSE classifier, logistic regression, perceptron, SVM with hard and soft margin, kernel SVM.</p>
+<p><span class="who">Tomáš Vičar</span></p>
+<div class="links">
+<span class="btn-pill muted">not published yet</span>
+</div>
+</section>
+</div>
+<div id="l6" class="card-item soon">
+<p><span class="num">Lecture 6</span></p>
+<section id="decision-trees-and-ensembles" class="level3">
+<h3 class="anchored" data-anchor-id="decision-trees-and-ensembles">Decision trees and ensembles</h3>
+<p>Bias–variance trade-off and learning curves. CART for classification and regression: impurity, greedy splitting, stopping. Bagging, random forest and out-of-bag samples. AdaBoost step by step.</p>
+<p><span class="who">Jiří Chmelík</span></p>
+<div class="links">
+<span class="btn-pill muted">not published yet</span>
+</div>
+</section>
+</div>
+<div id="l7" class="card-item soon">
+<p><span class="num">Lecture 7</span></p>
+<section id="artificial-neural-networks" class="level3">
+<h3 class="anchored" data-anchor-id="artificial-neural-networks">Artificial neural networks</h3>
+<p>Perceptron and the artificial neuron; activation functions. Gradient for one neuron, matrix notation, the general network. Mini-batch gradient descent, Adam, saddle points. Loss functions. L1/L2 regularization, dropout, batch normalization.</p>
+<p><span class="who">Jiří Chmelík</span></p>
+<div class="links">
+<span class="btn-pill muted">not published yet</span>
+</div>
+</section>
+</div>
+<div id="l8" class="card-item soon">
+<p><span class="num">Lecture 8</span></p>
+<section id="convolutional-networks-1-basics" class="level3">
+<h3 class="anchored" data-anchor-id="convolutional-networks-1-basics">Convolutional networks 1 — basics</h3>
+<p>Shallow vs.&nbsp;deep networks and the price of depth. From fully connected to convolutional: local connections, shared weights, counting parameters. Convolutional layer, activation, pooling, dropout, batch norm; a typical CNN layer by layer.</p>
+<p><span class="who">Jiří Chmelík</span></p>
+<div class="links">
+<span class="btn-pill muted">not published yet</span>
+</div>
+</section>
+</div>
+<div id="l9" class="card-item soon">
+<p><span class="num">Lecture 9</span></p>
+<section id="convolutional-networks-2-special-blocks" class="level3">
+<h3 class="anchored" data-anchor-id="convolutional-networks-2-special-blocks">Convolutional networks 2 — special blocks</h3>
+<p>Skip connections and residual blocks. 1 × 1 convolution, bottlenecks, autoencoders. Dilated convolution and the receptive field. Up-sampling and transposed convolution. Channel and spatial attention, CBAM.</p>
+<p><span class="who">Roman Jakubíček</span></p>
+<div class="links">
+<span class="btn-pill muted">not published yet</span>
+</div>
+</section>
+</div>
+<div id="l10" class="card-item soon">
+<p><span class="num">Lecture 10</span></p>
+<section id="other-networks-architectures-and-applications" class="level3">
+<h3 class="anchored" data-anchor-id="other-networks-architectures-and-applications">Other networks — architectures and applications</h3>
+<p>Regression and classification heads, encoders. Image-to-image networks, segmentation (U-Net, nnU-Net), object detection (Faster R-CNN). Recurrent networks and LSTM. Transfer learning, pre-trained networks, augmentation.</p>
+<p><span class="who">Jiří Chmelík · Roman Jakubíček</span></p>
+<div class="links">
+<span class="btn-pill muted">not published yet</span>
+</div>
+</section>
+</div>
+<div id="l11" class="card-item soon">
+<p><span class="num">Lecture 11</span></p>
+<section id="transformers" class="level3">
+<h3 class="anchored" data-anchor-id="transformers">Transformers</h3>
+<p>Tokenization, embeddings, positional encoding. Self-attention in three steps: queries, keys, values; multi-head attention and its cost. Encoder, decoder, output head. Vision transformer. Pre-trained transformer models.</p>
+<p><span class="who">Jiří Chmelík</span></p>
+<div class="links">
+<span class="btn-pill muted">not published yet</span>
+</div>
+</section>
+</div>
+<div id="l12" class="card-item soon">
+<p><span class="num">Lecture 12 · new</span></p>
+<section id="generative-models-and-wrap-up" class="level3">
+<h3 class="anchored" data-anchor-id="generative-models-and-wrap-up">Generative models and wrap-up</h3>
+<p>Proposal: diffusion models (forward and reverse process, denoising as the training objective), a short look at how large language models are trained (pre-training, fine-tuning, RLHF), and a summary of the course.</p>
+<span class="who">in preparation</span>
+<div class="links">
+<span class="btn-pill muted">not published yet</span>
+</div>
+</section>
+</div>
+</div>
+</section>
+<section id="archive" class="level2">
+<h2 class="anchored" data-anchor-id="archive">Archive</h2>
+<section id="probabilistic-models-not-taught-in-202627" class="level3">
+<h3 class="anchored" data-anchor-id="probabilistic-models-not-taught-in-202627">Probabilistic models (not taught in 2026/27)</h3>
+<p>Maximum likelihood and MAP estimation, Bayesian inference, naive Bayes, logistic regression and Gaussian mixture models were lectures 11 and 12 until 2025. The topic is covered by another course now, so it is dropped here — the slides stay available.</p>
+<ul>
+<li>Probabilistic models 1 — <a href="lectures/L11.html">slides</a> · <a href="lectures/L11.pdf">PDF</a> · <a href="materials/archive_ex11_probabilistic_models_1.pdf">exercise slides</a></li>
+<li>Probabilistic models 2 — <a href="lectures/L12.html">slides</a> · <a href="lectures/L12.pdf">PDF</a> · <a href="materials/archive_ex12_probabilistic_models_2.pdf">exercise slides</a></li>
+</ul>
+</section>
+<section id="slides-of-previous-years" class="level3">
+<h3 class="anchored" data-anchor-id="slides-of-previous-years">Slides of previous years</h3>
+<p>The presentations of each year exactly as they were uploaded to the e-learning, 2025 included. The course was taught in Czech until 2021; <a href="https://vutbr.sharepoint.com/:f:/s/mpa-mlr-2021/Eis407-Nnd5Dp8zi1b90l7IBSLbljNSRClR-RbAll-eq3w?e=orEsdO">recordings of the 2020/21 lectures</a> are available with a university login.</p>
+<!-- Generováno skriptem nastroje/sestav_web.py — needitovat ručně. -->
+<details>
+<summary>
+2025 (12 PDF)
+</summary>
+<ul>
+<li><a href="lectures/pdf/2025/01_MLR_introduction_optimization.pdf">01 MLR introduction optimization</a></li>
+<li><a href="lectures/pdf/2025/02_MLR_performance_evaluation.pdf">02 MLR performance evaluation</a></li>
+<li><a href="lectures/pdf/2025/03_MLR_dimensionality_reduction.pdf">03 MLR dimensionality reduction</a></li>
+<li><a href="lectures/pdf/2025/04_MLR_linear_models.pdf">04 MLR linear models</a></li>
+<li><a href="lectures/pdf/2025/05_MLR_trees.pdf">05 MLR trees</a></li>
+<li><a href="lectures/pdf/2025/06_MLR_neural_networks.pdf">06 MLR neural networks</a></li>
+<li><a href="lectures/pdf/2025/07_MLR_deep_learning_1_basics.pdf">07 MLR deep learning 1 basics</a></li>
+<li><a href="lectures/pdf/2025/08_MLR_deep_learning_2_special_blocks.pdf">08 MLR deep learning 2 special blocks</a></li>
+<li><a href="lectures/pdf/2025/09_MLR_deep_learning_3_architectures_and_applications.pdf">09 MLR deep learning 3 architectures and applications</a></li>
+<li><a href="lectures/pdf/2025/10_MLR_deep_learning_4_transformers.pdf">10 MLR deep learning 4 transformers</a></li>
+<li><a href="lectures/pdf/2025/11_MLR_probabilistic_models1.pdf">11 MLR probabilistic models1</a></li>
+<li><a href="lectures/pdf/2025/12_MLR_probabilistic_models2.pdf">12 MLR probabilistic models2</a></li>
+</ul>
+</details>
+<details>
+<summary>
+2024 (15 PDF)
+</summary>
+<ul>
+<li><a href="lectures/pdf/2024/03_MLR_Dimensionality_reduction_part1_2024.pdf">03 MLR Dimensionality reduction part1 2024</a></li>
+<li><a href="lectures/pdf/2024/04_MLR_Dimensionality_reduction_part2_2024.pdf">04 MLR Dimensionality reduction part2 2024</a></li>
+<li><a href="lectures/pdf/2024/05_MLR_Regression_part1_2024.pdf">05 MLR Regression part1 2024</a></li>
+<li><a href="lectures/pdf/2024/06_MLR_Regression_part2_Kernels_2024.pdf">06 MLR Regression part2 Kernels 2024</a></li>
+<li><a href="lectures/pdf/2024/07_MLR_Linear_classification_2024.pdf">07 MLR Linear classification 2024</a></li>
+<li><a href="lectures/pdf/2024/08_MLR_Neural_Networks_2024.pdf">08 MLR Neural Networks 2024</a></li>
+<li><a href="lectures/pdf/2024/09_MLR_Trees_2024.pdf">09 MLR Trees 2024</a></li>
+<li><a href="lectures/pdf/2024/10_MLR_Deep_Learning_1_Basics_2024.pdf">10 MLR Deep Learning 1 Basics 2024</a></li>
+<li><a href="lectures/pdf/2024/11_MLR_Deep_Learning_2_Special_blocks_2024.pdf">11 MLR Deep Learning 2 Special blocks 2024</a></li>
+<li><a href="lectures/pdf/2024/12_MLR_Deep_Learning_3_Transformers_2024_not_used__not_on_exam_.pdf">12 MLR Deep Learning 3 Transformers 2024 not used (not on exam))</a></li>
+<li><a href="lectures/pdf/2024/12_MLR_probabilistic_models.pdf">12 MLR probabilistic models</a></li>
+<li><a href="lectures/pdf/2024/12_MLR_probabilistic_models1_fixed.pdf">12 MLR probabilistic models1 fixed</a></li>
+<li><a href="lectures/pdf/2024/13_MLR_probabilistic_models2.pdf">13 MLR probabilistic models2</a></li>
+<li><a href="lectures/pdf/2024/MLR_01_Introduction_2024.pdf">MLR 01 Introduction 2024</a></li>
+<li><a href="lectures/pdf/2024/MLR_02_Performance_2024.pdf">MLR 02 Performance 2024</a></li>
+</ul>
+</details>
+<details>
+<summary>
+2023 (12 PDF)
+</summary>
+<ul>
+<li><a href="lectures/pdf/2023/MLR_01_Introduction_2023.pdf">MLR 01 Introduction 2023</a></li>
+<li><a href="lectures/pdf/2023/MLR_02_Performance_2023_new_03_10.pdf">MLR 02 Performance 2023 new 03 10</a></li>
+<li><a href="lectures/pdf/2023/MLR_03_Regression_2023.pdf">MLR 03 Regression 2023</a></li>
+<li><a href="lectures/pdf/2023/MLR_04_Dimensionality_reduction_2023.pdf">MLR 04 Dimensionality reduction 2023</a></li>
+<li><a href="lectures/pdf/2023/MLR_05_Linear_classification_2023.pdf">MLR 05 Linear classification 2023</a></li>
+<li><a href="lectures/pdf/2023/MLR_06_Trees_2023.pdf">MLR 06 Trees 2023</a></li>
+<li><a href="lectures/pdf/2023/MLR_07_ANN_2023.pdf">MLR 07 ANN 2023</a></li>
+<li><a href="lectures/pdf/2023/MLR_08_Deep_Learning_1_Basics_2023.pdf">MLR 08 Deep Learning 1 Basics 2023</a></li>
+<li><a href="lectures/pdf/2023/MLR_09_Deep_Learning_2_Special_blocks_2023.pdf">MLR 09 Deep Learning 2 Special blocks 2023</a></li>
+<li><a href="lectures/pdf/2023/MLR_10_Deep_Learning_3_Transformers_2023.pdf">MLR 10 Deep Learning 3 Transformers 2023</a></li>
+<li><a href="lectures/pdf/2023/MLR_11_probabilistic_models1.pdf">MLR 11 probabilistic models1</a></li>
+<li><a href="lectures/pdf/2023/MLR_12_probabilistic_models2.pdf">MLR 12 probabilistic models2</a></li>
+</ul>
+</details>
+<details>
+<summary>
+2022 (13 PDF)
+</summary>
+<ul>
+<li><a href="lectures/pdf/2022/01_MLR_Introduction.pdf">01 MLR Introduction</a></li>
+<li><a href="lectures/pdf/2022/01_MLR_Introduction_higher_contrast_of_the_text.pdf">01 MLR Introduction higher contrast of the text</a></li>
+<li><a href="lectures/pdf/2022/02_MLR_Performance_corrections.pdf">02 MLR Performance corrections</a></li>
+<li><a href="lectures/pdf/2022/03_MLR_Dimensionality_reduction.pdf">03 MLR Dimensionality reduction</a></li>
+<li><a href="lectures/pdf/2022/03_MLR_Dimensionality_reduction_updated_October_10.pdf">03 MLR Dimensionality reduction updated October 10</a></li>
+<li><a href="lectures/pdf/2022/04_MLR_Regression.pdf">04 MLR Regression</a></li>
+<li><a href="lectures/pdf/2022/05_MLR_Linear_classification.pdf">05 MLR Linear classification</a></li>
+<li><a href="lectures/pdf/2022/06_MLR_Trees.pdf">06 MLR Trees</a></li>
+<li><a href="lectures/pdf/2022/07_MLR_Artificial_Neural_Networks.pdf">07 MLR Artificial Neural Networks</a></li>
+<li><a href="lectures/pdf/2022/08_MLR_Deep_Learning_1.pdf">08 MLR Deep Learning 1</a></li>
+<li><a href="lectures/pdf/2022/09_MLR_Deep_Learning_2_Special_blocks.pdf">09 MLR Deep Learning 2 Special blocks</a></li>
+<li><a href="lectures/pdf/2022/09_MLR_Deep_Learning_3.pdf">09 MLR Deep Learning 3</a></li>
+<li><a href="lectures/pdf/2022/10_MLR_probabilistic_models.pdf">10 MLR probabilistic models</a></li>
+</ul>
+</details>
+<details>
+<summary>
+2021 (10 PDF)
+</summary>
+<ul>
+<li><a href="lectures/pdf/2021/01_MLR_Introduction_2021.pdf">01 MLR Introduction 2021</a></li>
+<li><a href="lectures/pdf/2021/02_MLR_Dimensionality_reduction_2021_Update_October_10.pdf">02 MLR Dimensionality reduction 2021 Update October 10</a></li>
+<li><a href="lectures/pdf/2021/03_MLR_Regression_2021.pdf">03 MLR Regression 2021</a></li>
+<li><a href="lectures/pdf/2021/04_MLR_Linear_classification_Update_November_1.pdf">04 MLR Linear classification Update November 1</a></li>
+<li><a href="lectures/pdf/2021/05_MLR_probabilistic_models1.pdf">05 MLR probabilistic models1</a></li>
+<li><a href="lectures/pdf/2021/06_MLR_Trees2021.pdf">06 MLR Trees2021</a></li>
+<li><a href="lectures/pdf/2021/07_MLR_Artificial_Neural_Networks2021.pdf">07 MLR Artificial Neural Networks2021</a></li>
+<li><a href="lectures/pdf/2021/08_MLR_Deep_Learning_1.pdf">08 MLR Deep Learning 1</a></li>
+<li><a href="lectures/pdf/2021/09_MLR_Deep_Learning_2_2021.pdf">09 MLR Deep Learning 2 2021</a></li>
+<li><a href="lectures/pdf/2021/MLR_probabilistic_models2.pdf">MLR probabilistic models2</a></li>
+</ul>
+</details>
+<details>
+<summary>
+2020 (13 PDF)
+</summary>
+<ul>
+<li><a href="lectures/pdf/2020/01_MLR_Introduction.pdf">01 MLR Introduction</a></li>
+<li><a href="lectures/pdf/2020/02_MLR_Dimensionality_reduction.pdf">02 MLR Dimensionality reduction</a></li>
+<li><a href="lectures/pdf/2020/03_MLR_Regression_aktualni_upraveno_12_10_2020.pdf">03 MLR Regression aktuální upraveno 12 10 2020</a></li>
+<li><a href="lectures/pdf/2020/04_MLR_Linear_classification_aktualni_upraveno_19_10.pdf">04 MLR Linear classification aktuální upraveno 19 10</a></li>
+<li><a href="lectures/pdf/2020/05_MLR_Bayes.pdf">05 MLR Bayes</a></li>
+<li><a href="lectures/pdf/2020/06_MLR_Trees2020.pdf">06 MLR Trees2020</a></li>
+<li><a href="lectures/pdf/2020/07_MLR_Artificial_Neural_Networks2020.pdf">07 MLR Artificial Neural Networks2020</a></li>
+<li><a href="lectures/pdf/2020/08_MLR_Deep_Learning_1.pdf">08 MLR Deep Learning 1</a></li>
+<li><a href="lectures/pdf/2020/09_MLR_Deep_Learning_2_Special_blocks.pdf">09 MLR Deep Learning 2 Special blocks</a></li>
+<li><a href="lectures/pdf/2020/10_MLR_Deep_Learning_3_Applications.pdf">10 MLR Deep Learning 3 Applications</a></li>
+<li><a href="lectures/pdf/2020/11_MLR_Deep_Learning_4_Recurrent_net.pdf">11 MLR Deep Learning 4 Recurrent net</a></li>
+<li><a href="lectures/pdf/2020/12_MLR_Deep_Learning_5_Advanced_Methods.pdf">12 MLR Deep Learning 5 Advanced Methods</a></li>
+<li><a href="lectures/pdf/2020/13_MLR_Deep_Learning_6_Tips_Tricks.pdf">13 MLR Deep Learning 6 Tips Tricks</a></li>
+</ul>
+</details>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tomasvicar\.github\.io\/MLR-public\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>MPA-MLR · Department of Biomedical Engineering, FEEC, Brno University of Technology</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org">Quarto</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

@@ -2,7 +2,7 @@
 
 In every step the two closest clusters are merged and the distance matrix is
 updated with the size-weighted average of the two merged rows.
-Run with ``uv run python lectures_latex_2025/L1/code/upgma.py``.
+Run with ``uv run python lectures/L1/code/upgma.py``.
 """
 
 import numpy as np

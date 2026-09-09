@@ -2,7 +2,7 @@
 
 There is no training phase: the whole model is the training set. Prediction
 means finding the k closest points and letting them vote.
-Run with ``uv run python lectures_latex_2025/L1/code/knn.py``.
+Run with ``uv run python lectures/L1/code/knn.py``.
 """
 
 import numpy as np

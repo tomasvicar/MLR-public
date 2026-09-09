@@ -2,7 +2,7 @@
 
 Two alternating steps: assign every point to the nearest centroid, then move
 every centroid to the mean of its points. The inertia J can only decrease.
-Run with ``uv run python lectures_latex_2025/L1/code/kmeans.py``.
+Run with ``uv run python lectures/L1/code/kmeans.py``.
 """
 
 import numpy as np

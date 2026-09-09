@@ -1,7 +1,7 @@
 """Distances and vector norms — the four formulas from the slide, by hand.
 
 A distance between two points is simply a norm of their difference vector,
-``x = a - b``. Run with ``uv run python lectures_latex_2025/L1/code/distances.py``.
+``x = a - b``. Run with ``uv run python lectures/L1/code/distances.py``.
 """
 
 import numpy as np

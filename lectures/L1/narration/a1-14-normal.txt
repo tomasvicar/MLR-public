@@ -1,0 +1,13 @@
+The normal density has only two parameters: the centre mu and the width sigma. Look at the formula on the bottom left. In the exponent is x minus mu, squared, over two sigma squared, with a minus sign, so the density falls off with the squared distance from the centre, measured in units of sigma. The constant in front does nothing to the shape. It is there only to make the area equal to one.
+
+The left panel shows the rule worth remembering. Within one sigma of the mean lies sixty-eight point three percent of the probability, within two sigma ninety-five point four percent, and within three sigma ninety-nine point seven percent. In terms of z-scores, a z-score of three is rare, and a z-score of five is almost surely an outlier or an error.
+
+Why does this distribution appear everywhere? The second bullet says it: an average of many independent effects is close to normal. You can watch that happen with the dice on the previous slide.
+
+The right half is the same density in d dimensions. The mean becomes a vector, and sigma squared becomes the covariance matrix, capital Sigma. In the exponent, the squared distance becomes x minus mu, transposed, times Sigma inverse, times x minus mu. The determinant of Sigma in the constant plays the role that sigma squared played in one dimension.
+
+The panel on the right uses the matrix of the eigenvector slide as the covariance, the one with rows two, one and one, two. Its contours are ellipses. Their axes point along the eigenvectors of Sigma, and at k standard deviations the half-lengths are k times the square root of the eigenvalue. Here the ellipses are stretched along the direction one, one by the square root of three, and along the direction one, minus one by one. The red and green arrows are exactly these two scaled eigenvectors, the three ellipses sit at one, two and three standard deviations, and the grey points are three hundred samples drawn from the distribution.
+
+The last bullet is why the mean squared error is the default loss for regression. Take minus the log of a normal density centred on the prediction y hat. What remains is y minus y hat, squared, over two sigma squared, plus a constant. So minimizing the squared error is the same as maximizing the likelihood under Gaussian noise.
+
+And you will meet this exponent once more. The Gaussian, or RBF, kernel of the fifth lecture has the same exponent, only without the normalizing constant.

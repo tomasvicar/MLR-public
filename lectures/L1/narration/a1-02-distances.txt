@@ -1,0 +1,17 @@
+A distance is just the norm of a difference. Take two points, a and b, subtract them to get the difference vector x, and measure how long x is. So there are not two concepts here, distances and norms, but one. The formulas on the right are different ways of measuring that length.
+
+Start with the row of five panels at the top. Every panel shows the same two points, the red one and the blue one, and every panel gives a different answer to the question how far apart they are. The Euclidean distance is the straight line between them, what a ruler would give. The Manhattan distance walks along the axes, once horizontally and once vertically, like a taxi in a grid of streets, and adds the two legs. The Chebyshev distance keeps only the longer of the two legs; the dashed one is ignored. The Minkowski panel puts them together. P equal to one is the walk along the two legs, p equal to two is the diagonal, and p equal to infinity is the single leg along the top. Minkowski is a whole family of norms, and the other three are members of it.
+
+The fifth panel is different. The cosine panel does not draw the gap between the points at all. It draws two arrows from the origin and the angle theta between them. I will come back to it in a moment.
+
+Now the unit balls below. Each one is the set of points at distance one from the origin, under that norm. For L two it is the familiar circle. For L one it is a diamond, because the two coordinates share one budget: their absolute values must add up to one. For L infinity it is a square, because only the larger coordinate counts. The Minkowski ball with p equal to one point five sits between the diamond and the circle. If you ever wonder what a norm does, look at its unit ball.
+
+The formulas next to them say the same in symbols. L two is the square root of the sum of the squares. L one is the sum of the absolute values. L infinity is the largest absolute value. And the general p-norm raises the absolute values to the power p, sums them, and takes the p-th root.
+
+Now compute the example in your head; it takes a few seconds. The point a is one, one, and the point b is two, three. The difference is the vector minus one, minus two. For L two, square the components to get one and four, add them to get five, and take the square root, about two point two four. For L one, add the absolute values, one plus two, which is three. For L infinity, take the larger one, which is two. Notice the order: L one gives the largest number, L infinity the smallest, and L two lies in between.
+
+If you run the distances code example linked under the formulas, it gives the same numbers. It also adds a cosine distance of zero point zero one nine for the same two points.
+
+Why is that so small, when the points are more than two apart? Because the cosine distance does not measure length at all. It measures the angle between the two vectors, and the vectors one, one and two, three point in almost the same direction. That is exactly why it is used for text. A long document and a short one about the same topic have very different lengths, but they point the same way, and the length of the document does not matter.
+
+The takeaway: the choice of the metric is a decision, not a detail. It changes the result of every method in the second appendix, nearest neighbours, k-means and U P G M A alike.

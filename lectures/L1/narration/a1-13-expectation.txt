@@ -1,0 +1,13 @@
+The expected value is a weighted average: every value times its probability, summed up. For a die, the faces one to six each with weight one sixth, that gives three point five. Notice that three point five is not a value the die can ever show. It is the balance point of the distribution.
+
+The variance measures the spread around that balance point, as the expected squared distance from the mean. For the die it is easiest to compute the expectation of X squared first, which is ninety-one sixths, and subtract three point five squared. That leaves thirty-five twelfths, or two point nine two. The standard deviation sigma is its square root, one point seven one, and it is in the same units as X.
+
+From data, you estimate the same quantities with averages. The sample mean is the ordinary average. The sample variance divides by n minus one rather than by n. Here is why: you measure the spread around the sample mean instead of the true mean, and the sample mean always sits a little closer to the data, so dividing by n would underestimate the spread. The PCA slides of the third lecture write one over n, which for large n makes no difference.
+
+Covariance is the same idea for two variables: do they deviate from their means together? Divide it by both standard deviations and you get the correlation, which always lies between minus one and one. For d features, the covariance matrix collects all the pairwise covariances, and for centred data it is X transpose X, over n minus one.
+
+The two rules explain the z-score of the second lecture. Adding a constant shifts the mean and leaves the variance alone, and multiplying by a constant a multiplies the variance by a squared. So subtract the mean, divide by sigma, and the result has mean zero and variance one.
+
+Now the figure on the right. It shows the exact distribution of the average of M dice, for M equal to one, four and sixteen. The centre stays at three point five, but the spread shrinks as sigma over the square root of M: one point seven one, then zero point eight five, then zero point four three. That is the last bullet, variance sigma squared over M. And watch the shape. The flat bars of a single die turn into a bell, which the orange normal curve follows closely. That is the reason why the next slide is about the normal distribution.
+
+Bagging, in the sixth lecture, averages trees for the same reason. Here is the catch, though: the rule on the slide is for independent copies, and those trees are correlated. With correlation rho, the variance only drops to two terms added together: rho times sigma squared, and one minus rho, times sigma squared over M. The first term does not shrink with M at all, so the gain is much smaller.

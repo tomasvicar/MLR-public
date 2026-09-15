@@ -1,0 +1,13 @@
+This slide is not a picture but a small program, so the way to use it is to play with it. The twenty points on the canvas are the same as on the one nearest neighbour slide, red circles for class A and blue triangles for class B. The orange star is the query, and the shading is the classifier's decision at every place.
+
+Start the way the slide opens, with k equal to one. The text on the right already reads the vote for the star: zero neighbours of class A, one of class B, so class B. Look at the border between red and blue. It is jagged and follows every single point. Now drag the slider at the top right. It goes from one to nineteen. Push k up and watch the border smooth out.
+
+Next, open the metric menu. Besides Euclidean, the L two distance, there is Manhattan, the L one distance, and Chebyshev, the L infinity distance. Switch between them and watch the shading. The boundary changes, although not a single point has moved. That is the lesson here: the choice of the distance is part of the model.
+
+Then add some noise. Set k back to one, keep class A selected, and click somewhere deep inside the blue region to add a lonely red circle. Look how far its red island reaches. Now set k to five. The island disappears, because the red point is outvoted by its blue neighbours. That is what sensitive to noise means.
+
+After that, grab one of the existing points and drag it across the boundary. The shading follows it. To add points of the other class, pick B with the radio buttons. A right-click, or a click with shift held down, adds a blue triangle directly. One small catch: a click right on top of an existing point grabs that point instead of adding a new one.
+
+Finally, drag the orange star around. Dashed lines join it to its k nearest neighbours, and the text on the right reads out the vote. It gives the position of the query, how many neighbours are A and how many are B, the resulting class, and the number of points. Why does the slider jump by two? With an even number of neighbours the vote could end in a tie, which is why the slider offers odd k only.
+
+If the canvas gets too messy, the reset button brings back the original twenty points and the star. You can open this slide on your own laptop in the first lab.

@@ -1,0 +1,11 @@
+The nearest neighbour classifier is the simplest classifier there is. A new point arrives, you find the training point closest to it, and you say whatever that neighbour says. That is all the formula in the first bullet means: the predicted label of x star is y with the index one in brackets, the label of the nearest training point.
+
+Look at the upper figure. The orange star is the query. The dashed line joins it to its nearest neighbour, the blue triangle just to the right and slightly below, so the star is classified as class B.
+
+Notice what is missing: there is no training at all. The model learns no parameters, it merely stores the data. That is why this is called lazy learning. The price is paid later, at prediction time, because every new point has to be compared with the stored training set. For a large number of samples n that search gets expensive, which is where a data structure such as the k d tree helps.
+
+Now the lower figure. The shading shows what the classifier would answer at every place in the plane, red for class A, blue for class B. The star sits on the blue side, which agrees with the upper figure. Now follow the border between the two colours. It is jagged, and it follows the individual points exactly. Every piece of it lies halfway between a red point and a blue point, so nothing is smoothed out, and a single training point can push the boundary around. This is a textbook overfitted model.
+
+Here is a question worth a moment. What is the accuracy of one nearest neighbour on its own training data? A hundred percent. The nearest neighbour of a training point is the point itself, so it always gets its own label back. And yet the model need not be good. A perfect score on the training data tells you nothing about new data.
+
+Then the sensitivity listed on the slide. Noise and outliers matter because one wrong point carves out its own little region around itself. Scaling matters because the whole method stands on a distance. Imagine one feature measured in millimetres and another one in metres. The millimetre numbers are much larger, so the distance is determined by the first feature alone, and the second one is practically ignored. That is the reason for the normalization in the second lecture.

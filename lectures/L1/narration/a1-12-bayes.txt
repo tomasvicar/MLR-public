@@ -1,0 +1,15 @@
+Bayes' rule is nothing more than the product rule written twice. The joint probability of A and B can be split as A given B, times B, or as B given A, times A. Set the two equal, divide by the probability of B, and you have the formula at the top left.
+
+The second formula gives the denominator. The probability of B is the sum, over every possible a, of the probability of B given a, times the probability of a. In the tree on the right, that is simply adding up all the ways a positive test can happen.
+
+The names in the first bullet are worth learning. The prior is what you believed before seeing the evidence. The likelihood is how probable the evidence is under each hypothesis. The posterior is what you believe afterwards, and the evidence in the denominator makes it a proper probability.
+
+Why is this useful? Because it turns what we can measure into what we need. A test can be checked on people who are known to be sick, which gives the probability of a positive result given sickness. A patient with a positive result needs the reverse: the probability of being sick given the positive result.
+
+You can check the rule on the e-mails of the previous slide. The probability of free given spam was zero point six seven, the probability of spam zero point three, and the probability of free zero point two five. Zero point six seven times zero point three, over zero point two five, gives zero point eight, the same number you read straight from the table.
+
+Now the example. A disease affects one person in a thousand, and the test is ninety-nine percent sensitive and ninety-nine percent specific. The formula at the bottom left gives zero point oh nine oh. That is easier to believe as counts, so look at the tree. Of one hundred thousand people, one hundred are sick, and ninety-nine of them test positive. Of the ninety-nine thousand nine hundred healthy people, one percent test positive too, and one percent of that many is nine hundred ninety-nine people. So among the one thousand and ninety-eight positives, only ninety-nine are sick. That is nine point oh percent.
+
+This is the example of the warm-up slide earlier in the lecture. A ninety-nine percent accurate test for a rare disease is wrong most of the time it says positive, because the prior is tiny. The healthy group is so large that its small error rate produces far more positives than there are sick people.
+
+The same thing happens in machine learning. A rare class has a small prior, so even a small false-positive rate ruins the precision of the positive predictions. The second lecture comes back to this.

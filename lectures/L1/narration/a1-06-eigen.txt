@@ -1,0 +1,15 @@
+A matrix does two things to a vector: it can turn it and it can stretch it. An eigenvector is a direction the matrix does not turn, only scales, and the scale factor is its eigenvalue lambda. That is the equation at the top, A times v equals lambda times v, for a v that is not zero.
+
+Look at the left picture first. The dashed circle is every vector of length one, and three of them are drawn: v one along one, one, v two along one, minus one, and a grey vector one, zero.
+
+Now the right picture, after multiplying by the matrix with rows two, one and one, two. The circle has become an ellipse. The red v one still points the same way, but it is three times longer. The green v two keeps both its direction and its length. The grey vector one, zero has gone to two, one, so it has changed direction; it is not an eigenvector. The picture says it all: the eigenvectors are the directions that are not turned, and the eigenvalues, three and one, are the half-axes of the ellipse.
+
+You can check the example in your head. A times one, one gives three, three, which is three times one, one. A times one, minus one gives one, minus one, unchanged. The eigenvalues come from setting the determinant of A minus lambda I to zero. Here that is two minus lambda, squared, minus one, equals zero, so lambda is three or one. The one over the square root of two in front of each vector only makes it unit length.
+
+A negative lambda would flip the vector to the opposite side. It stays on its own line, so it still counts as not turned.
+
+Notice that the two axes of the ellipse are perpendicular. That holds for every symmetric matrix: its eigenvalues are real, and its eigenvectors can be chosen perpendicular. This is exactly the situation of a covariance matrix, and the same matrix comes back as a covariance on the normal-distribution slide.
+
+Positive semidefinite means that x transpose A x is never negative, whatever x you take. For a symmetric matrix, that is the same as saying that all eigenvalues are at least zero. Covariance matrices are positive semidefinite, and so are the kernel matrices of the fifth lecture.
+
+The main place this comes back is PCA, in the third lecture. Maximizing the variance along a unit direction w gives the equation S w equals lambda w, with S the covariance matrix. So the best direction is an eigenvector, and the largest lambda is the variance along it.

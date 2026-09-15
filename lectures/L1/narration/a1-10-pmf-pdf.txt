@@ -1,0 +1,9 @@
+A random variable is just a number produced by a random experiment. How you describe which numbers are likely depends on whether the values can be counted.
+
+The left panel is the discrete case, a fair die. Six faces, each with probability one sixth. This is a probability mass function, a PMF: every bar is a probability, none is negative, and together they sum to one.
+
+The right panel is the continuous case, a model of body height: a normal density centred at one hundred seventy-five centimetres, with a standard deviation of seven. Here is the most common confusion. The height of this curve is not a probability. Only the area under it is. The shaded band says that a height from this model falls between one hundred seventy and one hundred eighty centimetres with probability zero point five two five.
+
+Two consequences follow, and both surprise people. First, the probability of exactly one hundred seventy-five point zero zero zero, with the zeros going on forever, is zero. A single point has no width, so it has no area. Second, a density may be larger than one. This curve stays below zero point zero six, but a normal distribution with sigma equal to zero point one peaks at three point nine nine. Its area is still one, it is just very tall and very thin.
+
+Where does this come back? The softmax of the previous slide produces a PMF over the classes. The output of every classifier in this course is a discrete distribution like the die, one bar per class. A generative model, on the other hand, learns a density and then samples from it.

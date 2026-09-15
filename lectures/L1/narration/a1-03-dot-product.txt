@@ -1,0 +1,11 @@
+The dot product is the operation you will meet most often in this course. It takes two vectors and returns one number, and that number says how much the two vectors point the same way. The formula at the top gives two ways to compute it: multiply the components pair by pair and add them up, or multiply the two lengths by the cosine of the angle between the vectors.
+
+Check the example the first way. The vector a is three, one, and b is two, four. Three times two is six, one times four is four, together ten. The length of a is the square root of ten, the length of b the square root of twenty. Ten over the product of those two roots is zero point seven oh seven, the cosine of forty-five degrees.
+
+Now the figure. Drop a perpendicular from the tip of a onto the line of b; that is the dashed line with the small right angle. The thick teal bar next to b is the shadow of a on that line. Its length is two point two four, which is ten over the square root of twenty, and it ends at the point one, two, exactly half of b.
+
+Here is the trap. The projection is a transpose u only when u has unit length. Divide b by its length first, and you get the two point two four. Use b itself, and the so-called projection grows with the length of b. The third lecture stresses the same condition for PCA.
+
+The cosine similarity is one for the same direction, zero for perpendicular vectors, and minus one for opposite ones. The cosine distance from the previous slide is one minus that cosine. It ignores the lengths completely, which is why it is used for text and for embeddings.
+
+And a contrast worth remembering. The attention scores of the eleventh lecture are plain dot products, not normalized. There the lengths do count, and a long vector wins. The same operation also sits inside the linear model of the fifth lecture, w transpose x plus b.

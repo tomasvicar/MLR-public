@@ -1,0 +1,3 @@
+This appendix collects the mathematics the rest of the course takes for granted: notation, linear algebra, derivatives and probability. The lecture itself ends with the quiz; this appendix is not presented, and the slides stay in the deck for you to study on your own.
+
+Which part should you read? The three warm-up questions at the start of the optimization block tell you. And most slides end with a line marked In ML, which says where in the course the topic comes back, so you can return here whenever a later lecture uses it.

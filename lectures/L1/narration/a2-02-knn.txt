@@ -1,0 +1,11 @@
+Instead of asking one neighbour, k nearest neighbours asks k of them and lets them vote. The curly N with the index k in the first bullet is just the name for that set, the k training points closest to x star. For classification the majority wins. For regression you take the average of the neighbours' values instead.
+
+The two small panels on the left show the difference on one query, the orange point. With k equal to one, a single line goes to the single nearest point, a blue one, and that one point decides. With k equal to three there are three lines. Two go to blue points and one goes to a red point. Two blue against one red, so the majority says blue. Here both answers agree, but notice that the decision is no longer in the hands of a single point.
+
+The figure on the right is an animation on the twenty points from the one nearest neighbour slide. It runs through the odd values of k from one up to fifteen. The frame you see first, and the one you see in print, is the last value, k equal to fifteen. When it plays, watch the border between the red and the blue region. At k equal to one it is jagged and follows every point. As k grows it straightens out, until it is almost a straight line.
+
+Why does that happen? A larger k lets more points vote, so a single noisy point can no longer win its neighbourhood on its own. The boundary gets smoother and less sensitive to noise. The cost is a worse ability to capture fine detail, because a small real feature of the classes gets voted away as well. That is the second bullet: k regularizes the model. A small k overfits, a large k underfits. This is the bias-variance trade-off, and the sixth lecture starts with it.
+
+Now push it to the extreme. Let k be equal to the number of samples. Every query then gets all the training points as its neighbours, and the vote is the same every time. The classifier always returns the most frequent class, regardless of the input.
+
+So k is a knob between following every single point and ignoring the input completely. The next slide is an interactive playground on the same twenty points, where you can change k and the metric and add points yourself. The link at the bottom leads to the code example.

@@ -1,0 +1,13 @@
+U P G M A stands for unweighted pair group method with arithmetic mean. It is hierarchical clustering. You start with every sample as its own cluster and repeatedly merge the two closest clusters, until only one is left. The result is not a single split but a tree, the dendrogram.
+
+The difference from k-means is worth stressing. You do not have to state the number of clusters in advance. You get the whole hierarchy, and you cut it wherever you want.
+
+Notice also that the procedure is greedy. At every step it merges the pair that happens to be closest at that moment, and it never reconsiders that merge later.
+
+What does closest mean for clusters with several points in them? The second bullet says it: the distance between two clusters is the average of all pairwise distances between their samples. The formula on the right keeps that average up to date without going back to the samples. When clusters C i and C j are merged, the new distance to another cluster C k is the size of C i times the distance from C i to C k, plus the size of C j times the distance from C j to C k, all over the sum of the two sizes. It is just a weighted average, and the weights are the sizes of the merged clusters. A cluster with more samples contributes more pairs, so it gets more weight. So why unweighted in the name? It refers to the samples, not to the clusters. Every sample counts the same, and that is exactly why the clusters are weighted by their size.
+
+The algorithm on the left is then short. Merge the closest pair. Update the distance matrix, where the two rows and two columns of the merged clusters are replaced by a single one, filled with these averages. Repeat until one cluster remains.
+
+Now the animation at the bottom right. Twelve points are merged step by step into a single tree. Its first frame is the finished result, so let one loop run through first, and only then try to read it. Each line is one merge. The links are drawn between the centroids of the clusters, which is why many lines start from an empty spot between points rather than from a point. Watch the close pairs join first, and the long links between the three groups come at the end.
+
+U P G M A is the standard method in bioinformatics for phylogenetic trees.

@@ -1,0 +1,13 @@
+Entropy measures how surprised you are, on average, by an outcome drawn from p. The left panel shows it for a coin, as a function of the probability of heads. With the logarithm in base two, the unit is the bit. A fair coin, at the top of the arch, surprises you the most: exactly one bit. A coin that lands heads ninety percent of the time is more predictable, zero point four six nine bit. And at either end, where the outcome is certain, the entropy is zero. Nothing can surprise you there.
+
+Why the minus sign in the formula? Every probability is at most one, so its logarithm is at most zero, and the minus sign turns the sum into a non-negative number.
+
+Cross-entropy is the same sum with one change: the outcomes come from p, but you pay according to q, the model. It is never below the entropy of p, and the excess is the KL divergence, cross-entropy minus entropy. That is why the KL divergence is never negative, and it is zero only when q equals p.
+
+Now the classification loss, in the right column. The target p is one-hot: probability one on the true class and zero everywhere else. Every term of the sum vanishes except one, so the loss is minus the log of the probability the model gives to the true class. A one-hot target also has entropy zero. The cross-entropy loss therefore equals the KL divergence between the label and the prediction, and minimizing the loss moves q towards the label.
+
+The right panel plots exactly that loss. Take the softmax probabilities from the slide on the softmax. If the true class is the one that got zero point six five nine, the loss is zero point four one seven. If it is the one that got only zero point oh nine nine, the loss is two point three two. Confident and right costs almost nothing, confident and wrong costs a lot, and as the probability of the true class goes to zero, the loss grows without bound.
+
+Notice the natural logarithm on that axis. Networks use it, so the loss is measured in nats rather than bits. The base only rescales the value.
+
+These ideas come back three times. The third lecture computes the same coin examples and builds mutual information from entropy. The sixth lecture uses the entropy as the impurity of a leaf in a tree. And the cross-entropy loss returns in the seventh.

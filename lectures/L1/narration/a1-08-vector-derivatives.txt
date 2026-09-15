@@ -1,0 +1,11 @@
+These rules look new, but every row of the table is a one-dimensional rule in disguise. The first row, a transpose w, is the vector version of a times w, whose derivative is a. The second, the squared length of w, is w squared, whose derivative is two w. The third, w transpose A w with a symmetric A, is a times w squared, whose derivative is two a w. If you forget a row, write down the one-dimensional version and it comes back.
+
+The last row is the one least squares needs. It is the squared error of a linear model over all n samples. Its gradient is the chain rule of the previous slide, done for all n samples at once: two times the residual, carried back through X. With a single feature it reads two times the sum over i of x i times the bracket, w x i minus y i.
+
+Under the table is the shape check. X transpose is d by n, the residual X w minus y is n by one, so the product is d by one, the shape of w. That is the fastest way to catch a wrong transpose: a gradient always has the shape of whatever you differentiate with respect to. Forget the transpose, and you get n by d times n by one, which does not even fit.
+
+Now the three lines on the right. They are the complete least-squares method. First, set the gradient to zero. Divide by two and move X transpose y to the other side, and you get the second line, X transpose X times w equals X transpose y, the normal equations. Then solve, which gives the third line: w star is the inverse of X transpose X, times X transpose y.
+
+Ridge adds lambda times the squared length of w to the loss. By the second row of the table, that adds two lambda w to the gradient, and after the same steps the only change is lambda I next to X transpose X. In other words, ridge only adds lambda to the diagonal of X transpose X, and that also makes it invertible.
+
+You will meet all of this again in the fifth lecture. It derives OLS by exactly these steps, and its ridge solution is the inverse of X transpose X plus lambda I, times X transpose y.

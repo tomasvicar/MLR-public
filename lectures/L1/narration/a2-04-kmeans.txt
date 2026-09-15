@@ -1,0 +1,9 @@
+K-means is the best known unsupervised method, and at the same time it is the first optimization problem of this lecture. There are no labels. You have n points and you want to split them into k clusters, each one represented by its mean.
+
+What makes a split good? The formula on the left says it. Read it from the inside out. For a point x i, take its distance from the centre of its own cluster, mu j, and square it. The double bars with the two below and the two above are exactly that, the ordinary Euclidean distance, squared. The inner sum adds this up over all points x i in the cluster C j, and the outer sum adds it up over all k clusters. So the inertia J is the sum of squared distances of the points from the centre of their cluster. A small J means tight clusters.
+
+Notice one thing the formula takes for granted, and that is k. The number of clusters has to be given in advance. The algorithm will not find it for you.
+
+The right column is Lloyd's algorithm. It alternates two phases. First the assignment: every point goes to its nearest centroid. Then the update: every centroid moves to the mean of the points assigned to it. Both phases are easy. For fixed centres, the nearest centre is the best choice for each point. For a fixed set of points, the mean is the centre with the smallest sum of squared distances. So neither phase can make J larger, and together they converge. You repeat the two until nothing changes. In practice that means no point switches to another cluster, so the means stay exactly where they are, and another round would give the same result.
+
+Here is the trap, in the last bullet. The result depends on the initialization. The starting centroids are random samples, and the algorithm only finds a local minimum. An unlucky start can end in a worse clustering than the best one. That is why the algorithm is run several times from different starts, and you keep the run with the lowest J.

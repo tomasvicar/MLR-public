@@ -1,0 +1,3 @@
+This second appendix is a refresher of three algorithms from the bachelor course: nearest neighbours, k-means and U P G M A. It is not presented in the lecture, the slides stay in the deck for self-study.
+
+The first two labs go through distances and k nearest neighbours, by hand and in code. K-means and U P G M A do not come up in the labs. If the material has faded, read these slides before the first lab and check that you can write the formulas from memory. The distances slide is in the first appendix.

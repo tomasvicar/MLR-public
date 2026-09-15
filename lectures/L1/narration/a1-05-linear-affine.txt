@@ -1,0 +1,15 @@
+A linear function is defined by the two properties in the first bullet on the left. Additivity: the image of a sum is the sum of the images. Homogeneity: scale the input by a, and the output scales by a. Together they are the superposition principle, the same definition as in the linearity recap of the third lecture.
+
+Now the three panels. The light grey grid is the input, a square grid around the origin; the teal grid is where the function sends it.
+
+The left panel is the linear map. The red dot at the origin stays where it was. The grid lines stay straight, stay parallel and stay evenly spaced. A linear map can rotate the grid, stretch it, shear it or flip it, and that is all it can do. Why must the origin stay? Every linear function from d dimensions to m dimensions is a matrix times x, and a matrix times the zero vector is the zero vector.
+
+The middle panel is the affine map. It is the same grid, only moved by the vector b, the red arrow. The lines are still straight and parallel; what has changed is that the origin has left. That is exactly W x plus b, linear plus a shift.
+
+In the right panel the lines bend. That map is neither linear nor affine.
+
+The one-dimensional example on the right shows that a shift really breaks linearity. Take f of x equals two x plus one. f of one plus one is f of two, which is five. But f of one plus f of one is three plus three, which is six. Five is not six, so the function is not linear.
+
+Here is the naming trap. In machine learning, linear regression and a linear layer are really affine, because of the bias. Mathematically, the bias breaks linearity, but nobody renames them, so you have to know what is meant.
+
+The last bullet on the right is the reason a neural network needs nonlinear activations. An affine map of an affine map is again affine. Multiply W two into the bracket, W one x plus b one, and add b two. You get W two W one times x, plus a new shift, W two b one plus b two. One matrix and one shift. So without a nonlinear activation, any number of stacked layers collapses into a single affine map. That is why the seventh lecture adds the activations.

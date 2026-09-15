@@ -1,0 +1,15 @@
+If there is one habit worth building here, it is this: before you compute anything, write the shape under every symbol. Most bugs in NumPy and PyTorch code are shape bugs, and on paper they are easy to catch.
+
+Look at the figure. A is three by two, B is two by four, and the product A B is three by four. The red arrow joins the inner sizes, the two columns of A and the two rows of B. They must agree, and the outer sizes, three and four, give the shape of the result. The second bullet on the left says the same in general: n by d times d by k gives n by k.
+
+Now follow the highlights. Row two of A is shaded, column three of B is shaded, and together they give the darker cell in row two, column three of A B. That entry is the dot product of the row with the column: multiply pair by pair and add. So the matrix product is nothing but a table of dot products, one for every row of A and every column of B.
+
+You have already used this rule. The warm-up product of the optimization block, the matrix with rows one, two and three, four, times the vector one, minus one, is two dot products. One times one plus two times minus one gives minus one. Three times one plus four times minus one gives minus one again. So the result is the vector minus one, minus one.
+
+Two warnings from the left column. The order matters: A B is in general not B A. And the transpose of a product reverses the order, B transpose times A transpose.
+
+On the right, the inverse. It exists only for a square matrix with a nonzero determinant. The two by two formula is the one worth knowing by heart: swap the two diagonal entries, flip the sign of the other two, and divide by a d minus b c, the determinant. The fifth lecture uses it in the by-hand least-squares example.
+
+In your own code, though, do not invert. To solve A x equals b, call numpy linalg solve. It is faster and numerically safer than computing the inverse and multiplying.
+
+The line at the bottom shows where this comes back. A layer W x turns d inputs into m outputs, so W is m by d. In the seventh lecture W has the neurons in its rows: three inputs and two neurons give a two by three matrix. And the least-squares solution of the fifth lecture is built from exactly these products and one inverse.

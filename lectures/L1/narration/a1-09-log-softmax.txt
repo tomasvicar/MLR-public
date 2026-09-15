@@ -1,0 +1,13 @@
+Three small tools come back again and again when machine learning works with probabilities: the logarithm, the sigmoid and the softmax. Start with the left panel. The exponential and the natural logarithm are mirror images across the dashed diagonal, because each one undoes the other.
+
+The three rules in the left column are all you need from the logarithm. The log of a product is the sum of the logs, the log of a power brings the exponent down in front, and the exponential of a sum is a product of exponentials. Why does that matter? A likelihood is a product over the samples, one probability per sample. Take its logarithm and it becomes a sum, and a sum can be differentiated term by term.
+
+There is also a very practical reason. Multiply four hundred probabilities of zero point one. The result is smaller than the smallest number a float sixty-four can hold, so the computer simply stores zero. This underflow is real, not a thought experiment. Four hundred times the log of zero point one, on the other hand, is minus nine hundred and twenty-one, an ordinary number.
+
+But does taking the log change the answer? No. The logarithm is increasing, so whatever w maximizes f also maximizes the log of f. The maximizer does not change, only the value of the maximum does.
+
+Now the middle panel. The sigmoid, one over one plus e to the minus z, squashes any score into the open interval between zero and one. Its derivative, the orange curve, is sigma times one minus sigma. Notice that it is at most zero point two five, exactly at zero, and almost zero far from it. A score far out on either side therefore passes back almost no gradient. The seventh lecture calls this the vanishing gradient, and it adds a temperature T to the sigmoid.
+
+The right panel is the softmax. Each score is exponentiated, which makes it positive, and divided by the sum of all of them, which makes the results add up to one. The scores two, one and zero point one are the ones the seventh lecture uses, and you can check the bars yourself. E squared is seven point three nine, e to the one is two point seven two, and e to the zero point one is one point one one. Together that is eleven point two one, and seven point three nine over eleven point two one gives the tallest bar, zero point six five nine.
+
+So, likelihoods are maximized as sums of logs, and the sigmoid of the fifth lecture and the softmax of the seventh are how a model turns scores into probabilities.

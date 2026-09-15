@@ -1,0 +1,13 @@
+All three kinds of probability can be read from one table of counts, and that is also how they are estimated from data. The table on the left counts one hundred e-mails, split by whether they are spam and whether they contain the word free.
+
+The joint probability is one cell divided by the total. Spam and free together is twenty e-mails out of one hundred, so zero point two.
+
+The marginal is a row or column total divided by the total. There are thirty spam e-mails, so the probability of spam is zero point three, whatever the word. Summing the row over both columns simply forgets about the word. And the name comes from the table itself: these totals are written in the margin.
+
+The conditional is the one to understand properly. The probability of spam given free means: restrict yourself to the column free. There are twenty-five such e-mails, and twenty of them are spam. Twenty out of twenty-five is zero point eight. The formula on the right says the same thing with probabilities, the joint zero point two divided by the column marginal zero point two five. Multiply both sides by that marginal and you get the product rule: a joint probability is a conditional times a marginal.
+
+Here is the trap. Look at the last line on the right. The probability of free given spam is a different question. Now you stay in the row spam, thirty e-mails, and twenty of them contain the word, which gives zero point six seven, not zero point eight. The two conditionals differ, and mixing them up is the most frequent error in probability. The next slide, on Bayes' rule, turns one into the other.
+
+Finally, independence, below the table. Independence would mean that the word says nothing about spam, and then the joint would equal the product of the two marginals. Here the joint, zero point two, is not zero point three times zero point two five. The word says a lot about spam.
+
+A confusion matrix, from the second lecture, is the same kind of table of counts.

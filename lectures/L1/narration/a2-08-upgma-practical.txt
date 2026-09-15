@@ -1,0 +1,13 @@
+This figure is a recipe for doing U P G M A on paper, and exactly this may come up in the exam. There are four points, A, B, C and D, and four columns, from step zero to step three.
+
+The top row shows the four points, with the links gradually appearing, one more in every step. The middle row is the distance matrix. It shrinks by one row and one column at every step, because two clusters become one. The bottom row is the dendrogram, growing with each merge.
+
+Start at step zero, with the full matrix. Find the smallest number in it. It is zero point nine two, between B and D. So in step one, B and D are merged into B D. Now the new distances. The distance from A to B D is the average of A to B, one point one two, and A to D, one point seven oh. That is one point four one. In the same way, C to B D is the average of one point four two and one point one two, which is one point two seven. The distance from A to C is not touched by the merge, so it stays one point three two.
+
+Step two. The smallest number in the smaller matrix is now one point two seven, so C joins B D, and you have B C D. What is the distance from A to B C D? Here the weights in the averaging formula matter. B D has two samples and C has one, so it is two times one point four one, plus one point three two, over three. That gives one point three eight, the number in the matrix. It is the same as averaging the three original distances from A to B, to C and to D.
+
+Step three merges A with B C D at one point three eight, and a single cluster remains. Look at the top panel of step three. The links are drawn between the centroids of the merged clusters, which is why the last link from A does not end at a point but partway along the line that joined C to B D.
+
+Now the bottom row. The height of a link is the distance at which the merge happened. The lowest link joins B and D at zero point nine two, the next one brings in C at one point two seven, and the top one brings in A at one point three eight. The leaves are ordered A, C, B, D, so that clusters that merge sit next to each other.
+
+Why draw the tree at all? Cutting it at a given height gives you any number of clusters you want. A cut between the two highest links leaves two clusters, A on its own and B C D. The lower you cut, the more clusters you get. The code example below the figure computes the same steps.

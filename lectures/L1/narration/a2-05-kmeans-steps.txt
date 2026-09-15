@@ -1,0 +1,15 @@
+The four panels at the top are one run of k-means with three clusters. Read them from left to right.
+
+In the first panel, means initialization, the points are still dark grey, and three crosses mark the starting means. Look where they landed. The blue one sits in the upper left group, but the green and the orange cross both lie in the same group on the right. It still ends well here, but it need not have.
+
+The second panel is the first assignment. Every point takes the colour of its nearest cross. The pale background shows the region that belongs to each centre, the places that are closer to it than to any other centre. That partition is called the Voronoi tessellation. Notice that the group at the bottom left has no centre of its own, so it is split between the blue and the orange region.
+
+The third panel is the means update. The crosses move to the means of their coloured points. The background still shows the old regions, so compare the crosses with where they stood in the second panel to see how far each one has travelled. Compare it with the last panel: the regions and their boundaries shift with every step.
+
+The fourth panel is convergence. Every group has its own cross, and another round changes nothing.
+
+The animation at the bottom left is the same run, step by step. After a still frame of the final state it shows the initialization, and then it alternates an assignment with a movement of the centres, drawn as arrows. After three movements nothing changes any more, neither the colours nor the centres. That is the definition of convergence.
+
+Next to the animation is a plot of the inertia J after each assignment step. It goes from four hundred six point eight, to one hundred fifty-eight point nine, to fifty-four point eight, and finally to fifty-two point six. It never increases. Why must it be so? The assignment gives each point its nearest centre, so no squared distance can grow. The update puts each centre at the mean of its points, and the mean is exactly the point with the smallest sum of squared distances to them. Both steps can only decrease J, and there are only finitely many ways to assign the points, so the algorithm must terminate.
+
+But notice the words in brackets on the slide: to a local minimum. Stopping is guaranteed, finding the best clustering is not. The code example linked on the right runs the same two steps.

@@ -1,0 +1,15 @@
+The table on the left is the whole of the calculus this course needs: powers, the exponential, the logarithm, the product rule and the chain rule. Everything else is the chain rule, applied again and again.
+
+With many variables you take partial derivatives. Differentiate with respect to one variable, and hold all the others fixed, as if they were constants. The gradient collects these partial derivatives into a vector. So it has as many components as there are parameters, the same shape as w. It points uphill, which is why gradient descent steps the other way.
+
+Now the figure on the right. It is one neuron without an activation, and one sample. The loss L is w x minus y, squared, with w equal to one, x equal to two and y equal to three.
+
+Read the top row from left to right; that is the forward pass. Multiply w by x and get z equals two. Subtract y and get r equals minus one. Square it and get L equals one. Each value is stored, because the backward pass will need it.
+
+Then read the red labels from right to left; that is the backward pass. It starts with one at L, since the derivative of L with respect to itself is one. Each edge carries its local derivative, the red label under the arrow. Squaring has the local derivative two r, which is minus two, so the derivative of L with respect to r is minus two. Subtracting y has the local derivative one, so the derivative with respect to z is still minus two. Multiplying by x has the local derivative x, which is two, so the derivative with respect to w is minus four. The formula under the figure is exactly that product: minus two, times one, times two.
+
+Do not just trust the graph; check it directly. Put the numbers in first, and L is two w minus three, squared. By the chain rule, its derivative is two times the bracket, two w minus three, and then times two for the inner derivative. At w equal to one, that is two times minus one times two, which is minus four. The same number.
+
+What does the minus sign tell you? That the loss falls when w grows, so increase w. And indeed, w equal to one point five makes two w minus three zero, and the loss is zero.
+
+A gradient like this one is what gradient descent in this lecture steps against. And backpropagation, in the seventh lecture, is exactly this, forward and backward, layer by layer.

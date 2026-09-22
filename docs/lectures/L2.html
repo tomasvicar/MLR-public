@@ -1455,7 +1455,7 @@ display:block!important;
 <aside class="notes">
 <ul>
 <li>two different objects that students constantly confuse: the loss the optimizer minimizes and the metric we report — the loss has to be differentiable and cheap per sample, the metric is dictated by the task and the cost of the errors</li>
-<li>the figure: the margin <span class="math-before-word"><span class="math inline">\(y \cdot f(\mathbf x)\)</span></span> is positive when the prediction is correct; the 0–1 loss is what accuracy counts and its derivative is zero everywhere except at one point — gradient descent cannot move on it; cross-entropy, hinge and squared error are smooth upper bounds that push the margin in the right direction</li>
+<li>the figure: the margin <span class="math-before-word"><span class="math inline">\(y \cdot f(\mathbf x)\)</span></span> is positive when the prediction is correct; the 0–1 loss is what accuracy counts and its derivative is zero everywhere except at one point — gradient descent cannot move on it; cross-entropy, hinge and squared error are convex upper bounds with a usable gradient (the hinge has a kink at margin 1, but a subgradient is enough) that push the margin in the right direction</li>
 <li>why the two can disagree: a lower cross-entropy does not guarantee a higher accuracy (cross-entropy also rewards calibration — see the calibration slide later), and under class imbalance the plain loss optimizes the majority class while the metric (macro-F₁, recall) cares about the minority — hence class weights in the loss; in segmentation the Dice metric gets its own soft “Dice loss” (later lectures)</li>
 <li>a case where they coincide: regression with MSE as both loss and metric; for MAE as a metric one can train on MSE or directly on MAE (the fifth lecture, LAD)</li>
 <li>the practical rule: choose the metric first from the task, then a loss that pushes it, and check the metric on the validation set — never trust the loss value alone</li>
@@ -1754,10 +1754,10 @@ display:block!important;
 <aside class="notes">
 <ul>
 <li>the message: the threshold is a decision about the cost of the two errors, not a property of the model — it is chosen on the validation set, never on the test set</li>
-<li>max accuracy = equal costs; at a prevalence of 5 % a false alarm is 19× more frequent than a miss, so accuracy pushes the threshold up and the model finds almost nobody (the accuracy paradox of the next block, seen from the threshold side)</li>
+<li>max accuracy = equal costs; at a prevalence of 5 % there are 19× more negatives than positives, so every false alarm avoided is worth as much as a positive found and accuracy pushes the threshold up and the model finds almost nobody (the accuracy paradox of the next block, seen from the threshold side)</li>
 <li>Youden’s J weighs sensitivity and specificity equally regardless of the prevalence — the usual choice in diagnostic studies</li>
 <li>with unequal costs the threshold on a calibrated probability is <span class="math inline">\(c_{FP} / (c_{FP} + c_{FN})\)</span>; a missed tumour costs more than a recall, so the threshold goes down — that is the next slide</li>
-<li>numbers for <span class="math-before-word"><span class="math inline">\(n = 1000\)</span></span> with 50 positives, the students can compute them as TPR · 50 and FPR · 950: max accuracy catches 12 positives with 5 false alarms; sensitivity 0.95 catches 48 with 416 false alarms — 416 healthy people recalled to find 48 sick ones</li>
+<li>numbers for <span class="math-before-word"><span class="math inline">\(n = 1000\)</span></span> with 50 positives, the students can compute them as TPR · 50 and FPR · 950 (with the unrounded FPR 0.438): max accuracy catches 12 positives with 5 false alarms; sensitivity 0.95 catches 48 with 416 false alarms — 416 healthy people recalled to find 48 sick ones</li>
 <li>⏱ ~3 min</li>
 </ul>
 <style type="text/css">
@@ -2413,7 +2413,7 @@ display:block!important;
 </div>
 <aside class="notes">
 <ul>
-<li>an overview; the next three slides take the three groups one by one</li>
+<li>an overview; the next five slides take the three groups one by one (imputation and outliers each get a method slide and a worked table)</li>
 <li>the common rule of all three: every step is a decision about the data, and every statistic it needs (a mean, a fence, a category mean) is fitted on the training fold only</li>
 <li>⏱ ~1.5 min</li>
 </ul>

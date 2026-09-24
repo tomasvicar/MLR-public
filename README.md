@@ -10,6 +10,6 @@ This repository holds what the labs need: the student notebooks
 web), the starter projects of the agent labs (`exercises/exNN/starter/`) and the
 small datasets (`exercises/data/`). Materials are added as the semester
 progresses — published so far: lectures 1, 2,
-exercises 1, 2.
+exercises 1, 2, 3.
 
 Found a mistake? Open an issue.

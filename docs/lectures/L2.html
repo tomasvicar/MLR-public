@@ -1457,7 +1457,7 @@ display:block!important;
 <li>two different objects that students constantly confuse: the loss the optimizer minimizes and the metric we report — the loss has to be differentiable and cheap per sample, the metric is dictated by the task and the cost of the errors</li>
 <li>the figure: the margin <span class="math-before-word"><span class="math inline">\(y \cdot f(\mathbf x)\)</span></span> is positive when the prediction is correct; the 0–1 loss is what accuracy counts and its derivative is zero everywhere except at one point — gradient descent cannot move on it; cross-entropy, hinge and squared error are convex upper bounds with a usable gradient (the hinge has a kink at margin 1, but a subgradient is enough) that push the margin in the right direction</li>
 <li>why the two can disagree: a lower cross-entropy does not guarantee a higher accuracy (cross-entropy also rewards calibration — see the calibration slide later), and under class imbalance the plain loss optimizes the majority class while the metric (macro-F₁, recall) cares about the minority — hence class weights in the loss; in segmentation the Dice metric gets its own soft “Dice loss” (later lectures)</li>
-<li>a case where they coincide: regression with MSE as both loss and metric; for MAE as a metric one can train on MSE or directly on MAE (the fifth lecture, LAD)</li>
+<li>a case where they coincide: regression with MSE as both loss and metric; for MAE as a metric one can train on MSE or directly on MAE (the fourth lecture, LAD)</li>
 <li>the practical rule: choose the metric first from the task, then a loss that pushes it, and check the metric on the validation set — never trust the loss value alone</li>
 <li>⏱ ~3 min</li>
 </ul>
@@ -1531,7 +1531,7 @@ display:block!important;
 <aside class="notes">
 <ul>
 <li>accuracy is intuitive, but on imbalanced data it lies — we will come back to this in the fourth block</li>
-<li>MSE and MAE are the <span class="math-before-word"><span class="math inline">\(L_2\)</span></span> and <span class="math-before-word"><span class="math inline">\(L_1\)</span></span> norms of the error vector (the norms and their unit balls are in the appendix of the first lecture); the fifth lecture uses the same two norms as the objective of least squares and of least absolute deviations, and as the Ridge and LASSO penalties</li>
+<li>MSE and MAE are the <span class="math-before-word"><span class="math inline">\(L_2\)</span></span> and <span class="math-before-word"><span class="math inline">\(L_1\)</span></span> norms of the error vector (the norms and their unit balls are in the appendix of the first lecture); the fourth lecture uses the same two norms as the objective of least squares and of least absolute deviations, and as the Ridge and LASSO penalties</li>
 <li>the figure: <span class="math-before-word"><span class="math inline">\(p\)</span></span> is the exponent of the per-sample penalty — MSE punishes large errors quadratically, MAE linearly, so MSE is more sensitive to outliers; <span class="math-before-word"><span class="math inline">\(p &lt; 1\)</span></span> would care mostly about small errors</li>
 <li>RMSE has the same units as <span class="math inline">\(y\)</span>, so it is easy to interpret (e.g. mm, mV)</li>
 <li>the hand-worked example is the same one as in the code example — let the students compute MSE and MAE from the five errors on paper, then compare with the output of the script; with the norms: <span class="math inline">\(\lVert \mathbf e \rVert_1 = 2.6\)</span>, <span class="math inline">\(\lVert \mathbf e \rVert_2^2 = 1.64\)</span></li>
@@ -2528,7 +2528,7 @@ display:block!important;
 <li>right: winsorization clips the extremes to the percentiles — the outlier is still the largest value, it just cannot drag the mean or a least-squares fit any more; on this slide it moves from 200 to 71</li>
 <li>the decision tree: keep + robust scaling (default) → winsorize (when the model is sensitive to leverage, e.g. linear regression with MSE) → remove (only impossible values, e.g. the 400 cm heights in lab 3, dropped there by the rule <code>height_cm &lt;= 250</code>)</li>
 <li>whatever rule is chosen, it is fitted on the training fold: the percentiles, the fences, the isolation forest — otherwise the test set decides what gets removed</li>
-<li>the fifth lecture comes back to this from the model side: MAE and the LAD regression are robust to outliers where MSE is not</li>
+<li>the fourth lecture comes back to this from the model side: MAE and the LAD regression are robust to outliers where MSE is not</li>
 <li>⏱ ~3 min</li>
 </ul>
 <style type="text/css">

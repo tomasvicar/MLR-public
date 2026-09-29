@@ -6,13 +6,33 @@
     <atom:link href="https://tomasvicar.github.io/MLR-public/podcast.xml" rel="self" type="application/rss+xml"/>
     <description>Talk podcasts about the lectures and labs of the course Machine Learning (MPA-MLR), in English and Czech, read by a local text-to-speech engine. Slides and materials are on the course web.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 22 Sep 2026 12:07:00 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 27 Sep 2026 12:09:00 +0200</lastBuildDate>
     <image><url>https://tomasvicar.github.io/MLR-public/podcasts/cover.png</url><title>MPA-MLR · Machine Learning</title><link>https://tomasvicar.github.io/MLR-public/</link></image>
     <itunes:image href="https://tomasvicar.github.io/MLR-public/podcasts/cover.png"/>
     <itunes:author>Tomáš Vičar</itunes:author>
     <itunes:category text="Education"/>
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
+    <item>
+      <title>Lecture 3 · Feature extraction, selection and dimensionality reduction — talk (EN)</title>
+      <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Curse of dimensionality. Filter methods (correlation, entropy, mutual information, mRMR), wrappers (forward selection, backward elimination), embedded methods. PCA, LDA, t-SNE and UMAP, feature expansion.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L3/L3-talk-en-a294535c1d.m4a" length="19541425" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-09-27-l03-lecture-talk-en</guid>
+      <pubDate>Sun, 27 Sep 2026 12:09:00 +0200</pubDate>
+      <itunes:duration>1:18:34</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Lecture 3 · Feature extraction, selection and dimensionality reduction — talk (CZ)</title>
+      <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. Curse of dimensionality. Filter methods (correlation, entropy, mutual information, mRMR), wrappers (forward selection, backward elimination), embedded methods. PCA, LDA, t-SNE and UMAP, feature expansion.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L3/L3-talk-cs-381e48b5cb.m4a" length="18796623" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-09-27-l03-lecture-talk-cs</guid>
+      <pubDate>Sun, 27 Sep 2026 12:08:00 +0200</pubDate>
+      <itunes:duration>1:15:25</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
     <item>
       <title>Lecture 2 · Performance evaluation, metrics, preprocessing — talk (EN)</title>
       <description>A conversation of two hosts, in English, read by a local text-to-speech engine. The supervised pipeline; train / validation / test as two nested optimization problems. Confusion-matrix metrics, ROC, the operating point, calibration, R². Class imbalance, cross-validation, scaling, imputation, outliers, encodings, and where information leaks.</description>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MPA-MLR · Machine Learning</title>
+    <link>https://tomasvicar.github.io/MLR-public/</link>
+    <atom:link href="https://tomasvicar.github.io/MLR-public/podcast.xml" rel="self" type="application/rss+xml"/>
+    <description>Talk podcasts about the lectures and labs of the course Machine Learning (MPA-MLR), in English and Czech, read by a local text-to-speech engine. Slides and materials are on the course web.</description>
+    <language>en</language>
+    <lastBuildDate>Tue, 22 Sep 2026 12:07:00 +0200</lastBuildDate>
+    <image><url>https://tomasvicar.github.io/MLR-public/podcasts/cover.png</url><title>MPA-MLR · Machine Learning</title><link>https://tomasvicar.github.io/MLR-public/</link></image>
+    <itunes:image href="https://tomasvicar.github.io/MLR-public/podcasts/cover.png"/>
+    <itunes:author>Tomáš Vičar</itunes:author>
+    <itunes:category text="Education"/>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:type>episodic</itunes:type>
+    <item>
+      <title>Lecture 2 · Performance evaluation, metrics, preprocessing — talk (EN)</title>
+      <description>A conversation of two hosts, in English, read by a local text-to-speech engine. The supervised pipeline; train / validation / test as two nested optimization problems. Confusion-matrix metrics, ROC, the operating point, calibration, R². Class imbalance, cross-validation, scaling, imputation, outliers, encodings, and where information leaks.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L2/L2-talk-en-82b428d27e.m4a" length="21216924" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-09-22-l02-lecture-talk-en</guid>
+      <pubDate>Tue, 22 Sep 2026 12:07:00 +0200</pubDate>
+      <itunes:duration>1:25:17</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Lecture 2 · Performance evaluation, metrics, preprocessing — talk (CZ)</title>
+      <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. The supervised pipeline; train / validation / test as two nested optimization problems. Confusion-matrix metrics, ROC, the operating point, calibration, R². Class imbalance, cross-validation, scaling, imputation, outliers, encodings, and where information leaks.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L2/L2-talk-cs-c0c03211e2.m4a" length="21090635" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-09-22-l02-lecture-talk-cs</guid>
+      <pubDate>Tue, 22 Sep 2026 12:06:00 +0200</pubDate>
+      <itunes:duration>1:24:45</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Exercise 2 · k-NN as an object, metrics, splitting, standardization — talk (EN)</title>
+      <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Includes the solutions of the lab. From NN to k-NN, the scikit-learn estimator interface, metrics from a confusion matrix by hand and in NumPy, hold-out split, standardization, and four broken pipelines to diagnose — the last one also to repair.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-EX2/EX2-talk-en-5d7c35cff6.m4a" length="12813338" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-09-18-l02-lab-talk-en</guid>
+      <pubDate>Fri, 18 Sep 2026 12:03:00 +0200</pubDate>
+      <itunes:duration>0:51:31</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Exercise 2 · k-NN as an object, metrics, splitting, standardization — talk (CZ)</title>
+      <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. Includes the solutions of the lab. From NN to k-NN, the scikit-learn estimator interface, metrics from a confusion matrix by hand and in NumPy, hold-out split, standardization, and four broken pipelines to diagnose — the last one also to repair.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-EX2/EX2-talk-cs-cacd6ff823.m4a" length="12561143" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-09-18-l02-lab-talk-cs</guid>
+      <pubDate>Fri, 18 Sep 2026 12:02:00 +0200</pubDate>
+      <itunes:duration>0:50:27</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Lecture 1 · Introduction, optimization, how we code now — talk (EN)</title>
+      <description>A conversation of two hosts, in English, read by a local text-to-speech engine. What machine learning is; supervised, unsupervised and reinforcement learning. Distances, 1-NN, k-NN, k-means, UPGMA. Optimization: convexity, closed-form vs. iterative solutions. Why we compute by hand and validate what an agent writes.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L1/L1-talk-en-256f382290.m4a" length="25669092" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-09-15-l01-lecture-talk-en</guid>
+      <pubDate>Tue, 15 Sep 2026 12:05:00 +0200</pubDate>
+      <itunes:duration>1:43:11</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Lecture 1 · Introduction, optimization, how we code now — talk (CZ)</title>
+      <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. What machine learning is; supervised, unsupervised and reinforcement learning. Distances, 1-NN, k-NN, k-means, UPGMA. Optimization: convexity, closed-form vs. iterative solutions. Why we compute by hand and validate what an agent writes.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L1/L1-talk-cs-09fb83cd2e.m4a" length="26085881" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-09-15-l01-lecture-talk-cs</guid>
+      <pubDate>Tue, 15 Sep 2026 12:04:00 +0200</pubDate>
+      <itunes:duration>1:44:46</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Exercise 1 · Introduction, libraries, nearest neighbour — talk (EN)</title>
+      <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Includes the solutions of the lab. NumPy, Matplotlib, pandas and scikit-learn in an hour. Measure leaves, compute the nearest-neighbour decision by hand, then in NumPy.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-EX1/EX1-talk-en-d1911d44e3.m4a" length="12673079" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-09-09-l01-lab-talk-en</guid>
+      <pubDate>Wed, 09 Sep 2026 12:01:00 +0200</pubDate>
+      <itunes:duration>0:50:57</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Exercise 1 · Introduction, libraries, nearest neighbour — talk (CZ)</title>
+      <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. Includes the solutions of the lab. NumPy, Matplotlib, pandas and scikit-learn in an hour. Measure leaves, compute the nearest-neighbour decision by hand, then in NumPy.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-EX1/EX1-talk-cs-a551547c59.m4a" length="12091820" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-09-09-l01-lab-talk-cs</guid>
+      <pubDate>Wed, 09 Sep 2026 12:00:00 +0200</pubDate>
+      <itunes:duration>0:48:32</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+  </channel>
+</rss>

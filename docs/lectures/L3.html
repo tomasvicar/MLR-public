@@ -2757,14 +2757,22 @@ display:block!important;
 <div class="column" style="width:49%;">
 <p><strong>Compute a separating direction</strong></p>
 <ol type="1">
-<li>Estimate <strong>class means</strong> <span class="math inline">\(\boldsymbol\mu_c\)</span>.</li>
-<li>Sum <strong>within-class squared deviations</strong> into <span class="math inline">\(S_W\)</span>.</li>
-<li>For two classes, solve:</li>
+<li><strong>Class means</strong> <span class="math inline">\(\boldsymbol\mu_c\)</span>.</li>
+<li><strong>Within-class scatter</strong> <span class="math inline">\(S_W\)</span>.</li>
+<li>Two classes: <strong>maximize Fisher’s criterion</strong></li>
 </ol>
 <p><span class="math display">\[
-S_W\mathbf w=\boldsymbol\mu_1-\boldsymbol\mu_2.
+\max_{\mathbf w}\;
+\frac{\big(\mathbf w^\top(\boldsymbol\mu_1-\boldsymbol\mu_2)\big)^2}
+{\mathbf w^\top S_W\,\mathbf w}
+\;\;
+\begin{array}{l}
+\scriptstyle\leftarrow\,\text{separation}\uparrow\\[6pt]
+\scriptstyle\leftarrow\,\text{spread}\downarrow
+\end{array}
 \]</span></p>
-<p>Project: <span class="math inline">\(z=\mathbf w^\top\mathbf x\)</span>.</p>
+<p>Optimum: solve <span class="math inline">\(S_W\mathbf w=\boldsymbol\mu_1-\boldsymbol\mu_2\)</span>.<br>
+Score: <span class="math inline">\(z=\mathbf w^\top\mathbf x\)</span>.</p>
 </div><div class="column" style="width:49%;">
 <p><strong>Used in practice</strong></p>
 <ul>
@@ -2774,7 +2782,7 @@ S_W\mathbf w=\boldsymbol\mu_1-\boldsymbol\mu_2.
 </ul>
 </div></div>
 <div class="insight-box">
-<p><strong>Principle:</strong> large between-class separation relative to within-class spread. For two classes, <strong>one score + a threshold</strong> gives a linear classifier.</p>
+<p>For two classes, <strong>one score + a threshold</strong> gives a linear classifier.</p>
 </div>
 <div class="small-note">
 <p>Singular <span class="math inline">\(S_W\)</span>: use regularization or a rank-aware solver. <a href="#/lda-fisher-binary-case-in-one-slide">Derivation and example</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/20600976/">EEG application</a></p>
@@ -2783,7 +2791,9 @@ S_W\mathbf w=\boldsymbol\mu_1-\boldsymbol\mu_2.
 <ul>
 <li>the previous picture carries the main lesson: the most variable direction may be useless for distinguishing labels</li>
 <li>compute each class mean, then sum the within-class outer products: S_W = sum_c sum_{i:y_i=c} (x_i-mu_c)(x_i-mu_c)^T</li>
-<li>for two distinct class means and nonsingular S_W, solving S_W w = mu_1-mu_2 gives a Fisher-optimal direction up to a nonzero scale; use a linear solve rather than explicitly forming an inverse</li>
+<li>as with PCA, the projection is defined as an optimization problem over the direction w: the numerator is the squared distance of the projected class means (to be large), the denominator the projected within-class scatter w^T S_W w (to be small)</li>
+<li>the ratio does not change when w is scaled, so only the direction matters</li>
+<li>setting the gradient to zero gives the optimum in closed form (derivation in the appendix): for two distinct class means and nonsingular S_W, solving S_W w = mu_1-mu_2 gives a Fisher-optimal direction up to a nonzero scale; use a linear solve rather than explicitly forming an inverse</li>
 <li>for several classes, form S_B = sum_c n_c (mu_c-mu)(mu_c-mu)^T and choose generalized eigenvectors with the largest eigenvalues in S_B w = lambda S_W w</li>
 <li>Fisher’s criterion compares between-class separation against within-class scatter; it chooses a projection rather than literally moving samples independently</li>
 <li>a concrete practical example is shrinkage LDA for single-trial EEG/ERP classification (Blankertz et al., NeuroImage, 2011); this is evidence for classifier use, not for routine replacement of PCA preprocessing</li>
@@ -3484,7 +3494,7 @@ J(\mathbf{w}) =
 {\mathbf{w}^\top S_W \mathbf{w}},
 \qquad S_W=S_1+S_2 .
 \]</span></p>
-<p>For nonsingular <span class="math inline">\(S_W\)</span>, one optimal direction (up to nonzero scale) is: <span class="math display">\[
+<p><strong>Optimum:</strong> <span class="math-before-word"><span class="math inline">\(\nabla J=0\)</span></span> gives <span class="math-before-word"><span class="math inline">\(S_W\mathbf w\propto\boldsymbol\mu_1-\boldsymbol\mu_2\)</span></span> (the factors <span class="math-before-word"><span class="math inline">\(\mathbf w^\top(\boldsymbol\mu_1-\boldsymbol\mu_2)\)</span></span> and <span class="math-before-word"><span class="math inline">\(\mathbf w^\top S_W\mathbf w\)</span></span> are scalars). For nonsingular <span class="math inline">\(S_W\)</span>, one optimal direction (up to nonzero scale) is: <span class="math display">\[
 \boxed{\;\mathbf{w} = S_W^{-1}(\boldsymbol{\mu}_1-\boldsymbol{\mu}_2)\;}
 \]</span> For the multi-class case this leads to an eigenvalue problem: <span class="math inline">\(S_W^{-1} S_B\,\mathbf{w} = \lambda\,\mathbf{w}\)</span>.</p>
 </div>
@@ -3493,6 +3503,7 @@ J(\mathbf{w}) =
 <li>the extra 2D projection and histogram example, its figures and its runnable code link are preserved in extended-reference.md; the main mean/spread example supplies the primary visual explanation</li>
 <li>the Fisher criterion is a ratio: the squared separation of the projected means in the numerator, the scatter within the classes in the denominator</li>
 <li>both terms are expressed through w as quadratic forms, so the problem has a closed-form solution</li>
+<li>the gradient of J is zero when (mu_1-mu_2)(w<sup>T(mu_1-mu_2))(w</sup>T S_W w) = (w<sup>T(mu_1-mu_2))</sup>2 S_W w; both brackets are scalars, so S_W w is a multiple of mu_1-mu_2</li>
 <li>the result can be read geometrically: the direction of the difference of the means, “corrected” by the inverse of the within-class covariance</li>
 <li>if S_W were the identity, LDA would point exactly along the line joining the means; a non-diagonal S_W rotates that direction</li>
 <li>if S_W is singular, the inverse formula cannot be used as written; use a suitable regularized or rank-aware solution</li>

@@ -6,7 +6,7 @@
     <atom:link href="https://tomasvicar.github.io/MLR-public/podcast.xml" rel="self" type="application/rss+xml"/>
     <description>Talk podcasts about the lectures and labs of the course Machine Learning (MPA-MLR), in English and Czech, read by a local text-to-speech engine. Slides and materials are on the course web.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 27 Sep 2026 12:09:00 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 27 Sep 2026 12:11:00 +0200</lastBuildDate>
     <image><url>https://tomasvicar.github.io/MLR-public/podcasts/cover.png</url><title>MPA-MLR · Machine Learning</title><link>https://tomasvicar.github.io/MLR-public/</link></image>
     <itunes:image href="https://tomasvicar.github.io/MLR-public/podcasts/cover.png"/>
     <itunes:author>Tomáš Vičar</itunes:author>
@@ -18,7 +18,7 @@
       <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Curse of dimensionality. Filter methods (correlation, entropy, mutual information, mRMR), wrappers (forward selection, backward elimination), embedded methods. PCA, LDA, t-SNE and UMAP, feature expansion.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L3/L3-talk-en-a294535c1d.m4a" length="19541425" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-09-27-l03-lecture-talk-en</guid>
-      <pubDate>Sun, 27 Sep 2026 12:09:00 +0200</pubDate>
+      <pubDate>Sun, 27 Sep 2026 12:11:00 +0200</pubDate>
       <itunes:duration>1:18:34</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -28,8 +28,28 @@
       <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. Curse of dimensionality. Filter methods (correlation, entropy, mutual information, mRMR), wrappers (forward selection, backward elimination), embedded methods. PCA, LDA, t-SNE and UMAP, feature expansion.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L3/L3-talk-cs-381e48b5cb.m4a" length="18796623" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-09-27-l03-lecture-talk-cs</guid>
-      <pubDate>Sun, 27 Sep 2026 12:08:00 +0200</pubDate>
+      <pubDate>Sun, 27 Sep 2026 12:10:00 +0200</pubDate>
       <itunes:duration>1:15:25</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Exercise 3 · Feature selection — talk (EN)</title>
+      <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Includes the solutions of the lab. Tables in pandas. Correlation, entropy and mutual information by hand on four rows, then in NumPy and checked against scipy. Forward selection from scratch, with a brief scikit-learn comparison. PCA is optional reference material.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-EX3/EX3-talk-en-2e00cb8dd0.m4a" length="17157366" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-09-24-l03-lab-talk-en</guid>
+      <pubDate>Thu, 24 Sep 2026 12:05:00 +0200</pubDate>
+      <itunes:duration>1:09:01</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Exercise 3 · Feature selection — talk (CZ)</title>
+      <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. Includes the solutions of the lab. Tables in pandas. Correlation, entropy and mutual information by hand on four rows, then in NumPy and checked against scipy. Forward selection from scratch, with a brief scikit-learn comparison. PCA is optional reference material.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-EX3/EX3-talk-cs-69df425601.m4a" length="17483998" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-09-24-l03-lab-talk-cs</guid>
+      <pubDate>Thu, 24 Sep 2026 12:04:00 +0200</pubDate>
+      <itunes:duration>1:10:10</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
     </item>
@@ -38,7 +58,7 @@
       <description>A conversation of two hosts, in English, read by a local text-to-speech engine. The supervised pipeline; train / validation / test as two nested optimization problems. Confusion-matrix metrics, ROC, the operating point, calibration, R². Class imbalance, cross-validation, scaling, imputation, outliers, encodings, and where information leaks.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L2/L2-talk-en-82b428d27e.m4a" length="21216924" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-09-22-l02-lecture-talk-en</guid>
-      <pubDate>Tue, 22 Sep 2026 12:07:00 +0200</pubDate>
+      <pubDate>Tue, 22 Sep 2026 12:09:00 +0200</pubDate>
       <itunes:duration>1:25:17</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -48,7 +68,7 @@
       <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. The supervised pipeline; train / validation / test as two nested optimization problems. Confusion-matrix metrics, ROC, the operating point, calibration, R². Class imbalance, cross-validation, scaling, imputation, outliers, encodings, and where information leaks.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L2/L2-talk-cs-c0c03211e2.m4a" length="21090635" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-09-22-l02-lecture-talk-cs</guid>
-      <pubDate>Tue, 22 Sep 2026 12:06:00 +0200</pubDate>
+      <pubDate>Tue, 22 Sep 2026 12:08:00 +0200</pubDate>
       <itunes:duration>1:24:45</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -78,7 +98,7 @@
       <description>A conversation of two hosts, in English, read by a local text-to-speech engine. What machine learning is; supervised, unsupervised and reinforcement learning. Distances, 1-NN, k-NN, k-means, UPGMA. Optimization: convexity, closed-form vs. iterative solutions. Why we compute by hand and validate what an agent writes.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L1/L1-talk-en-256f382290.m4a" length="25669092" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-09-15-l01-lecture-talk-en</guid>
-      <pubDate>Tue, 15 Sep 2026 12:05:00 +0200</pubDate>
+      <pubDate>Tue, 15 Sep 2026 12:07:00 +0200</pubDate>
       <itunes:duration>1:43:11</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -88,7 +108,7 @@
       <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. What machine learning is; supervised, unsupervised and reinforcement learning. Distances, 1-NN, k-NN, k-means, UPGMA. Optimization: convexity, closed-form vs. iterative solutions. Why we compute by hand and validate what an agent writes.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L1/L1-talk-cs-09fb83cd2e.m4a" length="26085881" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-09-15-l01-lecture-talk-cs</guid>
-      <pubDate>Tue, 15 Sep 2026 12:04:00 +0200</pubDate>
+      <pubDate>Tue, 15 Sep 2026 12:06:00 +0200</pubDate>
       <itunes:duration>1:44:46</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>

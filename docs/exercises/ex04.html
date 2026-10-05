@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Exercises – MPA-MLR · Machine Learning</title>
+<title>Exercise 4 — Linear, ridge and kernel regression – MPA-MLR · Machine Learning</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -29,19 +29,19 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-048d922357c5513320d4bebf0a31084d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-048d922357c5513320d4bebf0a31084d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -59,6 +59,35 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -69,11 +98,11 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./images/logo.svg" alt="MPA-MLR" class="navbar-logo light-content">
-    <img src="./images/logo.svg" alt="MPA-MLR" class="navbar-logo dark-content">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../images/logo.svg" alt="MPA-MLR" class="navbar-logo light-content">
+    <img src="../images/logo.svg" alt="MPA-MLR" class="navbar-logo dark-content">
     </a>
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">MPA-MLR · Machine Learning</span>
     </a>
   </div>
@@ -83,23 +112,23 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./lectures.html"> 
+    <a class="nav-link" href="../lectures.html"> 
 <span class="menu-text">Lectures</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./exercises.html" aria-current="page"> 
+    <a class="nav-link" href="../exercises.html"> 
 <span class="menu-text">Exercises</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./materials.html"> 
+    <a class="nav-link" href="../materials.html"> 
 <span class="menu-text">Materials</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./organisation.html"> 
+    <a class="nav-link" href="../organisation.html"> 
 <span class="menu-text">Organisation</span></a>
   </li>  
 </ul>
@@ -125,8 +154,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#labs-202627" id="toc-labs-202627" class="nav-link active" data-scroll-target="#labs-202627">Labs 2026/27</a></li>
-  <li><a href="#archive" id="toc-archive" class="nav-link" data-scroll-target="#archive">Archive</a></li>
+  <li><a href="#what-you-will-learn" id="toc-what-you-will-learn" class="nav-link active" data-scroll-target="#what-you-will-learn">What you will learn</a></li>
+  <li><a href="#before-the-lab" id="toc-before-the-lab" class="nav-link" data-scroll-target="#before-the-lab">Before the lab</a></li>
+  <li><a href="#tasks" id="toc-tasks" class="nav-link" data-scroll-target="#tasks">Tasks</a></li>
+  <li><a href="#by-hand" id="toc-by-hand" class="nav-link" data-scroll-target="#by-hand">By hand</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
+  <li><a href="#further-resources" id="toc-further-resources" class="nav-link" data-scroll-target="#further-resources">Further resources</a></li>
   </ul>
 </nav>
     </div>
@@ -135,8 +168,8 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Exercises</h1>
-<p class="subtitle lead">Computer labs: assignments, notebooks, data</p>
+<h1 class="title">Exercise 4 — Linear, ridge and kernel regression</h1>
+<p class="subtitle lead">From a 2×2 matrix inverse on the blackboard to a kernel that never builds its feature space</p>
 </div>
 
 
@@ -153,145 +186,115 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Every lab has an <strong>assignment page</strong> (what you will learn, the tasks, the small example to compute by hand, data) and, for labs 1–4, 6–9 and 11, a <strong>notebook in Google Colab</strong> (opens from the assignment page; save a copy to your Drive before editing). Labs 5 and 10 happen in a terminal and an editor and come with a starter project instead; lab 12 is the project, assigned and solved in the lab.</p>
-<div class="callout callout-style-simple callout-tip">
+<div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>In the first four labs, switch the AI assistance in Colab off (Settings → AI assistance) — you write the code to understand the algorithm. From lab 5 on, a coding agent is part of the work.</p>
+<p><strong>Week 4</strong> · builds on the <a href="../lectures/L4.html">fourth lecture</a> (<em>linear models and kernels</em>) · bring a laptop and a pen; Tasks 1, 3 and 5 start on paper</p>
 </div>
 </div>
 </div>
-<section id="labs-202627" class="level2">
-<h2 class="anchored" data-anchor-id="labs-202627">Labs 2026/27</h2>
-<div class="grid-cards">
-<div id="ex1" class="card-item">
-<p><span class="num">Exercise 1</span></p>
-<section id="introduction-libraries-nearest-neighbour" class="level3">
-<h3 class="anchored" data-anchor-id="introduction-libraries-nearest-neighbour">Introduction, libraries, nearest neighbour</h3>
-<p>NumPy, Matplotlib, pandas and scikit-learn in an hour. Measure leaves, compute the nearest-neighbour decision by hand, then in NumPy.</p>
+<p><a class="btn-colab" href="https://colab.research.google.com/github/tomasvicar/MLR-public/blob/master/exercises/ex04/ex04_student.ipynb" target="_blank">▶ Open the notebook in Google Colab</a></p>
 <div class="links">
-<a class="btn-pill solid" href="./exercises/ex01.html">Assignment</a> <a class="btn-pill" href="https://colab.research.google.com/github/tomasvicar/MLR-public/blob/master/exercises/ex01/ex01_student.ipynb">Colab</a> <a class="btn-pill" href="https://github.com/tomasvicar/MLR-public/releases/download/media-EX1/EX1-talk-en-d1911d44e3.m4a" title="Talk podcast about the lab, including the solutions">Podcast EN</a> <a class="btn-pill" href="https://github.com/tomasvicar/MLR-public/releases/download/media-EX1/EX1-talk-cs-a551547c59.m4a" title="Talk podcast about the lab, including the solutions">Podcast CZ</a>
+<a class="btn-pill" href="https://github.com/tomasvicar/MLR-public/releases/download/media-EX4/EX4-talk-en-ab3a63599d.m4a" title="Talk podcast about the lab, including the solutions">Podcast EN</a> <a class="btn-pill" href="https://github.com/tomasvicar/MLR-public/releases/download/media-EX4/EX4-talk-cs-653f145979.m4a" title="Talk podcast about the lab, including the solutions">Podcast CZ</a>
 </div>
+<section id="what-you-will-learn" class="level2">
+<h2 class="anchored" data-anchor-id="what-you-will-learn">What you will learn</h2>
+<ul>
+<li>Solve linear regression in closed form, <span class="math inline">\(\mathbf w = (X^\top X)^{-1} X^\top \mathbf y\)</span> — on paper, in NumPy and checked against scikit-learn.</li>
+<li>Turn a linear model into a curve with <strong>polynomial features</strong>, and see a degree-15 polynomial overfit.</li>
+<li>Read what <strong>ridge</strong> <span class="math inline">\(\lambda\)</span> does from a table before a plot.</li>
+<li>Write ridge in its <strong>primal</strong> and <strong>dual</strong> form, and replace the dot products of the dual by a <strong>kernel</strong>: kernel ridge regression.</li>
+<li>See why <strong>Lasso</strong> (<span class="math inline">\(L_1\)</span>) sets weights exactly to zero while ridge (<span class="math inline">\(L_2\)</span>) only shrinks them.</li>
+</ul>
 </section>
-</div>
-<div id="ex2" class="card-item">
-<p><span class="num">Exercise 2</span></p>
-<section id="k-nn-as-an-object-metrics-splitting-standardization" class="level3">
-<h3 class="anchored" data-anchor-id="k-nn-as-an-object-metrics-splitting-standardization">k-NN as an object, metrics, splitting, standardization</h3>
-<p>From NN to k-NN, the scikit-learn estimator interface, metrics from a confusion matrix by hand and in NumPy, hold-out split, standardization, and four broken pipelines to diagnose — the last one also to repair.</p>
-<div class="links">
-<a class="btn-pill solid" href="./exercises/ex02.html">Assignment</a> <a class="btn-pill" href="https://colab.research.google.com/github/tomasvicar/MLR-public/blob/master/exercises/ex02/ex02_student.ipynb">Colab</a> <a class="btn-pill" href="https://github.com/tomasvicar/MLR-public/releases/download/media-EX2/EX2-talk-en-5d7c35cff6.m4a" title="Talk podcast about the lab, including the solutions">Podcast EN</a> <a class="btn-pill" href="https://github.com/tomasvicar/MLR-public/releases/download/media-EX2/EX2-talk-cs-cacd6ff823.m4a" title="Talk podcast about the lab, including the solutions">Podcast CZ</a>
-</div>
+<section id="before-the-lab" class="level2">
+<h2 class="anchored" data-anchor-id="before-the-lab">Before the lab</h2>
+<ul>
+<li>Revise the <a href="../lectures/L4.html">fourth lecture</a>: the bias trick, the closed form, ridge in primal and dual form, kernels and the kernel matrix <span class="math inline">\(K\)</span>, and ridge vs.&nbsp;LASSO. The notebook uses the same notation.</li>
+<li>Recall the train / validation / test split and standardization from lab 2.</li>
+<li>The sliders and the animation need Colab or Jupyter: run the cell, set the sliders and click <strong>Run Interact</strong>; the animation has its own player.</li>
+</ul>
 </section>
-</div>
-<div id="ex3" class="card-item">
-<p><span class="num">Exercise 3</span></p>
-<section id="feature-selection" class="level3">
-<h3 class="anchored" data-anchor-id="feature-selection">Feature selection</h3>
-<p>Tables in pandas. Correlation, entropy and mutual information by hand on four rows, then in NumPy and checked against scipy. Forward selection from scratch, with a brief scikit-learn comparison. PCA is optional reference material.</p>
-<div class="links">
-<a class="btn-pill solid" href="./exercises/ex03.html">Assignment</a> <a class="btn-pill" href="https://colab.research.google.com/github/tomasvicar/MLR-public/blob/master/exercises/ex03/ex03_student.ipynb">Colab</a> <a class="btn-pill" href="https://github.com/tomasvicar/MLR-public/releases/download/media-EX3/EX3-talk-en-2e00cb8dd0.m4a" title="Talk podcast about the lab, including the solutions">Podcast EN</a> <a class="btn-pill" href="https://github.com/tomasvicar/MLR-public/releases/download/media-EX3/EX3-talk-cs-69df425601.m4a" title="Talk podcast about the lab, including the solutions">Podcast CZ</a>
-</div>
+<section id="tasks" class="level2">
+<h2 class="anchored" data-anchor-id="tasks">Tasks</h2>
+<ol type="1">
+<li><strong>Least squares by hand</strong> — a line through two points, then least squares and ridge for three points on paper, confirmed by code and scikit-learn.</li>
+<li><strong>Many points</strong> — the same formula on 100 noisy samples; try to beat it with sliders on an error bowl.</li>
+<li><strong>Polynomial features</strong> — build the feature matrix, fit degrees 1, 3 and 15 and compare training and test error.</li>
+<li><strong>Ridge regression</strong> — implement it, trace <span class="math inline">\(\lambda\)</span> in a table, then in a picture.</li>
+<li><strong>Primal and dual form</strong> — two points on the blackboard, then the dual prediction on the polynomial features.</li>
+<li><strong>The kernel trick</strong> — polynomial and RBF kernels, kernel ridge regression checked against <code>KernelRidge</code>, and the RBF model as a sum of bumps.</li>
+<li><strong>Lasso vs.&nbsp;ridge</strong> — a table of validation error and non-zero weights on the diabetes data, the coefficient paths, and an animation of why <span class="math inline">\(L_1\)</span> gives exact zeros.</li>
+</ol>
+<p>The lab has <strong>135 teaching minutes (3 × 45)</strong>: Task 1 with the blackboard part (30 minutes), Tasks 2–4 (50), Tasks 5–6 (40), Task 7 (12) and a short recap. Breaks are outside this budget. <strong>The parts marked <em>optional</em></strong> (the sliders of Tasks 4 and 6, the conditioning of Task 4) are for fast students or for home.</p>
 </section>
+<section id="by-hand" class="level2">
+<h2 class="anchored" data-anchor-id="by-hand">By hand</h2>
+<p><strong>Task 1 — three points.</strong></p>
+<div class="hand-table">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(x\)</span></th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(y\)</span></td>
+<td>2</td>
+<td>3</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="ex4" class="card-item">
-<p><span class="num">Exercise 4</span></p>
-<section id="linear-ridge-and-kernel-regression" class="level3">
-<h3 class="anchored" data-anchor-id="linear-ridge-and-kernel-regression">Linear, ridge and kernel regression</h3>
-<p>Least squares on three points by hand. Polynomial features and why degree 15 overfits. Ridge with λ traced in a table before the plot; primal vs.&nbsp;dual; the kernel trick and kernel ridge; why lasso gives exact zeros.</p>
-<div class="links">
-<a class="btn-pill solid" href="./exercises/ex04.html">Assignment</a> <a class="btn-pill" href="https://colab.research.google.com/github/tomasvicar/MLR-public/blob/master/exercises/ex04/ex04_student.ipynb">Colab</a> <a class="btn-pill" href="https://github.com/tomasvicar/MLR-public/releases/download/media-EX4/EX4-talk-en-ab3a63599d.m4a" title="Talk podcast about the lab, including the solutions">Podcast EN</a> <a class="btn-pill" href="https://github.com/tomasvicar/MLR-public/releases/download/media-EX4/EX4-talk-cs-653f145979.m4a" title="Talk podcast about the lab, including the solutions">Podcast CZ</a>
+<p>Build <span class="math inline">\(X\)</span> with a leading column of ones, then compute <span class="math inline">\(X^\top X\)</span>, <span class="math inline">\(X^\top \mathbf y\)</span>, <span class="math inline">\((X^\top X)^{-1}\)</span> — for a <span class="math inline">\(2\times2\)</span> matrix, <span class="math inline">\(\begin{bmatrix} a &amp; b \\ c &amp; d\end{bmatrix}^{-1}
+= \frac{1}{ad-bc}\begin{bmatrix} d &amp; -b \\ -c &amp; a\end{bmatrix}\)</span> — the least-squares <span class="math inline">\(\mathbf w^{*}\)</span>, the predictions and residuals, and finally ridge with <span class="math inline">\(\lambda = 1\)</span> on the slope only. What happened to the slope?</p>
+<p><strong>Task 3 — a feature matrix.</strong> For <span class="math inline">\(x = 0,\ 2.5,\ 5\)</span>, map <span class="math inline">\(x\)</span> to <span class="math inline">\(t = 2x/5 - 1 \in [-1, 1]\)</span> and write the <span class="math inline">\(3 \times 4\)</span> matrix of <span class="math inline">\([1,\ t,\ t^2,\ t^3]\)</span>.</p>
+<p><strong>Task 5 — primal and dual.</strong> One feature, no column of ones, <span class="math inline">\(\lambda = 1\)</span>:</p>
+<div class="hand-table">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(x\)</span></th>
+<th>1</th>
+<th>2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(y\)</span></td>
+<td>1</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
 </div>
+<p>Compute <span class="math inline">\(w\)</span> from the primal (a division), then <span class="math inline">\(\boldsymbol\alpha\)</span> from the dual <span class="math inline">\((X X^\top + \lambda I)^{-1}\mathbf y\)</span> and <span class="math inline">\(w = X^\top\boldsymbol\alpha\)</span>, and predict at <span class="math inline">\(x = 3\)</span> both ways.</p>
+<p>All the numbers come out as small fractions; the notebook recomputes them.</p>
 </section>
-</div>
-<div id="ex5" class="card-item soon">
-<p><span class="num">Exercise 5</span></p>
-<section id="build-with-an-agent" class="level3">
-<h3 class="anchored" data-anchor-id="build-with-an-agent">Build with an agent</h3>
-<p>Install Claude Code with the CERIT-SC endpoint, watch a tour of CAD, Blender, slides, documents and browser automation, and let the agent work on a class server over SSH. Build a classical-ML comparison with Bayesian tuning, a report and a presentation. Mandatory ungraded GitHub repository submission.</p>
-<div class="links">
-<span class="btn-pill muted">not published yet</span>
-</div>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data">Data</h2>
+<p>No files to download; everything is generated in the notebook with a fixed seed or loaded from scikit-learn:</p>
+<ul>
+<li><strong>Tasks 3–6</strong> — a noisy sine, <span class="math inline">\(y = \sin x + \varepsilon\)</span> with <span class="math inline">\(x \in [0, 5]\)</span> and <span class="math inline">\(\varepsilon \sim \mathcal N(0, 0.3^2)\)</span>; 40 training and 200 test samples.</li>
+<li><strong>Task 7</strong> — the <strong>diabetes</strong> dataset (<code>sklearn.datasets.load_diabetes</code>): 442 patients, 10 clinical features, target is the disease progression one year later; split 75 / 25 into training and validation parts.</li>
+</ul>
 </section>
-</div>
-<div id="ex6" class="card-item soon">
-<p><span class="num">Exercise 6</span></p>
-<section id="svm-decision-trees-random-forest" class="level3">
-<h3 class="anchored" data-anchor-id="svm-decision-trees-random-forest">SVM, decision trees, random forest</h3>
-<p>SVM primal and dual, the effect of C and of the kernel. One CART split by hand with Gini and entropy, then trees, bagging and random forest in scikit-learn. Pixel-wise segmentation of aerial images. Grid vs.&nbsp;Bayesian search, and a first task handed to an agent.</p>
-<div class="links">
-<span class="btn-pill muted">not published yet</span>
-</div>
-</section>
-</div>
-<div id="ex7" class="card-item soon">
-<p><span class="num">Exercise 7</span></p>
-<section id="neural-network-from-scratch" class="level3">
-<h3 class="anchored" data-anchor-id="neural-network-from-scratch">Neural network from scratch</h3>
-<p>One learning step of a single neuron by hand, the lecture’s own numbers. A neuron and then a two-layer network in NumPy with backpropagation written out in matrix form and checked with finite differences. Activations and the learning rate.</p>
-<div class="links">
-<span class="btn-pill muted">not published yet</span>
-</div>
-</section>
-</div>
-<div id="ex8" class="card-item soon">
-<p><span class="num">Exercise 8</span></p>
-<section id="pytorch" class="level3">
-<h3 class="anchored" data-anchor-id="pytorch">PyTorch</h3>
-<p>Tensors and what autograd actually does; last week’s NumPy network rebuilt in PyTorch and checked against your own backpropagation. Optimizers and their state, batches, <code>nn.Module</code>. One 3 × 3 convolution by hand, then Dataset, DataLoader and a CNN on photos of leaves.</p>
-<div class="links">
-<span class="btn-pill muted">not published yet</span>
-</div>
-</section>
-</div>
-<div id="ex9" class="card-item soon">
-<p><span class="num">Exercise 9</span></p>
-<section id="deep-learning-showcase-with-an-agent" class="level3">
-<h3 class="anchored" data-anchor-id="deep-learning-showcase-with-an-agent">Deep-learning showcase with an agent</h3>
-<p>Seven tasks, one encoder: image and signal classification, segmentation, image-to-image and signal-to-signal regression. Softmax and cross-entropy by hand, one reference task (ECG noise type) worked through, then you pick a task, hand the specification to an agent and validate what comes back.</p>
-<div class="links">
-<span class="btn-pill muted">not published yet</span>
-</div>
-</section>
-</div>
-<div id="ex10" class="card-item soon">
-<p><span class="num">Exercise 10</span></p>
-<section id="practical-application-on-metacentrum" class="level3">
-<h3 class="anchored" data-anchor-id="practical-application-on-metacentrum">Practical application on MetaCentrum</h3>
-<p>Why a notebook stops being enough once a run takes hours. A training project as scripts with arguments, checkpoints and logs, run first locally and then as a GPU job on MetaCentrum: account, job script, scratch, results. Extended with an agent and committed to Git.</p>
-<div class="links">
-<span class="btn-pill muted">not published yet</span>
-</div>
-</section>
-</div>
-<div id="ex11" class="card-item soon">
-<p><span class="num">Exercise 11</span></p>
-<section id="transformers" class="level3">
-<h3 class="anchored" data-anchor-id="transformers">Transformers</h3>
-<p>Scaled dot-product attention for three tokens by hand. Tokenization, positional encoding and a small language model trained on WikiText-2, then last year’s checkpoint generating text. An image as a sequence of patches, a pre-trained vision transformer and its fine-tuning; a transformer on ECG as an optional extra.</p>
-<div class="links">
-<span class="btn-pill muted">not published yet</span>
-</div>
-</section>
-</div>
-<div id="ex12" class="card-item soon">
-<p><span class="num">Exercise 12</span></p>
-<section id="project" class="level3">
-<h3 class="anchored" data-anchor-id="project">Project</h3>
-<p>One task, assigned at the start of the lab and handed in at its end: what is fixed (one metric, a hidden test set, a repository with history), what is still to be decided, how the ranking turns into points, and the checklist before hand-in.</p>
-<div class="links">
-<span class="btn-pill muted">not published yet</span>
-</div>
-</section>
-</div>
-</div>
-</section>
-<section id="archive" class="level2">
-<h2 class="anchored" data-anchor-id="archive">Archive</h2>
-<p>Last year’s labs on probabilistic models are not part of the course any more: <a href="https://colab.research.google.com/drive/1763TNHU0I2G4NWqeVEo0S7cgsZf8yA05?usp=sharing">Bayesian inference</a> and <a href="https://colab.research.google.com/drive/13eJwqncXCw670y-lPG4Nt79gyIr_q6Zz?usp=sharing">naive Bayes, logistic regression, GMM</a>.</p>
+<section id="further-resources" class="level2">
+<h2 class="anchored" data-anchor-id="further-resources">Further resources</h2>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=fd6kQQEbq2Q&amp;list=PLE6Wd9FR--EdyJ5lbFl8UuGjecvVw66F6&amp;index=2">Linear regression</a></li>
+<li><a href="https://www.youtube.com/watch?v=hrIad1RVFV0&amp;list=PLE6Wd9FR--EdyJ5lbFl8UuGjecvVw66F6&amp;index=4">Polynomial regression and regularization</a></li>
+<li><a href="https://www.youtube.com/watch?v=wBVSbVktLIY">Kernelized linear regression</a></li>
+<li>scikit-learn: <a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html"><code>Ridge</code></a>, <a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Lasso.html"><code>Lasso</code></a>, <a href="https://scikit-learn.org/stable/modules/generated/sklearn.kernel_ridge.KernelRidge.html"><code>KernelRidge</code></a></li>
+</ul>
 
 
 </section>
@@ -720,5 +723,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

@@ -1927,9 +1927,11 @@ display:block!important;
 \]</span></p>
 </div><div class="column" style="width:52%;">
 <p><strong>Dual</strong> — learn <span class="math-before-word"><span class="math inline">\(n\)</span></span> coefficients <span class="math inline">\(\boldsymbol\alpha\)</span>, one per sample <span class="math display">\[
-\boldsymbol\alpha^{*} = (\color{#d62728}{X X^\top} + \lambda I)^{-1}\mathbf y
+\min_{\boldsymbol\alpha}\ \tfrac{1}{2}\,\boldsymbol\alpha^\top(\color{#d62728}{X X^\top} + \lambda I)\boldsymbol\alpha - \mathbf y^\top \boldsymbol\alpha
 \]</span> <span class="math display">\[
-\mathbf w = X^\top \boldsymbol\alpha = \textstyle\sum_{i}\alpha_i\,\mathbf x_i
+\boldsymbol\alpha^{*} = (\color{#d62728}{X X^\top} + \lambda I)^{-1}\mathbf y,
+\qquad
+\mathbf w = X^\top \boldsymbol\alpha
 \]</span> <span class="math display">\[
 \hat y_{\text{new}} = \textstyle\sum_{i}\alpha_i\,\color{#d62728}{\mathbf x_i^\top \mathbf x_{\text{new}}}
 \]</span></p>
@@ -1953,7 +1955,7 @@ display:block!important;
 <li>the figure: <span class="math-before-word"><span class="math inline">\(X^\top X\)</span></span> is <span class="math inline">\(d \times d\)</span>, <span class="math-before-word"><span class="math inline">\(X X^\top\)</span></span> is <span class="math-before-word"><span class="math inline">\(n \times n\)</span></span> (the original slide had them the other way round); inverting costs roughly the cube of the size</li>
 <li>the practical consequence: many samples and few features → primal; few samples and many features → dual</li>
 <li>and above all (the red terms): in the dual the samples appear only inside dot products — <span class="math-before-word"><span class="math inline">\(XX^\top\)</span></span> is the table of all <span class="math inline">\(\mathbf x_i^\top\mathbf x_j\)</span>, and a new sample enters only through <span class="math inline">\(\mathbf x_i^\top\mathbf x_{\text{new}}\)</span>; that is exactly what the kernel trick on the next slide needs (<span class="math-before-word"><span class="math inline">\(K\)</span></span> in the figure is the kernel matrix of two slides ahead)</li>
-<li>the dual objective and the formulas for predicting many samples at once are in the appendix</li>
+<li>the dual objective is a quadratic in <span class="math-before-word"><span class="math inline">\(\boldsymbol\alpha\)</span></span> whose minimum is exactly <span class="math-before-word"><span class="math inline">\(\boldsymbol\alpha^{*}\)</span></span> (zero gradient); its derivation and the formulas for predicting many samples at once are in the appendix</li>
 <li>⏱ ~3 min</li>
 </ul>
 <style type="text/css">

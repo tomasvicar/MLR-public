@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Exercise 5 — Build with an agent – MPA-MLR · Machine Learning</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-71cb37695e07016bb13aa6779a381b52.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../images/logo.svg" alt="MPA-MLR" class="navbar-logo light-content">
+    <img src="../images/logo.svg" alt="MPA-MLR" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">MPA-MLR · Machine Learning</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../lectures.html"> 
+<span class="menu-text">Lectures</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../exercises.html"> 
+<span class="menu-text">Exercises</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../schedule.html"> 
+<span class="menu-text">Schedule</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../materials.html"> 
+<span class="menu-text">Materials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../organisation.html"> 
+<span class="menu-text">Organisation</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/tomasvicar/MLR-public"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#before-you-arrive" id="toc-before-you-arrive" class="nav-link active" data-scroll-target="#before-you-arrive">Before you arrive</a></li>
+  <li><a href="#recap-from-the-basics-to-the-habits" id="toc-recap-from-the-basics-to-the-habits" class="nav-link" data-scroll-target="#recap-from-the-basics-to-the-habits">1. Recap: from the basics to the habits</a></li>
+  <li><a href="#install-and-connect" id="toc-install-and-connect" class="nav-link" data-scroll-target="#install-and-connect">2. Install and connect</a></li>
+  <li><a href="#give-the-project-a-home" id="toc-give-the-project-a-home" class="nav-link" data-scroll-target="#give-the-project-a-home">3. Give the project a home</a></li>
+  <li><a href="#build-change-and-try-things" id="toc-build-change-and-try-things" class="nav-link" data-scroll-target="#build-change-and-try-things">4. Build, change and try things</a></li>
+  <li><a href="#ml-study" id="toc-ml-study" class="nav-link" data-scroll-target="#ml-study">5. ML study</a></li>
+  <li><a href="#assignment-submission" id="toc-assignment-submission" class="nav-link" data-scroll-target="#assignment-submission">6. Assignment submission</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Exercise 5 — Build with an agent</h1>
+<p class="subtitle lead">From a first hello to a 3D model, a web page on a server and a machine-learning report</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<style>
+/* Prose prompts should remain readable on narrow screens. */
+pre.default, pre.default code { white-space: pre-wrap; overflow-wrap: anywhere; }
+/* Prompts to paste: a visible box with an accent edge. */
+pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
+</style>
+<section id="before-you-arrive" class="level2">
+<h2 class="anchored" data-anchor-id="before-you-arrive">Before you arrive</h2>
+<p>Do these at home; each takes minutes, but the account approval takes days.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>The terminal in 60 seconds (Windows)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Open it:</strong> Start menu → type <em>PowerShell</em> → Enter. A black or blue window with a line ending in <code>&gt;</code> appears. The text before <code>&gt;</code> is <strong>the folder you are in</strong>.</li>
+<li><strong>Type a command, press Enter</strong>, read what comes back. <code>cd C:\dev\mlr-agent-lab</code> = go into that folder. <code>mkdir C:\dev\mlr-agent-lab</code> = make it.</li>
+<li><strong>Paste</strong> with right-click or Ctrl+V. <strong>↑</strong> repeats the previous command. <strong>Ctrl+C</strong> stops a running command.</li>
+<li><strong>After installing anything, close the window and open a new one</strong>; the new program is only found in a fresh window.</li>
+</ul>
+</div>
+</div>
+<ol type="1">
+<li><strong>A GitHub account</strong> (<a href="https://github.com/signup">github.com/signup</a>).</li>
+<li><strong>A MetaCentrum account</strong>, which gives you free access to the CERIT-SC (e-INFRA CZ) models: <a href="https://metavo.metacentrum.cz/en/application/index.html">apply here</a> (sign in with your university identity, eduID). <strong>Approval is not instant, do it now.</strong></li>
+<li><strong>Your API key.</strong> When the account is approved, log in at <a href="https://chat.ai.e-infra.cz/">chat.ai.e-infra.cz</a>, send one message (<em>hello</em>) to see that it answers, then create an API key in the chat’s settings (<em>Settings → Account → API Keys</em>). Copy the key (a line starting with <code>sk-</code>) into a private note or a password manager, <strong>not</strong> into a project folder. <em>Done when:</em> you have the key saved and the chat answers you.</li>
+<li><strong>Git for Windows</strong> (<a href="https://git-scm.com/downloads/win">download</a>): run the installer and click <em>Next</em> on every screen; the defaults are fine. You will not use it directly, the agent does. <em>Done when:</em> <code>git --version</code> in a <strong>new</strong> PowerShell window prints a version. (macOS and Linux usually have Git already; every command box below has a tab for them.)</li>
+</ol>
+<p><strong>No paid subscription is needed.</strong> Do not buy a plan to solve a login problem; ask the teacher. If your key does not work on the day, sit with a neighbour whose agent works and type into their session; still create your own repository in part 3.</p>
+</section>
+<section id="recap-from-the-basics-to-the-habits" class="level2">
+<h2 class="anchored" data-anchor-id="recap-from-the-basics-to-the-habits">1. Recap: from the basics to the habits</h2>
+<p>The fifth lecture in one page, in the same order. Read it before the lab and keep it open while you work; the terms used in the tasks are defined here.</p>
+<section id="what-a-language-model-does" class="level3">
+<h3 class="anchored" data-anchor-id="what-a-language-model-does">What a language model does</h3>
+<ul>
+<li>A language model <strong>continues text</strong>: given everything so far, it estimates how likely each next piece is, picks one, appends it, repeats. The result is <strong>plausible text</strong>, not checked truth. (The network behind it is a transformer, eleventh lecture.)</li>
+<li><strong>Token</strong> = a piece of text: a word, part of a word, a number, punctuation. Your message, the reply, every file and every error the agent reads are counted in tokens.</li>
+<li><strong>Context window</strong> = how many tokens the model can read at once.</li>
+<li><strong>It learned once.</strong> Training (read a lot of text and code → learn from examples of good answers → get rewarded for better ones) changed the model before you used it. <strong>A correction in the chat is only read in this session.</strong> In a new session it is gone, unless you write it into a file.</li>
+</ul>
+</section>
+<section id="chatbot-vs.-agent" class="level3">
+<h3 class="anchored" data-anchor-id="chatbot-vs.-agent">Chatbot vs.&nbsp;agent</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Chatbot</th>
+<th>Agent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>You ask for a plot of <code>data.csv</code></td>
+<td>It writes plotting code <strong>as text</strong></td>
+<td>It reads the CSV, writes the code, <strong>runs it</strong> and fixes the error</td>
+</tr>
+<tr class="even">
+<td>Who runs, checks and fixes</td>
+<td>You: copy, run, paste the error back</td>
+<td>The agent; you check the result</td>
+</tr>
+<tr class="odd">
+<td>What it can reach</td>
+<td>Only what you paste into the chat</td>
+<td>Your project files, the terminal, a browser, a server</td>
+</tr>
+<tr class="even">
+<td>What you get</td>
+<td>An answer</td>
+<td>Files: <code>plot.py</code>, <code>plot.html</code>, and evidence that they work</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Model</strong> = the trained network that writes text. <strong>Agent</strong> = a model plus software that can act.</li>
+<li><strong>Harness</strong> = the program you install (Claude Code, Codex). It sends your request to the model and <strong>carries out</strong> the actions the model asks for. <strong>Agent = model + harness + tools:</strong> the model decides, the harness does it. The model never touches your files itself.</li>
+<li><strong>Tool</strong> = an action the harness does for the model: read a file, edit a file, run a command (<code>python</code>, <code>git</code>, <code>ssh</code>), open a browser. A tool returns <strong>evidence</strong>: file contents, an error message, a screenshot.</li>
+<li><strong>Terminal</strong> = a text window: you type a command, a program runs, text comes back. The agent uses it the same way, so anything you can start by typing, the agent can use.</li>
+<li><strong>The loop.</strong> One turn: the model proposes an action → the harness runs it → the result goes back to the model. A task takes many turns. Example, plot <code>measurements.csv</code>: read the first lines to learn the column names → write <code>plot.py</code> and run it → <code>KeyError: 'temperature'</code> (the column is <code>temperature_C</code>) → fix the script, run it again, open the plot → hand over <code>plot.html</code> and say what was checked. <strong>An error is information, not failure.</strong> The loop stops when the goal is done, it needs your permission, or information is missing. The same error repeated without investigating is your cue to step in.</li>
+<li><strong>Context</strong> = everything the model reads before this answer: your request, the rules file, the files it has read, the tool outputs. Like a desk: only what lies on the desk counts, not the files in the cabinet (your disk). A file is on the desk only after a tool has read it.</li>
+</ul>
+</section>
+<section id="your-first-session-where-it-runs-how-much-it-may-do-who-pays" class="level3">
+<h3 class="anchored" data-anchor-id="your-first-session-where-it-runs-how-much-it-may-do-who-pays">Your first session: where it runs, how much it may do, who pays</h3>
+<p>Every setup is four separate choices. Today’s answers:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Layer</th>
+<th>Question</th>
+<th>Today</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Model</td>
+<td>Who thinks?</td>
+<td>Qwen 3.8 Flash, behind CERIT-SC’s alias <code>agentic</code> (not Claude)</td>
+</tr>
+<tr class="even">
+<td>Provider</td>
+<td>Who runs it and bills you?</td>
+<td>CERIT-SC (e-INFRA CZ), free for students</td>
+</tr>
+<tr class="odd">
+<td>Harness</td>
+<td>Which program do you talk to?</td>
+<td>Claude Code</td>
+</tr>
+<tr class="even">
+<td>Your computer</td>
+<td>Where do the commands run?</td>
+<td>Your laptop; in the class-server task of part 4 the agent also sends commands to another computer over SSH</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p><strong>Provider</strong> = the service that runs the model. <strong>Endpoint</strong> = its web address. <strong>API key</strong> = your personal password for programs. Keep the key out of chats, screenshots and Git.</p></li>
+<li><p><strong>Which program.</strong> Claude Code (Anthropic, used today), Codex (OpenAI: terminal, VS Code extension and desktop app), Antigravity CLI (Google, successor of Gemini CLI for individuals), Copilot CLI (GitHub), OpenCode (open source, connects almost any model, even a local one). Codex and Claude Code are currently probably the strongest. OpenClaw and Hermes Agent are harnesses for an always-on personal assistant, not for coding sessions.</p></li>
+<li><p><strong>Where to type.</strong> The <strong>terminal</strong> (<code>cd my-project</code>, then <code>claude</code>) is recommended: it combines naturally with Python, Git and SSH. The same agent also lives in a <strong>VS Code extension</strong> (files, code, agent and its changes in one window) and a <strong>desktop app</strong> (several tasks side by side).</p></li>
+<li><p><strong>Permission modes.</strong> The agent wants to run <code>pip install pandas</code>. Who says yes?</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Plan</strong></td>
+<td>It only reads and proposes; nothing changes.</td>
+</tr>
+<tr class="even">
+<td><strong>Ask</strong> (<code>default</code>)</td>
+<td>It asks, you press yes or no.</td>
+</tr>
+<tr class="odd">
+<td><strong>Accept edits</strong> (<code>acceptEdits</code>)</td>
+<td>File edits go through; commands still ask.</td>
+</tr>
+<tr class="even">
+<td><strong>Auto</strong> (recommended)</td>
+<td>An automatic check decides the routine requests. With CERIT-SC it is slow and often blocks; then use Accept edits.</td>
+</tr>
+<tr class="odd">
+<td><strong>Bypass</strong></td>
+<td>It just runs, with no check. Only on a separate, throwaway machine.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Shift+Tab</strong> cycles the modes; <strong>Esc</strong> interrupts the agent.</p></li>
+<li><p><strong>Who pays.</strong> A <strong>subscription</strong> (ChatGPT Plus or Claude Pro, $20/month; higher tiers raise the limits) includes agent use within limits. An <strong>API key</strong> is billed <strong>per token</strong>, separately; a chat plan is not API credit. <strong>Every turn resends the whole conversation</strong>, so the input adds up: five turns of 10k–30k tokens are 100,000 input tokens for one small task; with 20,000 output tokens that is ≈ $0.80 on Claude Opus 5.5, $2 on GPT-6 Astra, but only ≈ $0.05–0.21 on the cheap Chinese DeepSeek and Kimi models (prices of 30 September and 2 October 2026; their servers are in China, so no personal data). For heavy agent use the API can cost <strong>much more</strong> than a subscription; light use can be cheaper. Today: CERIT-SC, free.</p></li>
+<li><p><strong>A model on your own computer.</strong> Open-weight models (e.g.&nbsp;via Ollama) keep the data at home and have no meter, but need memory (parameters × bits ÷ 8: a 70 B model at 4 bits needs 35 GB just for the weights) and are weaker at long tool chains. <strong>Agent on your laptop ≠ model on your laptop:</strong> Claude Code on your laptop still sends your files to a hosted model.</p></li>
+<li><p><strong>A server that stays on.</strong> <strong>SSH</strong> = log in to another computer’s terminal. <strong>tmux</strong> keeps a terminal session alive on the server: start the agent in <code>tmux</code>, detach (Ctrl-b, then d), close the laptop, later <code>tmux attach</code> brings the same terminal back. Remote control (Claude Code, Codex) lets you check a session from your phone; it needs the provider’s account, not CERIT-SC.</p></li>
+</ul>
+</section>
+<section id="goal-and-context" class="level3">
+<h3 class="anchored" data-anchor-id="goal-and-context">Goal and context</h3>
+<ul>
+<li><strong>Ask for the result, not the steps:</strong> “one HTML file with the row count, missing values and class balance of <code>data.csv</code>; do not change the CSV; open the result in a browser” instead of “make a nice report”.</li>
+<li><strong>Goal · Context · Constraints · Done when.</strong> The four parts of a good task. A missing “done when” is the most common reason an agent stops too early or claims success without evidence. In part 5 you write these four headings yourself in <code>SPEC.md</code>.</li>
+<li><strong>What goes into context:</strong> file paths, the exact error and the command that caused it, a screenshot of the wrong plot, an example of the output you want. Ask it to <strong>read the file</strong>, not guess.</li>
+<li><strong>Three files.</strong> <strong><code>AGENTS.md</code></strong> = the rules, read at every start (Claude Code reads <code>CLAUDE.md</code>; the line <code>@AGENTS.md</code> in it loads the shared file). <strong><code>SPEC.md</code></strong> = the task. <strong><code>PLAN.md</code></strong> = where we stopped: what is done, what was checked, the next step. All in <strong>Markdown</strong> (plain text with <code>#</code> headings and <code>-</code> bullets).</li>
+<li><strong>Long is not better.</strong> A crowded context makes the model worse: it forgets decisions, repeats a fixed error. Save the state into <code>PLAN.md</code>, <code>/clear</code>, then <em>“Read SPEC.md and PLAN.md, look at what changed, continue with the first unfinished step.”</em> <code>/compact</code> summarises instead, but details can be lost.</li>
+<li><strong>Subagent</strong> = a helper the agent starts for a side task (a search, a long log, a review) with <strong>its own fresh context</strong>; it returns only a short summary. It keeps your context clean and gives a fresh pair of eyes; it costs tokens and does not see your chat, so the brief must stand alone.</li>
+<li><strong>Steering:</strong> <em>“Stop. Explain the cause and try a different approach.”</em> · <em>“Return to the agreed scope. Show me what you changed.”</em> · <em>“Run the check and show the output.”</em> · <em>“Read this file, then revise the plan.”</em> · <strong>“I cannot” is a hypothesis:</strong> <em>“Look for a tool or a command, try a small example, and tell me the real blocker.”</em></li>
+</ul>
+</section>
+<section id="check-the-result" class="level3">
+<h3 class="anchored" data-anchor-id="check-the-result">Check the result</h3>
+<ul>
+<li><p><strong>Give it eyes.</strong> A browser it can drive (<strong>Playwright</strong>), a rendered image, a test it can run. Writing the HTML is only the first step; <em>“Open the page, try the filter and inspect a screenshot. Fix what you find.”</em></p></li>
+<li><p><strong>More tools.</strong> <strong>CLI first:</strong> <code>git</code>, <code>gh</code> (GitHub), <code>uv</code> (Python environments), <code>quarto</code>, <code>ffmpeg</code>; the agent knows them. <strong>MCP</strong> (Model Context Protocol) is a standard plug for extra tools, like USB: a browser (Playwright), Blender, a library’s current docs; the agent can set one up: <em>“Find and set up an MCP server for X.”</em> A <strong>skill</strong> is a recipe the agent reads when needed (<em>“Turn what we just did into a skill.”</em>). A <strong>hook</strong> is a script run at an event that can block an action: a rule in <code>AGENTS.md</code> asks, a hook enforces.</p></li>
+<li><p><strong>A test</strong> is a tiny script with a known answer:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> accuracy([<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>]) <span class="op">==</span> <span class="fl">0.75</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><em>“Write a test for this behaviour, show it failing, then make it pass.”</em> A passing test is evidence, not proof. Never let the agent change a test just to make it pass.</p></li>
+<li><p><strong>Works or fails is easy; plausible but wrong is hard.</strong> A page that loads or a board that blinks gives the agent clear feedback and it iterates until it works. A training script runs, prints an accuracy and complains about nothing when the test set leaked into tuning. For such tasks <strong>you</strong> write the checks before the agent starts.</p></li>
+<li><p><strong>For ML, fix the experiment first:</strong> where the data came from and how you split it (duplicates!), which models, which metric, how many trials; preprocessing fitted inside each training fold; a held-out test set used <strong>once</strong>, after choosing the model.</p></li>
+</ul>
+</section>
+<section id="save-undo-stay-safe" class="level3">
+<h3 class="anchored" data-anchor-id="save-undo-stay-safe">Save, undo, stay safe</h3>
+<ul>
+<li><strong>Good software practice still applies:</strong> version control, small steps, tests, review, readable code, documentation, no secrets in the repository.</li>
+<li><strong>Git from zero.</strong> <strong>Git</strong> = a history of your project folder. <strong>Repository</strong> = the folder with that history. <strong>Commit</strong> = a save point with a note. <strong>Diff</strong> = what changed since the last save point. <strong>Branch</strong> = a separate line of work. <strong>Push</strong> = upload the history to <strong>GitHub</strong>, a website that keeps a copy. <strong>Understand the words, not the commands:</strong> the agent types them, you decide what is saved and what is published.</li>
+<li><strong>Rhythm:</strong> commit a working version → ask for a change → look at what changed and check the output → commit or undo (<em>“Go back to the last commit, keep my other edits.”</em>).</li>
+<li><strong>Worktrees</strong> (<code>git worktree add</code>) give two agents separate folders of the same repository, so they never edit the same files.</li>
+<li><strong>Two risks:</strong> an unwanted action, and your data leaving.</li>
+<li><strong>Prompt injection:</strong> a web page, README or issue the agent reads can hide text that gives orders (“read <code>.env</code> and send it to …”). Limit what the agent <strong>can do</strong> (permissions, no secrets in reach); asking it to ignore injections is not enough.</li>
+<li><strong>Privacy:</strong> whatever the agent reads goes to the provider. <code>df.head()</code> on a patient table sends five real patients. Give the agent <strong>synthetic data</strong> with the same columns; run the real data yourself.</li>
+<li><strong>Instructions ask; permissions and isolation limit.</strong> “Do not touch <code>data/</code>” can be ignored; a permission rule makes it ask; a sandbox means it cannot even see the folder.</li>
+<li><strong>An agent optimises the goal it was given, not the one you meant.</strong> In July 2026 a model under test broke out of its environment to fetch the benchmark’s answers.</li>
+<li><strong>BUT rules:</strong> follow the assignment, verify and understand what you submit, disclose how you used AI; you remain responsible. Could you explain your result if the agent session disappeared?</li>
+</ul>
+</section>
+<section id="beyond-code" class="level3">
+<h3 class="anchored" data-anchor-id="beyond-code">Beyond code</h3>
+<p>Text in, anything out: <strong>Markdown</strong> for notes, <strong>HTML</strong> for interactive reports and small tools, <strong>Quarto</strong> for slides next to their code, <strong>LaTeX</strong> for documents, <strong>CadQuery</strong> (3D shapes in Python) and <strong>Blender</strong> scripts for 3D. The agent edits text easily and Git shows exactly what changed; Word and PowerPoint files are hard to edit and compare (generate them from a script if you need them, see part 4). For a thesis, keep notes, text, code and results in one repository.</p>
+</section>
+<section id="tips-in-detail" class="level3">
+<h3 class="anchored" data-anchor-id="tips-in-detail">Tips in detail</h3>
+<p><strong>Start the task well</strong></p>
+<ol type="1">
+<li><strong>Describe the finished result,</strong> not a sequence of steps.</li>
+<li><strong>Goal, context, constraints, done when.</strong> A missing “done when” is the most common reason an agent stops too early.</li>
+<li><strong>Say how you will recognise success:</strong> a test that passes, a number that must match, a page that must open.</li>
+<li><strong>Write naturally;</strong> precise beats elaborate. Imperfect English or typos hardly matter; a vague task does. Dictating a draft is fine; then check names and numbers.</li>
+<li><strong>Invite questions</strong> when the task is unclear: <em>“Ask me what would change the solution, then write SPEC.md.”</em></li>
+<li><strong>Compare two approaches</strong> before an expensive commitment.</li>
+<li><strong>A small first version</strong> that works end to end, then extend it.</li>
+<li><strong>Save the plan</strong> in the repository, not only in the chat.</li>
+</ol>
+<p><strong>Keep the context useful</strong></p>
+<ol start="9" type="1">
+<li><strong>Point to the files</strong> by path.</li>
+<li><strong>Show examples:</strong> the desired output, a screenshot of the wrong plot. On Windows, pasting an image with Ctrl+V often fails in the terminal: save the screenshot and give its path, or drag the file in.</li>
+<li><strong>Ask it to read the source</strong> before it guesses.</li>
+<li><strong>Give the exact error</strong> and the command that caused it, not “it fails”.</li>
+<li><strong>Excerpts, not dumps:</strong> the relevant lines, not a whole dataset or log.</li>
+<li><strong>Give it the sources:</strong> the PDFs, data and papers, or let it download them. Have PDFs converted to Markdown; ask it to search the web for current documentation.</li>
+<li><strong>One source of rules:</strong> <code>AGENTS.md</code> for rules, <code>SPEC.md</code> for the task, <code>PLAN.md</code> for where you stopped.</li>
+<li><strong>Have everything written into files,</strong> immediately: a correction in the chat is forgotten in the next session. A repeated mistake becomes a rule in <code>AGENTS.md</code>.</li>
+<li><strong><code>/clear</code> often,</strong> not only when it drifts: save the state, <code>/clear</code>, then <em>“Read SPEC.md and PLAN.md, look at what changed, continue with the first unfinished step.”</em></li>
+</ol>
+<p><strong>Steer the work</strong></p>
+<ol start="18" type="1">
+<li><strong>Try Auto; if it keeps blocking, use Accept edits.</strong> Never Bypass to escape prompts.</li>
+<li><strong>One project folder,</strong> with a subfolder per task.</li>
+<li><strong>Commit before a substantial change</strong> and look at what changed after it.</li>
+<li><strong>Interrupt early</strong> with Esc when it goes the wrong way.</li>
+<li><strong>Same failure repeated?</strong> <em>“Stop. Explain the cause and try a different approach.”</em></li>
+<li><strong>Unrelated edits?</strong> <em>“Return to the agreed scope. Show me what you changed.”</em></li>
+<li><strong>A claim without evidence?</strong> <em>“Run the check and show the output.”</em></li>
+<li><strong>“I cannot”?</strong> Find out which it is: no tool, no access, or no idea.</li>
+</ol>
+<p><strong>Check the result</strong></p>
+<ol start="26" type="1">
+<li><strong>Run it yourself</strong> with real inputs and an edge case.</li>
+<li><strong>Look at it:</strong> open the page, the figure, the PDF, the 3D model. A program that finished without error can still draw the wrong plot.</li>
+<li><strong>Check where the files landed;</strong> a model may report success with files written somewhere else.</li>
+<li><strong>Ask for files and evidence,</strong> not a promise that it is done.</li>
+<li><strong>A fresh reviewer:</strong> <em>“Start a subagent that reviews the diff against SPEC.md. It should find bugs, not praise.”</em> (if your setup supports subagents; otherwise a new session with the same request) The agent that wrote the code nearly always approves it. Another model (<code>/model thinker</code>) helps further.</li>
+<li><strong>Ask it to simplify:</strong> first versions are verbose. Every so often let it refactor thoroughly, with the tests passing before and after.</li>
+<li><strong>For ML, freeze the test data before tuning;</strong> choose the model without it.</li>
+</ol>
+<p><strong>Make durable outputs</strong></p>
+<ol start="33" type="1">
+<li><strong>Markdown</strong> for notes, <strong>HTML</strong> for interactive reports and small tools, <strong>Quarto</strong> for slides next to their code, <strong>LaTeX</strong> for documents.</li>
+<li><strong>Keep the source,</strong> not only the output: the script that made the figure, the parameters of the 3D model.</li>
+<li><strong>Record the model and date</strong> you used in <code>RUNS.md</code>.</li>
+<li><strong>Compare costs per checked result,</strong> not per token: a stronger model with fewer retries can be cheaper.</li>
+</ol>
+</section>
+</section>
+<section id="install-and-connect" class="level2">
+<h2 class="anchored" data-anchor-id="install-and-connect">2. Install and connect</h2>
+<p><strong>Goal:</strong> Claude Code runs on your laptop, talks to a CERIT-SC model, and has written and run one program for you.</p>
+<section id="step-1-install-claude-code" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-install-claude-code">Step 1 — install Claude Code</h3>
+<p>Paste into PowerShell and press Enter (no administrator rights needed):</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="os">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Windows (PowerShell)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">macOS / Linux</a></li></ul>
+<div class="tab-content" data-group="os">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">irm</span> https<span class="op">://</span>claude<span class="op">.</span><span class="fu">ai</span><span class="op">/</span>install<span class="op">.</span><span class="fu">ps1</span> <span class="op">|</span> <span class="fu">iex</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://claude.ai/install.sh <span class="kw">|</span> <span class="fu">bash</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<p><strong>Done when:</strong> in a <strong>new</strong> PowerShell window, <code>claude --version</code> prints a version number. <strong>Do not start <code>claude</code> yet.</strong></p>
+</section>
+<section id="step-2-connect-it-to-cerit-sc" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-connect-it-to-cerit-sc">Step 2 — connect it to CERIT-SC</h3>
+<p>If you do not have the API key at hand, create one at <a href="https://chat.ai.e-infra.cz/">chat.ai.e-infra.cz</a> (<em>Settings → Account → API Keys</em>).</p>
+<p>Copy the whole block below into the terminal and press Enter. It asks for your API key: <strong>paste it and press Enter — it shows as stars (Windows) or not at all (macOS/Linux); that is on purpose.</strong> It writes two files in your home folder (<code>C:\Users\&lt;you&gt;</code>): <code>.claude\settings.json</code> with the endpoint, the key and the model names, and <code>.claude.json</code>, which skips the login screen. Nothing goes into a project folder, so the key never gets into Git.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="os">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Windows (PowerShell)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">macOS / Linux</a></li></ul>
+<div class="tab-content" data-group="os">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">&amp;</span> <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="va">$key</span> <span class="op">=</span> <span class="op">[</span>Net<span class="op">.</span><span class="fu">NetworkCredential</span><span class="op">]::</span>new<span class="op">(</span><span class="st">''</span><span class="op">,</span> <span class="op">(</span><span class="fu">Read-Host</span> <span class="op">-</span>AsSecureString <span class="st">"CERIT-SC API key"</span><span class="op">)).</span><span class="fu">Password</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">New-Item</span> <span class="op">-</span>ItemType Directory <span class="op">-</span>Force <span class="st">"</span><span class="va">$HOME</span><span class="st">/.claude"</span> <span class="op">|</span> <span class="fu">Out-Null</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">[</span>IO<span class="op">.</span><span class="fu">File</span><span class="op">]::</span>WriteAllText<span class="op">(</span><span class="st">"</span><span class="va">$HOME</span><span class="st">/.claude/settings.json"</span><span class="op">,</span> <span class="vs">@"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="vs">{</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="vs">  "env": {</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="vs">    "ANTHROPIC_BASE_URL": "https://llm.ai.e-infra.cz/",</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="vs">    "ANTHROPIC_AUTH_TOKEN": "</span><span class="va">$key</span><span class="vs">",</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="vs">    "ANTHROPIC_MODEL": "agentic",</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="vs">    "ANTHROPIC_DEFAULT_OPUS_MODEL": "thinker",</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="vs">    "ANTHROPIC_DEFAULT_SONNET_MODEL": "agentic",</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="vs">    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "mini",</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="vs">    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="vs">  }</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="vs">}</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="vs">"@</span><span class="op">)</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="op">[</span>IO<span class="op">.</span><span class="fu">File</span><span class="op">]::</span>WriteAllText<span class="op">(</span><span class="st">"</span><span class="va">$HOME</span><span class="st">/.claude.json"</span><span class="op">,</span> <span class="st">'{"hasCompletedOnboarding": true}'</span><span class="op">)</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">'CERIT-SC API key: '</span><span class="kw">;</span> <span class="bu">read</span> <span class="at">-rs</span> <span class="va">key</span><span class="kw">;</span> <span class="bu">echo</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.claude</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> ~/.claude/settings.json <span class="op">&lt;&lt;JSON</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">{</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st">  "env": {</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">    "ANTHROPIC_BASE_URL": "https://llm.ai.e-infra.cz/",</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st">    "ANTHROPIC_AUTH_TOKEN": "</span><span class="va">$key</span><span class="st">",</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">    "ANTHROPIC_MODEL": "agentic",</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">    "ANTHROPIC_DEFAULT_OPUS_MODEL": "thinker",</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="st">    "ANTHROPIC_DEFAULT_SONNET_MODEL": "agentic",</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="st">    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "mini",</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="st">    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="op">JSON</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'{"hasCompletedOnboarding": true}'</span> <span class="op">&gt;</span> ~/.claude.json</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<p><strong>The block overwrites both files</strong>; if you already use Claude Code with another account, back them up first.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>What the configuration means
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>It follows the <a href="https://docs.cerit.io/en/docs/ai-as-a-service/llm-integration">CERIT-SC integration recipe</a>: requests go to <code>llm.ai.e-infra.cz</code> instead of Anthropic, and Claude Code’s model roles map to the provider’s aliases (<code>agentic</code> by default, <code>thinker</code> for <code>/model opus</code>, <code>mini</code> for <code>/model haiku</code>). These are <strong>not Claude models</strong>; the Claude Code window does not mean an Anthropic model. This is a provider-documented integration; Anthropic does not officially support routing Claude Code to other models. If a login screen appears or an alias is unavailable, check the current recipe.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="step-3-a-project-folder-and-the-first-start" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-a-project-folder-and-the-first-start">Step 3 — a project folder and the first start</h3>
+<p>Make the folder and go into it (a short path without spaces, accents or OneDrive):</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="os">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Windows (PowerShell)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">macOS / Linux</a></li></ul>
+<div class="tab-content" data-group="os">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mkdir C<span class="op">:</span>\dev\mlr-agent-lab</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cd</span> C<span class="op">:</span>\dev\mlr-agent-lab</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/dev/mlr-agent-lab</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/dev/mlr-agent-lab</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<p>Type <code>claude</code>. It asks whether you <strong>trust the files in this folder</strong>: answer <strong>Yes</strong>, it is your own empty folder. (Never say yes in a folder you downloaded and have not looked at.) Then type <code>/status</code>. <strong>Done when:</strong> it shows the model <code>agentic</code> and the address <code>llm.ai.e-infra.cz</code>.</p>
+</section>
+<section id="step-4-hello" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-hello">Step 4 — hello</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Write a Python program that prints hello and run it.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If the agent asks for permission, read what it wants to run and choose <em>Yes</em>. If Windows asks <em>“Do you want to allow this app to make changes?”</em>, that is the agent installing something (for example Python): click <em>Yes</em> yourself.</p>
+<p><strong>Done when:</strong> <code>hello.py</code> is in <code>C:\dev\mlr-agent-lab</code> (look in File Explorer) <strong>and</strong> you saw its output in the terminal because the agent ran it. A chatbot would only have shown you the code.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>If it does not work
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong><code>claude</code> is not recognized</strong> → close PowerShell and open a new window. Still not? Show the teacher the last lines of the installer output.</li>
+<li><strong>The first answer never comes</strong> (more than a minute) → the key is wrong. Run the block of step 2 again with the key copied freshly.</li>
+<li><strong>A login menu appears</strong> → the configuration was not read: run step 2 again and check that <code>C:\Users\&lt;you&gt;\.claude\settings.json</code> exists.</li>
+<li><strong><code>python</code> opens the Microsoft Store</strong> → tell the agent: <em>“Python is not installed; install it in a project environment with uv.”</em></li>
+<li><strong>A tool the agent just installed is “not found”</strong> → type <code>/exit</code>, open a new window, <code>cd</code> into the folder and run <code>claude --continue</code>.</li>
+<li><strong>“Could not evaluate”</strong> on a harmless command → the automatic check was too slow, not your mistake. Press <strong>Shift+Tab</strong> until the bar says <em>accept edits</em> and approve commands yourself.</li>
+<li><strong>Nothing works at all</strong> → sit with a neighbour whose agent works; do the tasks in their session, note that in your own repository later.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Reference: commands, models, modes
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Commands</strong> are typed inside Claude Code at the start of a message. Type <code>/</code> to see what your version offers.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>When to use it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>/help</code></td>
+<td>Find commands and help.</td>
+</tr>
+<tr class="even">
+<td><code>/status</code></td>
+<td>Check the active model, account and connection.</td>
+</tr>
+<tr class="odd">
+<td><code>/model</code></td>
+<td>Choose a model; with CERIT-SC use its aliases (below).</td>
+</tr>
+<tr class="even">
+<td><code>/plan Read SPEC.md and propose a plan</code></td>
+<td>Think the task through before editing.</td>
+</tr>
+<tr class="odd">
+<td><code>/permissions</code></td>
+<td>Inspect or change allow/ask/deny rules.</td>
+</tr>
+<tr class="even">
+<td><code>/context</code></td>
+<td>See what occupies the context window.</td>
+</tr>
+<tr class="odd">
+<td><code>/compact Keep the experiment decisions</code></td>
+<td>Summarise a long conversation and continue it.</td>
+</tr>
+<tr class="even">
+<td><code>/clear</code></td>
+<td>Start a fresh conversation; save progress in <code>PLAN.md</code> first.</td>
+</tr>
+<tr class="odd">
+<td><code>/resume</code></td>
+<td>Reopen an earlier conversation.</td>
+</tr>
+<tr class="even">
+<td><code>/usage</code> (<code>/cost</code>)</td>
+<td>Usage information; with CERIT-SC the cost estimate is meaningless.</td>
+</tr>
+<tr class="odd">
+<td><code>/diff</code></td>
+<td>Inspect changes in the working folder.</td>
+</tr>
+<tr class="even">
+<td><code>/rewind</code></td>
+<td>Checkpoint options; check what will be restored before confirming. <code>/rewind</code> is not a replacement for Git.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>In the shell:</strong> <code>claude</code> starts, <code>claude --continue</code> continues the latest conversation in this folder, <code>claude --resume</code> lets you choose one. Inside the agent, <strong>Esc</strong> interrupts it and <strong>Shift+Tab</strong> cycles the permission modes. <a href="https://code.claude.com/docs/en/commands">Command reference</a> · <a href="https://code.claude.com/docs/en/interactive-mode">keyboard shortcuts</a>.</p>
+<p><strong>CERIT-SC models.</strong> The aliases are the provider’s; what stands behind them changes without notice (state on 1 October 2026).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Alias</th>
+<th>Model behind it</th>
+<th>Use it for</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong><code>agentic</code></strong> (default)</td>
+<td>Qwen 3.8 Flash</td>
+<td>Everyday agent work: edit, run, fix. Start here.</td>
+</tr>
+<tr class="even">
+<td><strong><code>coder</code></strong></td>
+<td>GLM 5.3</td>
+<td>Larger coding tasks, refactoring, stubborn bugs.</td>
+</tr>
+<tr class="odd">
+<td><strong><code>thinker</code></strong></td>
+<td>DeepSeek V4.1 Flash</td>
+<td>Planning and reasoning: the evaluation design, a review.</td>
+</tr>
+<tr class="even">
+<td><strong><code>mini</code></strong></td>
+<td>gpt-oss-120b</td>
+<td>Quick questions and small edits.</td>
+</tr>
+</tbody>
+</table>
+<p>Switch inside the agent with <code>/model coder</code> (or <code>thinker</code>, …), or start with <code>claude --model coder</code>; <code>/status</code> shows the active one. Plan with <code>thinker</code>, then switch to <code>agentic</code> or <code>coder</code> to implement. <strong>Stuck?</strong> Switch the model instead of repeating the same prompt. <strong>Check where the files landed:</strong> in our tests a model reported success with files written outside the project folder. The model may call itself Claude; record the alias from <code>/status</code> in <code>RUNS.md</code>.</p>
+<p><strong>Permission modes.</strong> We recommend <strong>Auto</strong> when it works for you. Start it with <code>claude --permission-mode auto</code> or select it with <strong>Shift+Tab</strong>; there is no <code>/auto</code> command. <a href="https://code.claude.com/docs/en/permission-modes">Permission modes</a>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Plan (<code>plan</code>)</td>
+<td>Explores and proposes before editing.</td>
+</tr>
+<tr class="even">
+<td>Ask (<code>default</code>)</td>
+<td>Asks for actions that need permission.</td>
+</tr>
+<tr class="odd">
+<td>Accept edits (<code>acceptEdits</code>)</td>
+<td>Approves local edits and common file operations; other actions can still ask.</td>
+</tr>
+<tr class="even">
+<td>Auto (<code>auto</code>)</td>
+<td>An automatic check reviews actions; explicit ask rules still prompt.</td>
+</tr>
+<tr class="odd">
+<td>Bypass (<code>bypassPermissions</code>)</td>
+<td>Skips all checks; not the Auto mode recommended here.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Auto with the CERIT-SC models works, but slowly and unevenly</strong> (tested 1 October 2026): the check runs on the same CERIT-SC model and takes seconds per action; it often answers <em>“could not evaluate”</em> and blocks a harmless command, and after several blocks it asks you instead. If that happens again and again, switch to Accept edits with <strong>Shift+Tab</strong> (or <code>claude --permission-mode acceptEdits</code>) and approve commands yourself. Do not switch to Bypass to escape the prompts.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="give-the-project-a-home" class="level2">
+<h2 class="anchored" data-anchor-id="give-the-project-a-home">3. Give the project a home</h2>
+<p><strong>Goal:</strong> your folder is a public GitHub repository with working rules for the agent in <code>AGENTS.md</code>.</p>
+<p><strong>Git is required, but you do not memorise its commands.</strong> You understand commits, diffs, branches and pushing (recap above); the agent types the commands. You decide what is saved and what is published.</p>
+<section id="step-1-tell-git-who-you-are" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-tell-git-who-you-are">Step 1 — tell Git who you are</h3>
+<p>Once per computer. Use the e-mail address of your GitHub account, so that your commits are linked to your profile:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.name  <span class="st">"Your Name"</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.email <span class="st">"you@example.com"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>(Or ask the agent: <em>“Set my Git name to … and my e-mail to …”</em>.)</p>
+</section>
+<section id="step-2-github-cli-gh-and-uv" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-github-cli-gh-and-uv">Step 2 — GitHub CLI (<code>gh</code>) and <code>uv</code></h3>
+<p><code>gh</code> lets the agent create and manage GitHub repositories from the terminal; <code>uv</code> installs Python, packages and Python tools in separate environments, which makes the installations in the later tasks much easier. In the agent, in your project folder:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Install GitHub CLI (gh) and uv and check that both work.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then <strong>sign in yourself</strong>; the agent cannot click through a browser login. Open a <strong>second</strong> PowerShell window and run:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> auth login <span class="at">--web</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Choose <em>GitHub.com</em>, press Enter at the questions, copy the one-time code, and finish in the browser. <strong>Done when:</strong> <code>gh auth status</code> in that window says you are logged in. Then go back to the agent.</p>
+</section>
+<section id="step-3-the-repository" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-the-repository">Step 3 — the repository</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Use gh to create a public GitHub repository called mlr-agent-lab from this folder.</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>Show me what will be uploaded before you push it.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Read the list before you say yes: <strong>no key, no <code>.claude</code> folder, no <code>.venv</code>, no large data.</strong> The repository <strong>must be public</strong>, because GitHub Pages is free only for public repositories; keep keys and private material out of it. The agent does the first commit, <code>gh repo create</code> and the push.</p>
+<p><strong>Done when:</strong> you open the repository URL in a browser and see <code>hello.py</code> there.</p>
+</section>
+<section id="step-4-rules-for-the-agent" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-rules-for-the-agent">Step 4 — rules for the agent</h3>
+<p>The agent writes <code>AGENTS.md</code> from your rules, in your words:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>Write AGENTS.md with our working rules: read README.md and PLAN.md first,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>use a separate Python environment, and run checks before you say it is done.</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>Make CLAUDE.md load it. Also create README.md (goal, how to run things),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>PLAN.md (progress, next step) and RUNS.md (the model from /status, what I</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>asked, how I checked it).</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Rules worth having:</p>
+<ul>
+<li>Read <code>README.md</code> and <code>PLAN.md</code> before starting; keep decisions in the repository.</li>
+<li>Try the available tools before asking me to do a technical step by hand.</li>
+<li>Use an isolated Python environment; record versions and commands.</li>
+<li>Run meaningful checks before claiming completion.</li>
+<li>Do not weaken a test to make it pass; explain the disagreement first.</li>
+<li>Never publish secrets or private data; ask before publishing anything.</li>
+</ul>
+<p>Read the file it wrote and fix what you do not agree with. <strong>Done when:</strong> <code>AGENTS.md</code>, <code>CLAUDE.md</code> (containing the line <code>@AGENTS.md</code>), <code>README.md</code>, <code>PLAN.md</code> and <code>RUNS.md</code> are in the repository.</p>
+<p><strong>Project files from now on:</strong> <code>README.md</code> holds the goal and how to run things; <code>PLAN.md</code> holds progress and the next step; <code>RUNS.md</code> records the model (<code>/status</code>), what you asked and how you checked it. Start each task with <em>“Make a folder <code>&lt;task&gt;/</code> for this task.”</em> When a session fills up, save progress in <code>PLAN.md</code>, <code>/clear</code>, and start again from those files.</p>
+</section>
+</section>
+<section id="build-change-and-try-things" class="level2">
+<h2 class="anchored" data-anchor-id="build-change-and-try-things">4. Build, change and try things</h2>
+<p>Work through the examples with the teacher: ask for a result, <strong>look at it</strong>, then ask for a change. <strong>Complete at least three of the tasks below yourself.</strong> The Arduino is a teacher demo and does not count towards the three. Each box has a goal, a prompt to paste, what <strong>you</strong> check, one change to ask for and what “done” means. Pick by difficulty:</p>
+<ul>
+<li><strong>Easy</strong> (nothing big to install): Snake, Excel and Word.</li>
+<li><strong>Medium</strong> (the agent installs a tool first; Wi-Fi permitting): 3D model, slides and PDF, subtitles, browser check, class server.</li>
+<li><strong>Hard</strong> (the agent installs Blender and connects it through MCP): Blender.</li>
+<li><strong>Teacher demo</strong> (you may replay it): Arduino.</li>
+</ul>
+<p>Ask for what you want to <strong>get</strong>, not how to do it; the agent installs what is missing. If it says “I cannot”, answer <em>“Try it yourself first and tell me what exactly blocks you.”</em> The detailed requirements in each box are for your project files when they matter; you need not pack them into the first message.</p>
+<p>The teacher’s prepared versions are in <a href="../data/ex05_demo_sources.zip">the demo sources</a> (CadQuery, Three.js, Quarto, Blender, LaTeX, Excel/Word, Whisper/ffmpeg). You do not need them to do the tasks; they show what the results can look like.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Easy · A game: Snake with a twist
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Goal:</strong> a playable Snake game in your browser with one rule you invent.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Make a Snake game that runs in the browser as a single HTML file in a folder snake/.</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>Then suggest five unusual modifications of the rules and implement the one I choose.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Check:</strong> open the file and play. Arrow keys work? The snake grows? You can lose? Then pick a twist (the snake <strong>shortens</strong> when it eats and you win at length one; the walls move inwards; every food item reverses the controls; two snakes on one keyboard) or invent your own, and describe it so precisely that nobody could misunderstand it. Play until the rule happens; try the edge case (length one, food on the snake). Ask the agent to write the rules into <code>snake/README.md</code> and to test the game logic, not only the drawing.</p>
+<p><strong>Change:</strong> <em>“Add a high-score table that survives a page reload.”</em></p>
+<p><strong>Undo practice:</strong> <em>“Commit this.”</em> Then ask for something silly (<em>“make the snake invisible”</em>), look, and say <em>“Undo that with Git.”</em> The game is back.</p>
+<p><strong>Done when:</strong> <code>snake/index.html</code> opens by double-click, your twist works, and it is committed.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Easy · Office files: Excel and Word
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Goal:</strong> an Excel workbook and a Word report built by a script from the leaf data, so they can be rebuilt when the data change.</p>
+<p>Download <a href="../data/leaves.csv" download="leaves.csv">leaves.csv</a> (518 leaves, three tree types; you know it from the earlier labs) into the task folder, or let the agent fetch it.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Make an Excel file from leaves.csv with a summary sheet and a chart;</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>the summary uses formulas, not typed numbers.</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>Also make a one-page Word report with a table and a scatter plot.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The agent writes a Python script (<code>openpyxl</code>, <code>python-docx</code>) instead of clicking in Office, so the files can be regenerated.</p>
+<p><strong>Check:</strong> open both files. The counts add up to 518? The summary uses <strong>formulas</strong>, not typed numbers: change one class label on the data sheet and the counts update.</p>
+<p><strong>Change:</strong> <em>“Colour the header row and add the mean leaf width per class.”</em></p>
+<p><strong>Done when:</strong> both files open, the counts are right, the script and the files are committed.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Medium · 3D model → web viewer → GitHub Pages
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Goal:</strong> a 3D model of a cable clip written in Python (CadQuery), and a web page where anyone can rotate it and download it.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Make a cable clip in CadQuery and a web page where I can rotate it in 3D.</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>Publish the page on GitHub Pages once I have checked it.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Design: a 40 × 20 × 4 mm base, two 4 mm mounting holes 28 mm apart, a central upright loop with a 10 mm opening; dimensions as parameters; export STEP and STL (standard 3D file formats). The page needs mouse rotation, the dimensions and a download link.</p>
+<p><strong>Check:</strong> ask the agent to <strong>measure the hole diameter in the exported model</strong>; a convincing picture does not prove the geometry. Rotate the model on the page. GitHub Pages: the agent enables it with <code>gh</code>; the page appears after a minute or two at <code>https://&lt;you&gt;.github.io/mlr-agent-lab/…</code> — open that URL, not only the local file.</p>
+<p><strong>Change:</strong> <em>“Make the opening 12 mm. Does the exported model change too?”</em></p>
+<p><strong>Done when:</strong> the published URL shows the clip rotating, the measured opening is 12 mm, and the script is committed. See <a href="https://cadquery.readthedocs.io/en/latest/quickstart.html">CadQuery</a> and <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site">GitHub Pages</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Medium · Slides with an animation, then a PDF note
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Goal:</strong> short HTML slides with an animation and a one-page PDF, both built from editable text.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>Make a short Quarto presentation about our cable clip.</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>Include an animation of the opening changing size, and show me the HTML slides.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>Write a one-page LaTeX note about the clip, with a figure and its dimensions.</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>Compile it and show me the PDF.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>(No cable clip yet? Make them about your Snake game instead.) Quarto turns Markdown into slides; LaTeX turns text into a PDF. The agent installs both; TeX is a large download, so the teacher has a prepared toolchain.</p>
+<p>Slides: five slides, little text, speaker notes; the animation’s first frame shows the final state and the last frame is held. Note: a table of the dimensions, a figure, the commands to rebuild it, links to the viewer and the script.</p>
+<p><strong>Check:</strong> look at every slide; nothing cut off? Open the PDF: exactly one page, figure present?</p>
+<p><strong>Change:</strong> <em>“There is too much text on slide two; replace it with a picture.”</em> · <em>“Make the figure larger without adding a second page.”</em></p>
+<p><strong>Done when:</strong> the <code>.qmd</code> and <code>.tex</code> sources and their outputs are committed and you have looked at both outputs.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Medium · Subtitles: Whisper and ffmpeg
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Goal:</strong> a transcript of a recording and a video with correctly timed subtitles burned in.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>Transcribe speech.webm with faster-whisper and use ffmpeg to make a video</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>with burned-in subtitles. Also make a short GIF preview.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Test data: <a href="../data/ex05_speech.webm">speech.webm</a> (87 s of English speech, a synthetic voice reading an appendix of the first lecture) and <a href="../data/ex05_speech.txt">its text</a> to compare against. Or record half a minute of your own voice. The agent installs <a href="https://ffmpeg.org/">ffmpeg</a> and <a href="https://github.com/SYSTRAN/faster-whisper">faster-whisper</a>, which runs the Whisper speech model on your laptop.</p>
+<p><strong>Check:</strong> read the subtitles (<code>.srt</code>) next to the text; play the video: do they appear at the right moment?</p>
+<p><strong>Change:</strong> <em>“Cut the first five seconds and make the subtitles larger.”</em></p>
+<p><strong>Done when:</strong> the transcript, the video and the script are committed and the subtitles match what is said.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Medium · Browser check: the agent clicks through a website
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Goal:</strong> the agent uses a real web page in a browser — it clicks and looks, it does not just read code. Nothing from the other tasks is needed.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>Use Playwright to open https://tomasvicar.github.io/MLR-public/,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>click every link in the menu and check that each page loads.</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>Show me a screenshot of each page and a list of broken links.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Playwright is a program that drives a browser; the agent installs it.</p>
+<p><strong>Check:</strong> open two of the screenshots and compare them with the real pages in your own browser. Did it really visit them?</p>
+<p><strong>Change:</strong> <em>“Do it again on a narrow phone screen. Is the menu still usable?”</em></p>
+<p><strong>Done when:</strong> the screenshots, the list of broken links and the test script are committed.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Medium · Class server: your web page over SSH
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Goal:</strong> the agent logs in to another computer over SSH and runs a small web page there that anyone in the room can open.</p>
+<ul>
+<li><strong>SSH</strong> = a terminal on another computer. The agent uses it as a tool.</li>
+<li><strong>The class server</strong> is a throwaway Linux machine on the lab network. You get your own account <code>studentNN</code> with <strong>no password and no key</strong>, so the agent can connect by itself. Anyone in the room could log in as you: put nothing private there. Python with numpy, pandas and scikit-learn is installed; the server has no internet access and is wiped after the lab.</li>
+<li><strong>Your port</strong> (the door number of your web page) is 9000 + your number: <code>student07</code> → port 9007. Tell the agent the port; it cannot guess it.</li>
+</ul>
+<p>The teacher gives you your number; replace <code>07</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>Connect over SSH to student07@147.229.74.88, port 2222, and tell me what kind of machine it is.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>Put a small web page there with my name and the server's uptime, on port 9007.</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>Keep it running after you disconnect.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Check:</strong> open <code>http://147.229.74.88:9007</code> in your browser, then a neighbour’s page. If the agent’s SSH call hangs, tell it the server must keep running after the connection closes.</p>
+<p><strong>Change:</strong> <em>“Copy leaves.csv there and add the class counts to the page.”</em> First download <a href="../data/leaves.csv" download="leaves.csv">leaves.csv</a> into your project folder (the server has no internet; the file is used again in part 5).</p>
+<p>Nothing needs installing: Windows 10/11 include the <code>ssh</code> client (<code>ssh -V</code> in PowerShell), as do macOS and Linux. Use only your own account and port, run nothing heavy. If the network blocks the connection, the teacher demonstrates on the projector.</p>
+<p><strong>Done when:</strong> your neighbour opens your page and sees your name; the account, what runs there and the URL are in <code>RUNS.md</code>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hard · Blender: a low-poly tree through MCP
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Goal:</strong> the agent drives a running Blender through <strong>MCP</strong> and builds a small low-poly tree — a trunk, a crown of a few blocky shapes, a patch of grass — with materials, light and a rendered image.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>Install Blender and connect it to yourself through the Blender MCP, then use</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>it to build a low-poly tree: a brown trunk, a green crown of 3–4 blocky</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>shapes, a round patch of grass, a sun light and a camera. Render it to</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>tree.png and save tree.blend.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If the agent asks you to restart it so that the MCP tools load, do so (<code>claude --continue</code>) and type <em>continue</em>.</p>
+<p><strong>Check:</strong> watch the tree appear in Blender while the agent works; then look at the render: trunk, crown and grass visible, lit, in frame?</p>
+<p><strong>Change:</strong> <em>“Make it autumn: orange and red crown, a few fallen leaves on the grass.”</em></p>
+<p><strong>Done when:</strong> <code>tree.png</code> and the saved <code>tree.blend</code> are committed.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Teacher demo · Arduino: LEDs you control from the web
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Goal:</strong> an Arduino at the teacher’s desk, a program uploaded to it with <a href="https://arduino.github.io/arduino-cli/"><code>arduino-cli</code></a>, and a web page through which everyone in the room switches the LEDs from their own browser.</p>
+<p>The teacher connects the board and authorises the upload; the class designs the work together.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>An Arduino Uno is connected to this computer, with a HW-159 board of 7 LEDs</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>on data pin 12. Make the LEDs blink, using arduino-cli.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>Now make a local web page where I can switch the individual LEDs, and that</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>students on the local network can open too. Put the page's IP address and</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>port in its heading.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Check:</strong> the LEDs respond; the page works from your laptop on the lab network. <strong>Change:</strong> <em>“Add a button that runs a light around the LEDs.”</em></p>
+<p><strong>Done when (optional, does not count towards the three):</strong> you switched an LED from your browser; note the page address in <code>RUNS.md</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="ml-study" class="level2">
+<h2 class="anchored" data-anchor-id="ml-study">5. ML study</h2>
+<p><strong>Goal:</strong> find out how well the tree type can be predicted from leaf height and width — with a number you can trust. Try several classical classifiers from the lectures, tune their hyperparameters, compare them fairly, and present the result in an <strong>HTML report</strong> and a <strong>five-slide Quarto presentation</strong>.</p>
+<p>Data: <a href="../data/leaves.csv" download="leaves.csv">leaves.csv</a>, <strong>518 leaves, two measurements, three classes</strong>. Save it as <code>data/leaves.csv</code> and record where it came from. Work in pairs if useful; each student submits a repository and records who did what. The agent writes and runs the code.</p>
+<p><strong>Writing the assignment for the agent is your job.</strong> There is no prepared prompt. The evaluation design is yours, from the second lecture; the agent can help you think it through, but you decide.</p>
+<section id="step-1-look-at-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-look-at-the-data">Step 1 — look at the data</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>Show me leaves.csv: how many leaves of each type, a scatter plot of height</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>against width, and anything unusual.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Ask about what you see. Are there identical rows? What would that mean for a train/test split?</p>
+</section>
+<section id="step-2-write-spec.md" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-write-spec.md">Step 2 — write <code>SPEC.md</code></h3>
+<p>Create <code>SPEC.md</code> with the four headings from the lecture and fill them in your own words; the questions under each heading are hints, not a checklist to copy. Write a first draft yourself and commit it, then let the agent interview you: <em>“Ask me questions about my SPEC.md until nothing important is open, then update it.”</em></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Goal</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>What question should the result answer?</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu"># Context</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>The data: file, columns, rows, where it comes from, what you found in step 1.</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="fu"># Constraints</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>Which models, and which hyperparameters over which ranges?</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>How and when is the test set held out? What about the repeated rows?</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>Which metric chooses the model, and on which data?</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>How is tuning done, and with what budget?</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="fu"># Done when</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>Which files must exist (results, report, slides) and which numbers and</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>checks must be in them, so that a classmate can reproduce and check it?</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="step-3-plan-baseline-trial-run" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-plan-baseline-trial-run">Step 3 — plan, baseline, trial run</h3>
+<p><em>“Read SPEC.md. First list anything you would have to guess.”</em> Fix those gaps in <code>SPEC.md</code>. Then <code>/plan Read SPEC.md and propose a plan</code>. Start with a <strong>baseline</strong> (a model that always predicts the most common tree type; yours must beat it) and a small trial run.</p>
+</section>
+<section id="step-4-models-and-tuning" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-models-and-tuning">Step 4 — models and tuning</h3>
+<p>The full comparison with hyperparameter search, as <code>SPEC.md</code> says. All trial results saved to files.</p>
+</section>
+<section id="step-5-the-final-number" class="level3">
+<h3 class="anchored" data-anchor-id="step-5-the-final-number">Step 5 — the final number</h3>
+<p>Test the chosen model <strong>once</strong> on the held-out data and save the predictions.</p>
+</section>
+<section id="step-6-report-and-slides" class="level3">
+<h3 class="anchored" data-anchor-id="step-6-report-and-slides">Step 6 — report and slides</h3>
+<p>Generated from the saved results, not retyped numbers. The agent installs Quarto; five slides are enough.</p>
+</section>
+<section id="step-7-review-in-a-fresh-session" class="level3">
+<h3 class="anchored" data-anchor-id="step-7-review-in-a-fresh-session">Step 7 — review in a fresh session</h3>
+<p><code>/clear</code>, then:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>Read SPEC.md and the results. Does the work meet the spec?</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>List problems, not praise.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Check your own “Done when” list item by item. If the result surprises you, do not just rephrase the prompt: find out what was missing from <code>SPEC.md</code>, fix it there and record why in <code>PLAN.md</code>.</p>
+<p><strong>Done when:</strong> <code>SPEC.md</code>, the code, the saved results, the report and the slides are in the repository and every item of your “Done when” is met.</p>
+</section>
+</section>
+<section id="assignment-submission" class="level2">
+<h2 class="anchored" data-anchor-id="assignment-submission">6. Assignment submission</h2>
+<p><strong>Upload the link to your public GitHub repository to the assignment in the e-learning (Moodle).</strong> Every student submits, also when working in a pair.</p>
+<p>The repository contains the code and the outputs of all tasks of this lab, a subfolder per task:</p>
+<ul>
+<li><code>hello.py</code>, <code>AGENTS.md</code>, <code>CLAUDE.md</code>, <code>README.md</code>, <code>PLAN.md</code>, <code>RUNS.md</code> (parts 2–3);</li>
+<li>the folders of your <strong>three tasks</strong> from part 4 with their outputs;</li>
+<li><code>SPEC.md</code>, the code, the saved results, the HTML report and the five slides of the ML study (part 5);</li>
+<li>a short AI-use note in <code>README.md</code>: which agent and model you used and what you checked yourself.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>If you finish early
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Try PCA inside the cross-validation pipeline and explain what reducing two features to one loses; keep your final test result as it is and label the new run as an extra experiment. Or run two agents at once in separate Git worktrees: one on the report’s styling, one on the experiment code; merge only after checking both. Or recreate a second teacher demo.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tomasvicar\.github\.io\/MLR-public\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>MPA-MLR · Department of Biomedical Engineering, FEEC, Brno University of Technology</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org">Quarto</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

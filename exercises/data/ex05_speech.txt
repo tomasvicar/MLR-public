@@ -1,0 +1,11 @@
+Three conventions run through the whole course. A bold lowercase letter is a vector, an uppercase letter is a matrix, and a single component or a scalar is in plain type. So bold x is one sample, capital X is the whole dataset, and x with the subscript j is one number inside the vector.
+
+The table has three columns. The middle one is the definition, the right one shows where the symbol turns up in the course. If a definition says nothing to you, read the right column first.
+
+Notice that a vector is always a column. That is why one sample, written as a row of the data matrix, appears as x i transpose, in the fourth row of the table.
+
+Look carefully at the row with min and argmin, because it is a recap-quiz question. Min gives the smallest value of the function. Argmin gives the point where that value is attained. The lowest loss is a value; the trained weights are the point.
+
+Books write some of this differently. The i-th sample is often x with a superscript i in parentheses, and the number of samples is capital N. The meaning is the same.
+
+And here is the trap. Some symbols are overloaded, and the context decides. On the probability slides an uppercase letter is a random variable, and A and B are events, not matrices. Sigma is a standard deviation, and also the sigmoid. Lambda is an eigenvalue, and also the ridge penalty.

@@ -928,15 +928,16 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 <h3 class="anchored" data-anchor-id="step-4-rules-for-the-agent">Step 4 — rules for the agent</h3>
 <p>The agent writes <code>AGENTS.md</code> from your rules, in your words:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>Write AGENTS.md with our working rules: read README.md and PLAN.md first,</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>use a separate Python environment, and run checks before you say it is done.</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>Make CLAUDE.md load it. Also create README.md (goal, how to run things),</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>PLAN.md (progress, next step) and RUNS.md (the model from /status, what I</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>asked, how I checked it).</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>use uv for Python (uv run, uv add; no global pip install), and run checks</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>before you say it is done.</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>Make CLAUDE.md load it. Also create README.md (goal, how to run things),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>PLAN.md (progress, next step) and RUNS.md (the model from /status, what I</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>asked, how I checked it).</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Rules worth having:</p>
 <ul>
 <li>Read <code>README.md</code> and <code>PLAN.md</code> before starting; keep decisions in the repository.</li>
 <li>Try the available tools before asking me to do a technical step by hand.</li>
-<li>Use an isolated Python environment; record versions and commands.</li>
+<li>Use <strong>uv</strong> for Python: <code>uv run</code> to run scripts, <code>uv add</code> for packages, no global <code>pip install</code>; record versions and commands.</li>
 <li>Run meaningful checks before claiming completion.</li>
 <li>Do not weaken a test to make it pass; explain the disagreement first.</li>
 <li>Never publish secrets or private data; ask before publishing anything.</li>

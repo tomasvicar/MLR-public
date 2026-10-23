@@ -197,7 +197,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <div class="links">
-<a class="btn-pill" href="https://github.com/tomasvicar/MLR-public/releases/download/media-EX5/EX5-talk-en-e0e7dd7244.m4a" title="Talk podcast about the lab">Podcast EN</a> <a class="btn-pill" href="https://github.com/tomasvicar/MLR-public/releases/download/media-EX5/EX5-talk-cs-89a240a1d4.m4a" title="Talk podcast about the lab">Podcast CZ</a>
+<a class="btn-pill" href="../podcasts/EX5-talk-en.m4a" title="Talk podcast about the lab">Podcast EN</a> <a class="btn-pill" href="../podcasts/EX5-talk-cs.m4a" title="Talk podcast about the lab">Podcast CZ</a>
 </div>
 <style>
 /* Prose prompts should remain readable on narrow screens. */
@@ -207,7 +207,22 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </style>
 <section id="before-you-arrive" class="level2">
 <h2 class="anchored" data-anchor-id="before-you-arrive">Before you arrive</h2>
-<p>Do these at home; each takes minutes, but the account approval takes days.</p>
+<p>Do these at home before the lab.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Choose your agent: CERIT-SC, Antigravity or Codex
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>CERIT-SC + Claude Code</strong> is the worked example in part 2 for students who already have a MetaCentrum account and API key. <strong>Antigravity and Codex</strong> are alternatives with limited free access; availability depends on your account and current plan. Sign in to their services instead of setting a CERIT-SC API key. You can do the same tasks with any of these agents.</p>
+<p><strong>Antigravity (Google).</strong> A free plan includes a limited weekly agent quota; <a href="https://www.antigravity.google/docs/plans">paid plans raise it</a>. Install the CLI in PowerShell with <code>irm https://antigravity.google/cli/install.ps1 | iex</code>, or on macOS/Linux with <code>curl -fsSL https://antigravity.google/cli/install.sh | bash</code>. Open a new terminal, run <code>agy --version</code>, then <code>agy</code> and sign in. In your project folder, launch automatic tool approval with <code>agy --dangerously-skip-permissions</code>. Check remaining quota with <code>/usage</code> (also <code>/quota</code>) inside the agent. If you have eligible personal and school Google accounts, you may choose one; school access can require institutional setup and the quota depends on that account. Switch with <code>/logout</code>, restart <code>agy</code>, and sign in again. <a href="https://antigravity.google/docs/getting-started?tab=cli">CLI guide</a> · <a href="https://www.antigravity.google/docs/permissions">permissions</a> · <a href="https://www.antigravity.google/docs/cli/commands/usage">usage</a>.</p>
+<p><strong>Codex (OpenAI).</strong> A <a href="https://learn.chatgpt.com/docs/pricing">limited Free plan</a> is listed for the desktop app, subject to rollout; check your plan for CLI access. Install the CLI in PowerShell with <code>irm https://chatgpt.com/codex/install.ps1 | iex</code>, or on macOS/Linux with <code>curl -fsSL https://chatgpt.com/codex/install.sh | sh</code>. Open a new terminal, run <code>codex --version</code>, then <code>codex</code> and sign in. In your project folder, <code>codex --yolo</code> skips approval prompts <strong>and disables the sandbox</strong>. Inside Codex, <code>/status</code> shows the active model and remaining usage limits; use <code>codex logout</code> and <code>codex login</code> to switch accounts. <a href="https://learn.chatgpt.com/docs/cli">CLI guide</a> · <a href="https://learn.chatgpt.com/docs/enterprise/windows-deployment">Windows installer</a> · <a href="https://learn.chatgpt.com/docs/cli/reference">modes</a>.</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -228,11 +243,9 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 <ol type="1">
 <li><strong>A GitHub account</strong> (<a href="https://github.com/signup">github.com/signup</a>).</li>
-<li><strong>A MetaCentrum account</strong>, which gives you free access to the CERIT-SC (e-INFRA CZ) models: <a href="https://metavo.metacentrum.cz/en/application/index.html">apply here</a> (sign in with your university identity, eduID). <strong>Approval is not instant, do it now.</strong></li>
-<li><strong>Your API key.</strong> When the account is approved, log in at <a href="https://chat.ai.e-infra.cz/">chat.ai.e-infra.cz</a>, send one message (<em>hello</em>) to see that it answers, then create an API key in the chat’s settings (<em>Settings → Account → API Keys</em>). Copy the key (a line starting with <code>sk-</code>) into a private note or a password manager, <strong>not</strong> into a project folder. <em>Done when:</em> you have the key saved and the chat answers you.</li>
 <li><strong>Git for Windows</strong> (<a href="https://git-scm.com/downloads/win">download</a>): run the installer and click <em>Next</em> on every screen; the defaults are fine. You will not use it directly, the agent does. <em>Done when:</em> <code>git --version</code> in a <strong>new</strong> PowerShell window prints a version. (macOS and Linux usually have Git already; every command box below has a tab for them.)</li>
 </ol>
-<p><strong>No paid subscription is needed.</strong> Do not buy a plan to solve a login problem; ask the teacher. If your key does not work on the day, sit with a neighbour whose agent works and type into their session; still create your own repository in part 3.</p>
+<p><strong>No paid subscription is required</strong> if a free route is available to your account. If you use CERIT-SC and do not yet have its key, <a href="https://chat.ai.e-infra.cz/">create one in the chat settings</a> after signing in; keep it out of your project folder. If your key does not work on the day, ask the teacher or work with a neighbour whose agent works; still create your own repository in part 3.</p>
 </section>
 <section id="recap-from-the-basics-to-the-habits" class="level2">
 <h2 class="anchored" data-anchor-id="recap-from-the-basics-to-the-habits">1. Recap: from the basics to the habits</h2>
@@ -561,7 +574,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 <p><strong>The block overwrites both files</strong>; if you already use Claude Code with another account, back them up first.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -570,7 +583,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>It follows the <a href="https://docs.cerit.io/en/docs/ai-as-a-service/llm-integration">CERIT-SC integration recipe</a>: requests go to <code>llm.ai.e-infra.cz</code> instead of Anthropic, and Claude Code’s model roles map to the provider’s aliases (<code>agentic</code> by default, <code>thinker</code> for <code>/model opus</code>, <code>mini</code> for <code>/model haiku</code>). These are <strong>not Claude models</strong>; the Claude Code window does not mean an Anthropic model. This is a provider-documented integration; Anthropic does not officially support routing Claude Code to other models. If a login screen appears or an alias is unavailable, check the current recipe.</p>
 </div>
@@ -601,7 +614,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 <p>If the agent asks for permission, read what it wants to run and choose <em>Yes</em>. If Windows asks <em>“Do you want to allow this app to make changes?”</em>, that is the agent installing something (for example Python): click <em>Yes</em> yourself.</p>
 <p><strong>Done when:</strong> <code>hello.py</code> is in <code>C:\dev\mlr-agent-lab</code> (look in File Explorer) <strong>and</strong> you saw its output in the terminal because the agent ran it. A chatbot would only have shown you the code.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -610,7 +623,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li><strong><code>claude</code> is not recognized</strong> → run the <code>PATH</code> block of step 1, then close PowerShell and open a new window. Still not? Show the teacher the last lines of the installer output.</li>
@@ -728,7 +741,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -737,7 +750,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Commands</strong> are typed inside Claude Code at the start of a message. Type <code>/</code> to see what your version offers.</p>
 <table class="caption-top table">
@@ -958,7 +971,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 <p>Ask for what you want to <strong>get</strong>, not how to do it; the agent installs what is missing. If it says “I cannot”, answer <em>“Try it yourself first and tell me what exactly blocks you.”</em> The detailed requirements in each box are for your project files when they matter; you need not pack them into the first message.</p>
 <p>The teacher’s prepared versions are in <a href="../data/ex05_demo_sources.zip">the demo sources</a> (CadQuery, Three.js, Quarto, Blender, LaTeX, Excel/Word, Whisper/ffmpeg). You do not need them to do the tasks; they show what the results can look like.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -967,7 +980,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Goal:</strong> a playable Snake game in your browser with one rule you invent.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>Make a Snake game that runs in the browser as a single HTML file in a folder snake/.</span>
@@ -980,7 +993,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -989,7 +1002,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Goal:</strong> an Excel workbook and a Word report built by a script from the leaf data, so they can be rebuilt when the data change.</p>
 <p>Download <a href="../data/leaves.csv" download="leaves.csv">leaves.csv</a> (518 leaves, three tree types; you know it from the earlier labs) into the task folder, or let the agent fetch it.</p>
@@ -1004,7 +1017,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1013,7 +1026,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Goal:</strong> a 3D model of a cable clip written in Python (CadQuery), and a web page where anyone can rotate it and download it.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>Make a cable clip in CadQuery and a web page where I can rotate it in 3D.</span>
@@ -1026,7 +1039,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1035,7 +1048,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Goal:</strong> short HTML slides with an animation and a one-page PDF, both built from editable text.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>Make a short Quarto presentation about our cable clip.</span>
@@ -1051,7 +1064,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1060,7 +1073,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Goal:</strong> a transcript of a recording and a video with correctly timed subtitles burned in.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>Transcribe speech.webm with faster-whisper and use ffmpeg to make a video</span>
@@ -1073,7 +1086,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1082,7 +1095,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Goal:</strong> the agent uses a real web page in a browser — it clicks and looks, it does not just read code. Nothing from the other tasks is needed.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>Use Playwright to open https://tomasvicar.github.io/MLR-public/,</span>
@@ -1096,7 +1109,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1105,7 +1118,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Goal:</strong> the agent logs in to another computer over SSH and runs a small web page there that anyone in the room can open.</p>
 <ul>
@@ -1125,7 +1138,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1134,7 +1147,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Goal:</strong> the agent drives a running Blender through <strong>MCP</strong> and builds a small low-poly tree — a trunk, a crown of a few blocky shapes, a patch of grass — with materials, light and a rendered image.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>Install Blender and connect it to yourself through the Blender MCP, then use</span>
@@ -1149,7 +1162,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1158,7 +1171,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Goal:</strong> an Arduino at the teacher’s desk, a program uploaded to it with <a href="https://arduino.github.io/arduino-cli/"><code>arduino-cli</code></a>, and a web page through which everyone in the room switches the LEDs from their own browser.</p>
 <p>The teacher connects the board and authorises the upload; the class designs the work together.</p>
@@ -1227,7 +1240,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 <p>Check your own “Done when” list item by item. If the result surprises you, do not just rephrase the prompt: find out what was missing from <code>SPEC.md</code>, fix it there and record why in <code>PLAN.md</code>.</p>
 <p><strong>Done when:</strong> <code>SPEC.md</code>, the code, the saved results, the report and the slides are in the repository and every item of your “Done when” is met.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1236,7 +1249,7 @@ pre.sourceCode.default { border-left: 4px solid #0f7b7b; }
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Try PCA inside the cross-validation pipeline and explain what reducing two features to one loses; keep your final test result as it is and label the new run as an extra experiment. Or run two agents at once in separate Git worktrees: one on the report’s styling, one on the experiment code; merge only after checking both. Or recreate a second teacher demo.</p>
 </div>

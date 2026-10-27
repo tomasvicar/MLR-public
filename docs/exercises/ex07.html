@@ -209,7 +209,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Exercise 7 — Neural network from scratch</h1>
-<p class="subtitle lead">Write backpropagation yourself, generalize it to any number of layers, turn it into PyTorch step by step, then grow your network into a blood-cell classifier</p>
+<p class="subtitle lead">Write backpropagation yourself, read it generalized to any number of layers, turn it into PyTorch with autograd, then grow your network into a blood-cell classifier</p>
 </div>
 
 
@@ -243,7 +243,7 @@ Builds on the <a href="../lectures/L7.html">lecture on artificial neural network
 <h2 class="anchored" data-anchor-id="when-to-use-ai-agents">When to use AI agents</h2>
 <ul>
 <li><strong>Tasks 1–5: work without AI agents.</strong> Write and understand the code yourself. Use the formulas, the step comments in every cell and teacher help.</li>
-<li><strong>Task 6: use your coding agent.</strong> Have it extend <strong>your own network from Task 4</strong> into a deeper classifier, run the experiments and generate the report.</li>
+<li><strong>Task 6: use your coding agent.</strong> Have it extend <strong>the network from Task 4</strong> into a deeper classifier, run the experiments and generate the report.</li>
 <li><strong>Your review is your own work.</strong> Check the agent’s output and write <code>REVIEW.md</code> yourself; do not ask the agent to write it.</li>
 </ul>
 <p><a class="btn-colab" href="https://colab.research.google.com/github/tomasvicar/MLR-public/blob/master/exercises/ex07/ex07_student.ipynb" target="_blank">▶ Open the notebook in Google Colab</a> <a class="btn-colab" href="../notebooks/ex07_student.ipynb" download="">↓ Download the student notebook</a></p>
@@ -252,10 +252,10 @@ Builds on the <a href="../lectures/L7.html">lecture on artificial neural network
 <h2 class="anchored" data-anchor-id="what-you-will-build">What you will build</h2>
 <ul>
 <li>One neuron, by hand and then in NumPy, trained by SGD and checked against the closed-form least-squares solution.</li>
-<li>The <strong>forward pass, backward pass and mini-batch training loop</strong> of a two-layer network as one plain script, in the matrix form of the lecture, verified by a numerical gradient before the first epoch.</li>
-<li>The same network as functions with a <strong>loop over the layers</strong>, so that it can have any number of layers — with the same numbers as your script.</li>
-<li>The same network in PyTorch: autograd instead of your backward pass, an optimizer instead of your update — again with the same numbers.</li>
-<li>With an agent: your own network, deeper, classifying microscope images of blood cells — NumPy only.</li>
+<li>The <strong>forward pass, backward pass and training loop</strong> of a two-layer network as one plain script, in the matrix form of the lecture, one sample per update.</li>
+<li>The same network read as a given script with a <strong>loop over the layers</strong>, so that it can have any number of layers — with the same numbers as your script.</li>
+<li>The same network in PyTorch: autograd instead of your backward pass — again with the same numbers.</li>
+<li>With an agent: the Task 4 network, deeper, classifying microscope images of blood cells — NumPy only.</li>
 </ul>
 <p>You receive data generation, plotting and the checks. You write the computations; every cell you complete has short step comments, and the notebook states the numbers you should get.</p>
 </section>
@@ -284,23 +284,23 @@ Builds on the <a href="../lectures/L7.html">lecture on artificial neural network
 <tbody>
 <tr class="odd">
 <td>1. One neuron by hand</td>
-<td>A forward pass, a gradient and one update on paper, then in code</td>
+<td>A forward pass and a gradient on paper, then in code</td>
 </tr>
 <tr class="even">
 <td>2. One neuron in NumPy</td>
-<td>Your SGD loop, the closed-form comparison and a numerical gradient</td>
+<td>Your SGD loop and the closed-form comparison; a supplied numerical gradient check</td>
 </tr>
 <tr class="odd">
 <td>3. A two-layer network</td>
-<td>One plain script: forward pass, backward pass, update, mini-batch loop</td>
+<td>One plain script: forward pass, backward pass and update, one sample at a time</td>
 </tr>
 <tr class="even">
 <td>4. Any number of layers</td>
-<td>Your script as functions with a loop over the layers: the same curve for two layers, then a deeper network</td>
+<td>A given script with a loop over the layers, read together: the same curve for two layers</td>
 </tr>
 <tr class="odd">
 <td>5. From your code to PyTorch</td>
-<td>Autograd, then an optimizer, with the same loss curve</td>
+<td>Autograd instead of your backward pass, with the same loss curve</td>
 </tr>
 <tr class="even">
 <td>6. Agent extension</td>
@@ -340,10 +340,6 @@ Builds on the <a href="../lectures/L7.html">lecture on artificial neural network
 <td style="text-align: left;">target <span class="math inline">\(y\)</span></td>
 <td style="text-align: right;"><span class="math inline">\(1\)</span></td>
 </tr>
-<tr class="even">
-<td style="text-align: left;">learning rate <span class="math inline">\(\eta\)</span></td>
-<td style="text-align: right;"><span class="math inline">\(1\)</span></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -351,43 +347,42 @@ Builds on the <a href="../lectures/L7.html">lecture on artificial neural network
 <li>Derive <span class="math inline">\(\partial L / \partial w_1\)</span> and <span class="math inline">\(\partial L / \partial w_2\)</span> with the chain rule, keeping <span class="math inline">\(f\)</span> general; then compute <span class="math inline">\(a\)</span>.</li>
 <li>For the <strong>linear</strong> activation <span class="math inline">\(f(a) = a\)</span>: the prediction <span class="math inline">\(\hat y\)</span>, the loss <span class="math inline">\(L\)</span> and both derivatives.</li>
 <li>The same for the <strong>sigmoid</strong>, <span class="math inline">\(f'(a) = f(a)\big(1 - f(a)\big)\)</span>.</li>
-<li>One step <span class="math inline">\(w_i \leftarrow w_i - \eta\, \partial L / \partial w_i\)</span> of the sigmoid neuron, then the new <span class="math inline">\(a\)</span>, <span class="math inline">\(\hat y\)</span> and <span class="math inline">\(L\)</span> — did the loss go down?</li>
 </ol>
 <p>Why is the sigmoid gradient eight times smaller than the linear one, although the input, the target and the loss function are the same? Then write the same formulas in NumPy and reproduce your paper.</p>
 </section>
 <section id="one-neuron-in-numpy" class="level3">
 <h3 class="anchored" data-anchor-id="one-neuron-in-numpy">2. One neuron in NumPy</h3>
-<p>A linear neuron with one input <em>is</em> linear regression. Write the whole SGD loop — epochs, reshuffling, per-sample update, the loss curve — on 100 noisy samples of <span class="math inline">\(y = 0.5x + 2\)</span>. Compare the result with <code>np.linalg.lstsq</code>, and explain why SGD with a constant learning rate only gets close. Then compute the gradient both analytically and by a central difference.</p>
+<p>A linear neuron with one input <em>is</em> linear regression. Write the whole SGD loop — epochs, reshuffling, per-sample update, the loss curve — on 100 noisy samples of <span class="math inline">\(y = 0.5x + 2\)</span>. Compare the result with <code>np.linalg.lstsq</code>, and explain why SGD with a constant learning rate only gets close. A supplied cell then compares the analytic gradient with a central difference — the numerical gradient is only a check.</p>
 </section>
 <section id="a-two-layer-network" class="level3">
 <h3 class="anchored" data-anchor-id="a-two-layer-network">3. A two-layer network</h3>
-<p>ReLU hidden layer, linear output, one sample per column. Write the network as one plain script, line by line: first the forward pass, the loss and the backward pass for one mini-batch, then the same lines in a training loop with the update. The supplied gradient check compares your backward pass with finite differences on every parameter <strong>before</strong> you train with it.</p>
-<p>This is the slide “General neural net — each layer and NN learning” of the <a href="../lectures/L7.html">lecture</a>, with the bias written as a separate vector <span class="math inline">\(\mathbf b_k\)</span> and the loss averaged over a mini-batch of <span class="math inline">\(n\)</span> samples (one sample per column of <span class="math inline">\(\mathbf h_0\)</span>):</p>
+<p>ReLU hidden layer, linear output, trained by SGD on one sample at a time. Write the network as one plain script, line by line: first the forward pass, the loss and the backward pass for the first sample, then the same lines in a training loop with the update. Written as one equation, the network and the loss of a sample <span class="math inline">\((x, y)\)</span> are <span class="math display">\[L = \tfrac12 \big(W_2\, f(W_1 x + \mathbf b_1) + b_2 - y\big)^2,\]</span> and the chain rule on it gives the four gradients with respect to <span class="math inline">\(W_2\)</span>, <span class="math inline">\(b_2\)</span>, <span class="math inline">\(W_1\)</span> and <span class="math inline">\(\mathbf b_1\)</span>. The supplied gradient check compares your backward pass with finite differences on every parameter <strong>before</strong> you train with it.</p>
+<p>This is the slide “General neural net — each layer and NN learning” of the <a href="../lectures/L7.html">lecture</a>, with the bias written as a separate vector <span class="math inline">\(\mathbf b_k\)</span> and one sample as a column vector <span class="math inline">\(\mathbf h_0 = \mathbf x\)</span>:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../images/L7-layer-k.svg" class="img-fluid figure-img" alt="Diagram of the k-th layer: the inputs h of layer k minus one, the neurons with a summing junction, the inner potential a and the output h of layer k" width="420"></p>
-<figcaption>Layer <span class="math inline">\(k\)</span>: inputs <span class="math inline">\(\mathbf h_{k-1}\)</span>, inner potentials <span class="math inline">\(\mathbf a_k\)</span>, outputs <span class="math inline">\(\mathbf h_k\)</span> (in the figure, <span class="math inline">\(m\)</span> counts the inputs and <span class="math inline">\(n\)</span> the neurons of the layer; below, <span class="math inline">\(n\)</span> is the number of samples in a mini-batch).</figcaption>
+<figcaption>Layer <span class="math inline">\(k\)</span>: inputs <span class="math inline">\(\mathbf h_{k-1}\)</span>, inner potentials <span class="math inline">\(\mathbf a_k\)</span>, outputs <span class="math inline">\(\mathbf h_k\)</span> (in the figure, <span class="math inline">\(m\)</span> counts the inputs and <span class="math inline">\(n\)</span> the neurons of the layer).</figcaption>
 </figure>
 </div>
 <p><strong>Forward</strong>, from the first layer to the last, with <span class="math inline">\(\mathbf h_0 = \mathbf x\)</span> and <span class="math inline">\(\hat{\mathbf y} = \mathbf h_K\)</span>: <span class="math display">\[\mathbf a_k = W_k \mathbf h_{k-1} + \mathbf b_k\]</span> <span class="math display">\[\mathbf h_k = f(\mathbf a_k)\]</span></p>
-<p><strong>Backward</strong>, from the last layer to the first, starting with <span class="math inline">\(\nabla_{\hat{\mathbf y}} L = (\hat{\mathbf y} - \mathbf y)/n\)</span>: <span class="math display">\[\nabla_{\mathbf a_k} L = \nabla_{\mathbf h_k} L \odot f'(\mathbf a_k)\]</span> <span class="math display">\[\nabla_{W_k} L = \nabla_{\mathbf a_k} L \; \mathbf h_{k-1}^T\]</span> <span class="math display">\[\nabla_{\mathbf b_k} L = \textstyle\sum_{\text{batch}} \nabla_{\mathbf a_k} L\]</span> <span class="math display">\[\nabla_{\mathbf h_{k-1}} L = W_k^T \nabla_{\mathbf a_k} L\]</span></p>
+<p><strong>Backward</strong>, from the last layer to the first, starting with <span class="math inline">\(\nabla_{\hat{\mathbf y}} L = \hat{\mathbf y} - \mathbf y\)</span>: <span class="math display">\[\nabla_{\mathbf a_k} L = \nabla_{\mathbf h_k} L \odot f'(\mathbf a_k)\]</span> <span class="math display">\[\nabla_{W_k} L = \nabla_{\mathbf a_k} L \; \mathbf h_{k-1}^T\]</span> <span class="math display">\[\nabla_{\mathbf b_k} L = \nabla_{\mathbf a_k} L\]</span> <span class="math display">\[\nabla_{\mathbf h_{k-1}} L = W_k^T \nabla_{\mathbf a_k} L\]</span></p>
 <p><strong>Update</strong> every layer: <span class="math inline">\(W_k \leftarrow W_k - \eta \nabla_{W_k} L\)</span>, the same for <span class="math inline">\(\mathbf b_k\)</span>.</p>
 <p>Here <span class="math inline">\(K = 2\)</span>, <span class="math inline">\(f\)</span> is ReLU in the hidden layer and the identity at the output (<span class="math inline">\(f' = 1\)</span>). Every gradient has the shape of what it differentiates: <span class="math inline">\(\nabla_{W_k} L\)</span> is as large as <span class="math inline">\(W_k\)</span> — the quickest check of your code.</p>
 </section>
 <section id="any-number-of-layers" class="level3">
 <h3 class="anchored" data-anchor-id="any-number-of-layers">4. Any number of layers</h3>
-<p>Your script as functions, with the recipe above and <span class="math inline">\(K\)</span> as a variable: the weights and biases in Python lists <code>W[k]</code>, <code>b[k]</code>, the forward pass as a loop from the first layer to the last, the backward pass as a loop from the last to the first. A skeleton with the lists and the loops is given; you fill in the body of each loop. With the layer sizes <code>[1, 128, 1]</code> it must reproduce your Task 3 loss curve exactly; a gradient check on a tiny network with two hidden layers follows, and then you train a deeper network on the same data.</p>
+<p>Complete code, nothing to write — we read it together next to your Task 3 script. It is the recipe above with <span class="math inline">\(K\)</span> as a variable, a plain script without functions: the network given by its layer sizes, the weights and biases in Python lists <code>W[k]</code>, <code>b[k]</code>, the forward pass as a loop from the first layer to the last, the backward pass as a loop from the last to the first, then the update. With <code>sizes = [1, 128, 1]</code> it reproduces your Task 3 loss curve bit for bit. Optionally, change it to <code>[1, 32, 32, 1]</code> and rerun: is the deeper network better here?</p>
 </section>
 <section id="from-your-code-to-pytorch" class="level3">
 <h3 class="anchored" data-anchor-id="from-your-code-to-pytorch">5. From your code to PyTorch</h3>
-<p>The same lists and loops, with tensors. Replace one piece at a time: first autograd (<code>loss.backward()</code>) instead of your backward pass, then <code>torch.optim.SGD</code> instead of your update. The loss curve stays the same throughout. The training loop is given; you write only the lines that change. A short tour with runnable examples comes first: tensors, NumPy conversion, a gradient with <code>backward()</code> and its accumulation, <code>no_grad()</code>, <code>detach()</code> and the device.</p>
+<p>Back to the two-layer script of Task 3, with <code>W1</code>, <code>b1</code>, <code>W2</code>, <code>b2</code> as tensors and autograd (<code>loss.backward()</code>) instead of your backward pass in the training loop. The loss curve stays the same. The loops are given; you write the lines inside. A short tour with runnable examples comes first: tensors, NumPy conversion, a gradient with <code>backward()</code> and its accumulation, <code>no_grad()</code>, <code>detach()</code> and the device.</p>
 </section>
 <section id="agent" class="level3">
 <h3 class="anchored" data-anchor-id="agent">6. Your network on blood-cell images, with an agent</h3>
 <p><a class="btn-colab" href="../downloads/ex07_agent_task.zip" download="">↓ Download everything for the final task (ZIP)</a></p>
 <p>Includes the student notebook, the task with its requirements (<code>TASK.md</code>) and a getting-started README. After extracting, replace the bundled blank notebook with <strong>your own notebook</strong> before starting the agent.</p>
 <p><strong>The practical problem.</strong> A blood count with a <em>differential</em> tells a physician how many cells of each type are in the blood. Analysers photograph single cells from a blood smear, and a technician still checks many of them. A classifier that pre-sorts the cells, so that only the uncertain ones need a human, saves real work.</p>
-<p><strong>Your extension.</strong> The agent starts from <strong>your own Task 4 functions</strong> — already a loop over any number of ReLU layers — and extends them with a softmax output and the cross-entropy loss, in <strong>NumPy only</strong>, keeping your conventions (one sample per column, the lists <code>W[k]</code>, <code>b[k]</code>, the backward formulas of the lecture). The result must pass a finite-difference gradient test on a tiny network, compare a softmax baseline with several network sizes <strong>on the validation split</strong>, and open the test split only once, at the end. The notebook shows a preview of the data and gives the goal, the graded requirements (each with how you check it in <code>REVIEW.md</code>) and the required files — not a ready-made prompt: <strong>writing the instructions for your agent is your job</strong>.</p>
+<p><strong>Your extension.</strong> The agent starts from <strong>the Task 4 script</strong> — already a loop over any number of ReLU layers — and extends it with a softmax output and the cross-entropy loss, in <strong>NumPy only</strong>, keeping its conventions (one sample per column, the lists <code>W[k]</code>, <code>b[k]</code>, the backward formulas of the lecture). The result must pass a finite-difference gradient test on a tiny network, compare a softmax baseline with several network sizes <strong>on the validation split</strong>, and open the test split only once, at the end. The notebook shows a preview of the data and gives the goal, the graded requirements (each with how you check it in <code>REVIEW.md</code>) and the required files — not a ready-made prompt: <strong>writing the instructions for your agent is your job</strong>.</p>
 <p><strong>Optional editor:</strong> if you want to use VS Code on Windows, install it from PowerShell or Windows Terminal:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>winget install <span class="op">--</span>id Microsoft<span class="op">.</span><span class="fu">VisualStudioCode</span> <span class="op">--</span>exact <span class="op">--</span>scope user <span class="op">--</span>accept-package-agreements <span class="op">--</span>accept-source-agreements</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Start in class: the repository, the invitation, your first instructions, the gradient test and a short trial run. Finish the full run and the review at home.</p>

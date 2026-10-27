@@ -16,20 +16,20 @@
     <item>
       <title>Lecture 7 · Artificial neural networks — talk (EN)</title>
       <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Perceptron and the artificial neuron; activation functions. Gradient for one neuron, matrix notation, the general network. Mini-batch gradient descent, Adam, saddle points. Loss functions. L1/L2 regularization, dropout, batch normalization.</description>
-      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L7/L7-talk-en-dbe680594e.m4a" length="19510927" type="audio/mp4"/>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L7/L7-talk-en-67f2b80280.m4a" length="19444534" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-10-20-l07-lecture-talk-en</guid>
       <pubDate>Tue, 20 Oct 2026 12:27:00 +0200</pubDate>
-      <itunes:duration>1:18:26</itunes:duration>
+      <itunes:duration>1:18:09</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
     </item>
     <item>
       <title>Lecture 7 · Artificial neural networks — talk (CZ)</title>
       <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. Perceptron and the artificial neuron; activation functions. Gradient for one neuron, matrix notation, the general network. Mini-batch gradient descent, Adam, saddle points. Loss functions. L1/L2 regularization, dropout, batch normalization.</description>
-      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L7/L7-talk-cs-5bfd30379e.m4a" length="19423565" type="audio/mp4"/>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L7/L7-talk-cs-ab14bc77b2.m4a" length="19352731" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-10-20-l07-lecture-talk-cs</guid>
       <pubDate>Tue, 20 Oct 2026 12:26:00 +0200</pubDate>
-      <itunes:duration>1:18:02</itunes:duration>
+      <itunes:duration>1:17:46</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
     </item>

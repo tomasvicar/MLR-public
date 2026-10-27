@@ -310,7 +310,7 @@ Builds on the <a href="../lectures/L7.html">lecture on artificial neural network
 </table>
 <section id="by-hand" class="level3">
 <h3 class="anchored" data-anchor-id="by-hand">1. One neuron by hand</h3>
-<p>The laptop stays closed. One neuron with two inputs, no bias, and the squared-error loss <span class="math inline">\(L = \tfrac12 (\hat y - y)^2\)</span>:</p>
+<p>One neuron with two inputs, no bias, the prediction <span class="math inline">\(\hat y = f(a) = f(w_1 x_1 + w_2 x_2)\)</span> and the squared-error loss <span class="math inline">\(L = \tfrac12 (\hat y - y)^2\)</span>:</p>
 <div class="hand-table">
 <table class="caption-top table">
 <thead>
@@ -348,10 +348,10 @@ Builds on the <a href="../lectures/L7.html">lecture on artificial neural network
 </table>
 </div>
 <ol type="1">
-<li>Compute the inner potential <span class="math inline">\(a = w_1 x_1 + w_2 x_2\)</span>.</li>
-<li>For the <strong>linear</strong> activation <span class="math inline">\(f(a) = a\)</span>: the prediction <span class="math inline">\(\hat y\)</span>, the loss <span class="math inline">\(L\)</span> and the gradient <span class="math inline">\(\nabla_{\mathbf w} L = (\hat y - y)\, f'(a)\, \mathbf x\)</span>.</li>
+<li>Derive <span class="math inline">\(\partial L / \partial w_1\)</span> and <span class="math inline">\(\partial L / \partial w_2\)</span> with the chain rule, keeping <span class="math inline">\(f\)</span> general; then compute <span class="math inline">\(a\)</span>.</li>
+<li>For the <strong>linear</strong> activation <span class="math inline">\(f(a) = a\)</span>: the prediction <span class="math inline">\(\hat y\)</span>, the loss <span class="math inline">\(L\)</span> and both derivatives.</li>
 <li>The same for the <strong>sigmoid</strong>, <span class="math inline">\(f'(a) = f(a)\big(1 - f(a)\big)\)</span>.</li>
-<li>One step <span class="math inline">\(\mathbf w \leftarrow \mathbf w - \eta \nabla_{\mathbf w} L\)</span> of the sigmoid neuron, then the new <span class="math inline">\(a\)</span>, <span class="math inline">\(\hat y\)</span> and <span class="math inline">\(L\)</span> — did the loss go down?</li>
+<li>One step <span class="math inline">\(w_i \leftarrow w_i - \eta\, \partial L / \partial w_i\)</span> of the sigmoid neuron, then the new <span class="math inline">\(a\)</span>, <span class="math inline">\(\hat y\)</span> and <span class="math inline">\(L\)</span> — did the loss go down?</li>
 </ol>
 <p>Why is the sigmoid gradient eight times smaller than the linear one, although the input, the target and the loss function are the same? Then write the same formulas in NumPy and reproduce your paper.</p>
 </section>

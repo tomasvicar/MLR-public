@@ -6,13 +6,33 @@
     <atom:link href="https://tomasvicar.github.io/MLR-public/podcast.xml" rel="self" type="application/rss+xml"/>
     <description>Talk podcasts about the lectures and labs of the course Machine Learning (MPA-MLR), in English and Czech, read by a local text-to-speech engine. Slides and materials are on the course web.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 20 Oct 2026 12:27:00 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 29 Oct 2026 12:13:00 +0200</lastBuildDate>
     <image><url>https://tomasvicar.github.io/MLR-public/podcasts/cover.png</url><title>MPA-MLR · Machine Learning</title><link>https://tomasvicar.github.io/MLR-public/</link></image>
     <itunes:image href="https://tomasvicar.github.io/MLR-public/podcasts/cover.png"/>
     <itunes:author>Tomáš Vičar</itunes:author>
     <itunes:category text="Education"/>
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
+    <item>
+      <title>Exercise 7 · Neural network from scratch — talk (EN)</title>
+      <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Includes the solutions of the lab. One learning step of a single neuron by hand. A neuron and a two-layer network in NumPy with backpropagation written out and checked with finite differences, then any number of layers in a loop, then the same network in PyTorch. An agent grows it into a blood-cell classifier.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-EX7/EX7-talk-en-ed0b8984d4.m4a" length="20613298" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-10-29-l07-lab-talk-en</guid>
+      <pubDate>Thu, 29 Oct 2026 12:13:00 +0200</pubDate>
+      <itunes:duration>1:22:53</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Exercise 7 · Neural network from scratch — talk (CZ)</title>
+      <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. Includes the solutions of the lab. One learning step of a single neuron by hand. A neuron and a two-layer network in NumPy with backpropagation written out and checked with finite differences, then any number of layers in a loop, then the same network in PyTorch. An agent grows it into a blood-cell classifier.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-EX7/EX7-talk-cs-a7a3555ee1.m4a" length="20429997" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-10-29-l07-lab-talk-cs</guid>
+      <pubDate>Thu, 29 Oct 2026 12:12:00 +0200</pubDate>
+      <itunes:duration>1:22:00</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
     <item>
       <title>Lecture 7 · Artificial neural networks — talk (EN)</title>
       <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Perceptron and the artificial neuron; activation functions. Gradient for one neuron, matrix notation, the general network. Mini-batch gradient descent, Adam, saddle points. Loss functions. L1/L2 regularization, dropout, batch normalization.</description>
@@ -30,26 +50,6 @@
       <guid isPermaLink="false">MPA-MLR/2026-10-20-l07-lecture-talk-cs</guid>
       <pubDate>Tue, 20 Oct 2026 12:26:00 +0200</pubDate>
       <itunes:duration>1:17:46</itunes:duration>
-      <itunes:episodeType>full</itunes:episodeType>
-      <itunes:explicit>false</itunes:explicit>
-    </item>
-    <item>
-      <title>Exercise 7 · Neural network from scratch — talk (EN)</title>
-      <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Includes the solutions of the lab. One learning step of a single neuron by hand. A neuron and a two-layer network in NumPy with backpropagation written out and checked with finite differences, then any number of layers in a loop, then the same network in PyTorch. An agent grows it into a blood-cell classifier.</description>
-      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-EX7/EX7-talk-en-6e39cd6480.m4a" length="22127379" type="audio/mp4"/>
-      <guid isPermaLink="false">MPA-MLR/2026-10-20-l07-lab-talk-en</guid>
-      <pubDate>Tue, 20 Oct 2026 12:13:00 +0200</pubDate>
-      <itunes:duration>1:28:58</itunes:duration>
-      <itunes:episodeType>full</itunes:episodeType>
-      <itunes:explicit>false</itunes:explicit>
-    </item>
-    <item>
-      <title>Exercise 7 · Neural network from scratch — talk (CZ)</title>
-      <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. Includes the solutions of the lab. One learning step of a single neuron by hand. A neuron and a two-layer network in NumPy with backpropagation written out and checked with finite differences, then any number of layers in a loop, then the same network in PyTorch. An agent grows it into a blood-cell classifier.</description>
-      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-EX7/EX7-talk-cs-200336c0b1.m4a" length="21946164" type="audio/mp4"/>
-      <guid isPermaLink="false">MPA-MLR/2026-10-20-l07-lab-talk-cs</guid>
-      <pubDate>Tue, 20 Oct 2026 12:12:00 +0200</pubDate>
-      <itunes:duration>1:28:06</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
     </item>

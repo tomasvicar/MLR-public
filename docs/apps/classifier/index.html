@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- viewport-fit=cover + safe-area padding below: the layout must survive a notch at 390px -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#12251a">
+<title>Camera classifier</title>
+<style>
+  :root {
+    --bg: #f6f7f4;
+    --card: #ffffff;
+    --ink: #17251c;
+    --muted: #5d6b62;
+    --line: #dfe4dd;
+    --accent: #2f7d4f;
+    --accent-ink: #ffffff;
+    --danger: #a3251f;
+    --bar-off: #e7ece6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    /* iPhone home indicator / notch */
+    padding: calc(env(safe-area-inset-top) + 12px) calc(env(safe-area-inset-right) + 12px)
+             calc(env(safe-area-inset-bottom) + 24px) calc(env(safe-area-inset-left) + 12px);
+  }
+  .wrap { max-width: 560px; margin: 0 auto; }
+
+  header h1 { font-size: 20px; margin: 0 0 2px; }
+  header p.sub { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
+
+  #status {
+    font-size: 13px; color: var(--muted); background: var(--card);
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: 8px 10px; margin-bottom: 12px; word-break: break-word;
+  }
+  #status.err { color: var(--danger); border-color: #ecc8c6; }
+
+  /* The stage is a perfect square and the video is cover-cropped into it.
+     Because `cover` crops symmetrically and our preprocessing takes the
+     CENTRAL square, the visible square IS the cropped area at any aspect
+     ratio — that is what makes the guide honest. */
+  .stage {
+    position: relative; width: 100%; aspect-ratio: 1 / 1;
+    background: #0d1410; border-radius: 14px; overflow: hidden;
+  }
+  .stage video, .stage canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; display: block; background: #000;
+  }
+  [hidden] { display: none !important; }
+  /* inset: 0 on purpose — with `cover` in a square stage the *whole* stage
+     is the central square crop, so anything inset would lie about the crop. */
+  .guide {
+    position: absolute; inset: 0; pointer-events: none;
+    border: 2px solid rgba(255, 255, 255, .9); border-radius: 14px;
+  }
+  .guide::before, .guide::after {
+    content: ""; position: absolute; width: 26px; height: 26px;
+    border: 3px solid #7ee2a8;
+  }
+  .guide::before { left: 7px; top: 7px; border-right: 0; border-bottom: 0; border-radius: 6px 0 0 0; }
+  .guide::after  { right: 7px; bottom: 7px; border-left: 0; border-top: 0; border-radius: 0 0 6px 0; }
+  .stage .hint {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    color: #cfe0d5; font-size: 14px; text-align: center; padding: 16px;
+  }
+  .stage .badge {
+    position: absolute; right: 8px; top: 8px; font-size: 12px;
+    background: rgba(8, 14, 10, .62); color: #eaf3ec;
+    padding: 3px 8px; border-radius: 999px;
+  }
+
+  .caption { margin: 6px 2px 0; font-size: 12px; }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+  button {
+    font: inherit; flex: 1 1 130px; padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    min-height: 44px; /* thumb-friendly */
+  }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  button:disabled { opacity: .5; }
+
+  .photo {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 10px; font-size: 14px;
+  }
+  .photo label { display: block; color: var(--muted); font-size: 13px; margin-bottom: 6px; }
+  .photo input[type=file] { width: 100%; font-size: 14px; }
+
+  .results {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 12px; margin-top: 12px;
+  }
+  #topClass { font-size: 22px; font-weight: 650; }
+  #topClass small { font-weight: 500; color: var(--muted); font-size: 15px; }
+  #meta { font-size: 12px; color: var(--muted); margin: 2px 0 10px; font-variant-numeric: tabular-nums; }
+
+  .row { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; margin: 9px 0; }
+  .row .name { font-size: 14px; }
+  .row .prob { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .row .track { grid-column: 1 / -1; height: 8px; background: var(--bar-off); border-radius: 999px; overflow: hidden; }
+  .row .fill { height: 100%; width: 0%; background: var(--accent); border-radius: 999px; transition: width .12s linear; }
+  .row.top .name { font-weight: 650; }
+
+  .model { margin-bottom: 12px; }
+  .model .controls { margin: 0 0 8px; }
+  details { margin-top: 8px; font-size: 14px; }
+  details summary { cursor: pointer; color: var(--muted); }
+  .settings { display: grid; gap: 8px; margin-top: 8px; }
+  .settings label { display: grid; gap: 3px; font-size: 13px; color: var(--muted); }
+  .settings input[type=text], .settings input[type=number] {
+    font: 14px system-ui, sans-serif; padding: 8px; border: 1px solid var(--line);
+    border-radius: 8px; width: 100%; color: var(--ink); background: var(--card);
+  }
+  pre { font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--bar-off);
+        padding: 8px; border-radius: 8px; overflow-x: auto; white-space: pre; }
+
+  footer { margin-top: 14px; color: var(--muted); font-size: 12px; }
+  code { font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+  @media (max-width: 400px) {
+    header h1 { font-size: 18px; }
+    #topClass { font-size: 20px; }
+    button { flex: 1 1 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Camera classifier</h1>
+    <p class="sub">Classifies the live camera image with the leaf model of lab 8 or with your own
+      ONNX model — runs entirely on your device, nothing is uploaded.</p>
+  </header>
+
+  <div class="photo model">
+    <div class="controls">
+      <button id="demoBtn">Use the demo leaf model</button>
+    </div>
+    <label for="modelInput">…or your own model (an <code>.onnx</code> file exported in the lab):</label>
+    <input type="file" id="modelInput">
+    <details id="settingsBox">
+      <summary>Classes and preprocessing</summary>
+      <p class="sub">Read from the model file when it contains them; otherwise fill them in and press Apply.</p>
+      <div class="settings">
+        <label>Classes, in the order of the network outputs, comma-separated
+          <input type="text" id="setClasses" placeholder="apple, cherry, chestnut, maple"></label>
+        <label>Input size (pixels, square)
+          <input type="number" id="setSize" min="8" max="1024" value="96"></label>
+        <label>Mean (R, G, B)
+          <input type="text" id="setMean" value="0.485, 0.456, 0.406"></label>
+        <label>Std (R, G, B)
+          <input type="text" id="setStd" value="0.229, 0.224, 0.225"></label>
+        <button id="applyBtn" disabled>Apply</button>
+      </div>
+    </details>
+    <details>
+      <summary>How to export your model</summary>
+<pre>import json, onnx, torch
+model.eval().cpu()
+torch.onnx.export(model, (torch.zeros(1, 3, 96, 96),), "my_model.onnx",
+                  input_names=["image"], output_names=["logits"],
+                  external_data=False)
+info = {"classes": train_dataset.classes, "input_size": 96,
+        "mean": [0.485, 0.456, 0.406], "std": [0.229, 0.224, 0.225]}
+m = onnx.load("my_model.onnx")
+m.metadata_props.add(key="model_info", value=json.dumps(info))
+onnx.save(m, "my_model.onnx")</pre>
+      <p class="sub">Then copy <code>my_model.onnx</code> to your phone (e.g. through Google Drive
+        or iCloud Drive) and choose it above.</p>
+    </details>
+  </div>
+
+  <div id="status" role="status" aria-live="polite">Loading…</div>
+
+  <div class="stage" id="stage">
+    <video id="video" playsinline muted autoplay></video>
+    <canvas id="preview" hidden></canvas>
+    <div class="guide" id="guide" hidden></div>
+    <div class="badge" id="modeBadge" hidden>live</div>
+    <div class="hint" id="hint">Press <b>Start camera</b>, then hold a leaf inside the square.</div>
+  </div>
+  <p class="sub caption">Everything inside the square is what the model sees (central crop, resized to
+    <span id="capSize">—</span> px).</p>
+
+  <div class="controls">
+    <button id="startBtn" class="primary">Start camera</button>
+    <button id="stopBtn" disabled>Stop camera</button>
+  </div>
+
+  <div class="photo">
+    <label for="fileInput">No camera, or want to test a saved photo? EXIF rotation is honoured.</label>
+    <input type="file" id="fileInput" accept="image/*">
+  </div>
+
+  <section class="results">
+    <div id="topClass">—</div>
+    <div id="meta">waiting for model</div>
+    <div id="bars"></div>
+  </section>
+
+  <footer>
+    MPA-MLR, lab 8 · ONNX Runtime Web (WASM) · nothing is uploaded.
+  </footer>
+</div>
+
+<script>
+/* ------------------------------------------------------------------ *
+ * Config. The classes and the preprocessing are read from the metadata
+ * of the ONNX file (key "model_info", a JSON string) or from the settings
+ * form; only the ORT version is pinned here.
+ * ------------------------------------------------------------------ */
+const ORT_VERSION = '1.31.1';
+const ORT_BASE = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@' + ORT_VERSION + '/dist/';
+const MIN_FRAME_MS = 150;   // live loop: at most ~6–7 inferences/second
+
+// Test hooks (see README).
+window.modelReady = false;
+window.lastProbs = null;
+window.lastError = null;
+window.lastSource = null;
+window.lastInferenceMs = null;
+
+let ort = null, session = null, info = null;
+let inputName = null, outputName = null;
+let mean = null, std = null;
+let stream = null, busy = false, running = false, lastFrameAt = 0;
+
+const $ = (id) => document.getElementById(id);
+const video = $('video'), guide = $('guide'), hint = $('hint'), badge = $('modeBadge'), preview = $('preview');
+const startBtn = $('startBtn'), stopBtn = $('stopBtn'), fileInput = $('fileInput');
+const statusEl = $('status'), barsEl = $('bars'), topEl = $('topClass'), metaEl = $('meta');
+
+function setStatus(msg, isErr) {
+  statusEl.textContent = msg;
+  statusEl.classList.toggle('err', !!isErr);
+}
+function fail(msg, err) {
+  window.lastError = String((err && err.message) || msg || 'unknown error');
+  setStatus(msg + (err ? ' — ' + err.message : ''), true);
+  console.error(msg, err);
+}
+
+/* ------------------------------------------------------------------ *
+ * Bars
+ * ------------------------------------------------------------------ */
+let rows = [];
+function buildRows() {
+  barsEl.innerHTML = '';
+  rows = info.classes.map((name) => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.innerHTML = '<div class="name"></div><div class="prob"></div><div class="track"><div class="fill"></div></div>';
+    row.querySelector('.name').textContent = name;
+    barsEl.appendChild(row);
+    return { name, el: row, fill: row.querySelector('.fill'), prob: row.querySelector('.prob') };
+  });
+}
+
+function render(probs, ms, prepMs, source) {
+  let best = 0;
+  for (let i = 1; i < probs.length; i++) if (probs[i] > probs[best]) best = i;
+
+  for (let i = 0; i < rows.length; i++) {
+    rows[i].fill.style.width = (probs[i] * 100).toFixed(2) + '%';
+    rows[i].prob.textContent = probs[i].toFixed(6);   // 6 decimal places
+    rows[i].el.classList.toggle('top', i === best);
+  }
+  topEl.innerHTML = '';
+  topEl.append(document.createTextNode(info.classes[best]));
+  const s = document.createElement('small');
+  s.textContent = '  ' + (probs[best] * 100).toFixed(1) + '%';
+  topEl.append(s);
+
+  metaEl.textContent =
+    (source === 'photo' ? 'photo' : 'live') +
+    ' · inference ' + ms.toFixed(1) + ' ms' +
+    ' · preprocess ' + prepMs.toFixed(1) + ' ms';
+
+  window.lastProbs = probs.slice();     // plain array, class order
+  window.lastInferenceMs = ms;
+  window.lastSource = source;
+  window.lastError = null;
+}
+
+/* ------------------------------------------------------------------ *
+ * Preprocessing: central square crop -> input_size square -> NCHW
+ * float32, [0,1], per-channel (x - mean) / std
+ * ------------------------------------------------------------------ */
+const prepCanvas = document.createElement('canvas');
+const prepCtx = prepCanvas.getContext('2d', { willReadFrequently: true });
+
+function makeTensor(source, sw, sh) {
+  const S = info.input_size;
+  const side = Math.min(sw, sh);
+  const sx = (sw - side) / 2, sy = (sh - side) / 2;
+
+  prepCtx.imageSmoothingEnabled = true;
+  prepCtx.imageSmoothingQuality = 'high';
+  prepCtx.drawImage(source, sx, sy, side, side, 0, 0, S, S);
+
+  const px = prepCtx.getImageData(0, 0, S, S).data;   // RGBA
+  const n = S * S;
+  const t = new Float32Array(3 * n);
+  for (let i = 0, j = 0; i < n; i++, j += 4) {
+    t[i]         = (px[j]     / 255 - mean[0]) / std[0];
+    t[n + i]     = (px[j + 1] / 255 - mean[1]) / std[1];
+    t[2 * n + i] = (px[j + 2] / 255 - mean[2]) / std[2];
+  }
+  return new ort.Tensor('float32', t, [1, 3, S, S]);
+}
+
+// Shows the same central square that was fed to the model, so a chosen photo
+// is visible instead of a black box.
+function showPreview(source, sw, sh) {
+  const side = Math.min(sw, sh);
+  const sx = (sw - side) / 2, sy = (sh - side) / 2;
+  const out = 512;
+  preview.width = out;
+  preview.height = out;
+  const c = preview.getContext('2d');
+  c.imageSmoothingEnabled = true;
+  c.imageSmoothingQuality = 'high';
+  c.drawImage(source, sx, sy, side, side, 0, 0, out, out);
+  preview.hidden = false;
+}
+
+function softmax(logits) {  const arr = Array.from(logits);
+  const m = Math.max.apply(null, arr);
+  const ex = arr.map((v) => Math.exp(v - m));
+  const s = ex.reduce((a, b) => a + b, 0);
+  return ex.map((v) => v / s);
+}
+
+async function classify(source, sw, sh, kind) {
+  const t0 = performance.now();
+  const tensor = makeTensor(source, sw, sh);
+  const t1 = performance.now();
+
+  const feeds = {};
+  feeds[inputName] = tensor;
+  const out = await session.run(feeds);
+  const t2 = performance.now();
+
+  const probs = softmax(out[outputName].data);
+  if (probs.length !== info.classes.length) {
+    throw new Error('model returned ' + probs.length + ' values for ' + info.classes.length + ' classes');
+  }
+  render(probs, t2 - t1, t1 - t0, kind);
+}
+
+/* ------------------------------------------------------------------ *
+ * Live camera loop — never overlaps: a frame is skipped while a
+ * previous inference is still running.
+ * ------------------------------------------------------------------ */
+function tick() {
+  if (!running) return;
+  requestAnimationFrame(tick);
+
+  if (busy || !session || !stream) return;                       // skip
+  if (video.readyState < 2 || !video.videoWidth || !video.videoHeight) return;
+  const now = performance.now();
+  if (now - lastFrameAt < MIN_FRAME_MS) return;                  // throttle
+  lastFrameAt = now;
+
+  busy = true;
+  classify(video, video.videoWidth, video.videoHeight, 'camera')
+    .catch((e) => fail('Inference failed', e))
+    .finally(() => { busy = false; });
+}
+
+async function startCamera() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    fail('This browser has no camera support (getUserMedia missing).');
+    return;
+  }
+  if (!window.isSecureContext) {
+    fail('The camera needs HTTPS (or localhost). Open the GitHub Pages URL, not http://<ip>:8000.');
+    return;
+  }
+  startBtn.disabled = true;
+  try {
+    if (!stream) {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: { ideal: 'environment' },
+          width: { ideal: 640 },        // plenty for a 96px input, and fast on phones
+          height: { ideal: 480 },
+        },
+        audio: false,
+      });
+    }
+    video.srcObject = stream;
+    await video.play().catch(() => { /* autoplay rules: muted, so normally fine */ });
+
+    running = true;
+    preview.hidden = true;
+    guide.hidden = false;
+    badge.hidden = false;
+    badge.textContent = 'live';
+    hint.hidden = true;
+    stopBtn.disabled = false;
+
+    const track = stream.getVideoTracks()[0];
+    const settings = track && track.getSettings ? track.getSettings() : {};
+    const back = settings.facingMode === 'environment' || settings.facingMode === 'rear';
+    // getSettings().facingMode is absent on some browsers: stay silent then.
+    setStatus(settings.facingMode && !back
+      ? 'Camera on — front camera in use, the rear one was not available.'
+      : 'Camera on.');
+    requestAnimationFrame(tick);
+  } catch (e) {
+    startBtn.disabled = false;
+    const why = e && e.name === 'NotAllowedError'
+      ? 'Camera permission denied — allow it in the site settings, then tap again.'
+      : e && e.name === 'NotFoundError'
+        ? 'No camera found on this device.'
+        : 'Could not start the camera';
+    fail(why, e);
+  }
+}
+
+function stopCamera() {
+  running = false;
+  if (stream) stream.getTracks().forEach((t) => t.stop());   // frees the camera on phones
+  stream = null;
+  video.srcObject = null;
+  preview.hidden = true;
+  guide.hidden = true;
+  badge.hidden = true;
+  hint.hidden = false;
+  stopBtn.disabled = true;
+  startBtn.disabled = false;
+  setStatus('Camera stopped.');
+}
+
+/* ------------------------------------------------------------------ *
+ * Photo fallback — same preprocessing, EXIF orientation respected
+ * ------------------------------------------------------------------ */
+fileInput.addEventListener('change', async (ev) => {
+  const file = ev.target.files && ev.target.files[0];
+  if (!file) return;
+  if (!session) { fail('The model is still loading — try again in a second.'); return; }
+
+  fileInput.disabled = true;
+  let bmp = null;
+  try {
+    try {
+      bmp = await createImageBitmap(file, { imageOrientation: 'from-image' });
+    } catch (e) {
+      // Older Safari: no options object, orientation may then be ignored.
+      bmp = await createImageBitmap(file);
+    }
+    // Pause the live loop so the photo result is not overwritten by the
+    // next camera frame; "Start camera" resumes (reuses the open stream).
+    const wasLive = running;
+    running = false;
+    if (wasLive) startBtn.disabled = false;   // must be able to resume
+
+    showPreview(bmp, bmp.width, bmp.height);
+    badge.hidden = false;
+    guide.hidden = false;
+    hint.hidden = true;
+    badge.textContent = 'photo';
+    await classify(bmp, bmp.width, bmp.height, 'photo');
+    setStatus('Photo classified: ' + file.name +
+      (wasLive ? ' — camera paused, press Start camera to go live again.' : ''));
+  } catch (e) {
+    fail('Could not read that image', e);
+  } finally {
+    if (bmp && bmp.close) bmp.close();
+    fileInput.disabled = false;
+    fileInput.value = '';            // so the same file can be picked again
+  }
+});
+
+/* ------------------------------------------------------------------ *
+ * Loading: onnxruntime-web once, then a model (demo or the user's file);
+ * classes and preprocessing from the ONNX metadata or the settings form
+ * ------------------------------------------------------------------ */
+const demoBtn = $('demoBtn'), modelInput = $('modelInput'), applyBtn = $('applyBtn');
+const setClasses = $('setClasses'), setSize = $('setSize'), setMean = $('setMean'), setStd = $('setStd');
+const settingsBox = $('settingsBox');
+
+// Reads metadata_props (field 14 of ModelProto: key = 1, value = 2) from the
+// raw ONNX protobuf; returns a {key: value} object.
+function onnxMetadata(bytes) {
+  const out = {};
+  const dec = new TextDecoder();
+  function varint(buf, pos) {
+    let v = 0, mul = 1, b;
+    do { b = buf[pos++]; v += (b & 0x7f) * mul; mul *= 128; } while (b & 0x80);
+    return [v, pos];
+  }
+  function fields(buf, start, end, cb) {
+    let pos = start;
+    while (pos < end) {
+      let tag; [tag, pos] = varint(buf, pos);
+      const field = Math.floor(tag / 8), wire = tag % 8;
+      if (wire === 0) { [, pos] = varint(buf, pos); }
+      else if (wire === 1) { pos += 8; }
+      else if (wire === 5) { pos += 4; }
+      else if (wire === 2) { let len; [len, pos] = varint(buf, pos); cb(field, pos, pos + len); pos += len; }
+      else throw new Error('not an ONNX file (wire type ' + wire + ')');
+    }
+  }
+  fields(bytes, 0, bytes.length, (field, s, e) => {
+    if (field !== 14) return;
+    let key = '', value = '';
+    fields(bytes, s, e, (f, a, b) => {
+      if (f === 1) key = dec.decode(bytes.subarray(a, b));
+      if (f === 2) value = dec.decode(bytes.subarray(a, b));
+    });
+    out[key] = value;
+  });
+  return out;
+}
+
+const parseList = (s) => s.split(',').map((x) => x.trim()).filter((x) => x.length);
+
+function infoToForm(i) {
+  setClasses.value = (i.classes || []).join(', ');
+  setSize.value = i.input_size || 96;
+  if (i.mean) setMean.value = i.mean.join(', ');
+  if (i.std) setStd.value = i.std.join(', ');
+}
+
+function formToInfo() {
+  const i = {
+    classes: parseList(setClasses.value),
+    input_size: parseInt(setSize.value, 10),
+    mean: parseList(setMean.value).map(Number),
+    std: parseList(setStd.value).map(Number),
+  };
+  if (!(i.input_size >= 8)) throw new Error('the input size must be a number');
+  if (i.mean.length !== 3 || i.std.length !== 3 || i.mean.concat(i.std).some(isNaN)) {
+    throw new Error('mean and std need three numbers each');
+  }
+  return i;
+}
+
+// Checks the settings against the model with one dummy run and fills in
+// generic class names when none are given.
+async function applyInfo(i) {
+  const S = i.input_size;
+  const feeds = {};
+  feeds[inputName] = new ort.Tensor('float32', new Float32Array(3 * S * S), [1, 3, S, S]);
+  let n;
+  try {
+    n = (await session.run(feeds))[outputName].data.length;
+  } catch (e) {
+    throw new Error('the model does not accept a 1 × 3 × ' + S + ' × ' + S + ' input — check the input size');
+  }
+  if (!i.classes.length) i.classes = Array.from({ length: n }, (_, k) => 'class ' + k);
+  if (i.classes.length !== n) {
+    throw new Error('the model has ' + n + ' outputs but ' + i.classes.length + ' class names are given');
+  }
+  info = i;
+  mean = Float64Array.from(info.mean);
+  std = Float64Array.from(info.std);
+  prepCanvas.width = S;
+  prepCanvas.height = S;
+  buildRows();
+  infoToForm(info);
+  $('capSize').textContent = S;
+  topEl.textContent = '—';
+  metaEl.textContent = 'ready';
+}
+
+let ortReady = null;
+function loadOrt() {
+  if (!ortReady) {
+    ortReady = (async () => {
+      setStatus('Downloading ONNX Runtime Web ' + ORT_VERSION + ' (WASM, a few MB, cached afterwards)…');
+      ort = await import(ORT_BASE + 'ort.bundle.min.mjs');
+      ort.env.wasm.wasmPaths = ORT_BASE;
+      // SharedArrayBuffer needs cross-origin isolation, which GitHub Pages does
+      // not send; pinning to 1 thread avoids a failed init attempt.
+      if (!window.crossOriginIsolated) ort.env.wasm.numThreads = 1;
+    })();
+  }
+  return ortReady;
+}
+
+async function loadModel(bytes, name) {
+  window.modelReady = false;
+  running = false;
+  startBtn.disabled = true;
+  applyBtn.disabled = true;
+  try {
+    let meta = {};
+    try { meta = onnxMetadata(bytes); } catch (e) { throw new Error(name + ' is not an ONNX file'); }
+    await loadOrt();
+    setStatus('Preparing ' + name + '…');
+    session = await ort.InferenceSession.create(bytes, {
+      executionProviders: ['wasm'],
+      graphOptimizationLevel: 'all',
+    });
+    inputName = session.inputNames[0];
+    outputName = session.outputNames[0];
+
+    let fromFile = false;
+    let i;
+    if (meta.model_info) {
+      i = JSON.parse(meta.model_info);
+      fromFile = true;
+    } else {
+      i = formToInfo();
+      i.classes = [];
+    }
+    await applyInfo(i);
+    applyBtn.disabled = false;
+    window.modelReady = true;
+    startBtn.disabled = false;
+    if (stream) { running = true; requestAnimationFrame(tick); }
+    setStatus(fromFile
+      ? 'Ready: ' + name + ' — ' + info.classes.length + ' classes, ' + info.input_size + ' × ' +
+        info.input_size + ' px, settings read from the model file.'
+      : 'Ready: ' + name + ' — the file has no class names; check "Classes and preprocessing" below.');
+    settingsBox.open = !fromFile;
+  } catch (e) {
+    fail('Could not load the model', e);
+  }
+}
+
+demoBtn.addEventListener('click', async () => {
+  demoBtn.disabled = true;
+  try {
+    setStatus('Downloading the demo leaf model…');
+    const r = await fetch('demo/leaf_model.onnx', { cache: 'default' });
+    if (!r.ok) throw new Error('demo/leaf_model.onnx -> HTTP ' + r.status);
+    await loadModel(new Uint8Array(await r.arrayBuffer()), 'the demo leaf model');
+  } catch (e) {
+    fail('Could not load the demo model', e);
+  } finally {
+    demoBtn.disabled = false;
+  }
+});
+
+modelInput.addEventListener('change', async (ev) => {
+  const file = ev.target.files && ev.target.files[0];
+  if (!file) return;
+  await loadModel(new Uint8Array(await file.arrayBuffer()), file.name);
+  modelInput.value = '';
+});
+
+applyBtn.addEventListener('click', async () => {
+  try {
+    await applyInfo(formToInfo());
+    setStatus('Settings applied: ' + info.classes.length + ' classes, ' + info.input_size + ' px.');
+  } catch (e) {
+    fail('Settings not applied', e);
+  }
+});
+
+// Pause the loop while the tab is hidden (saves battery on phones).
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { running = false; }
+  else if (stream && !running) { running = true; requestAnimationFrame(tick); }
+});
+
+startBtn.disabled = true;
+startBtn.addEventListener('click', startCamera);   // iOS: only a tap may open the camera
+stopBtn.addEventListener('click', stopCamera);
+setStatus('Choose a model: the demo leaf model or your own .onnx file.');
+loadOrt().then(() => setStatus('Choose a model: the demo leaf model or your own .onnx file.'))
+  .catch((e) => fail('Could not load ONNX Runtime Web', e));
+</script>
+</body>
+</html>

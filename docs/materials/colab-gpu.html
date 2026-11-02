@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Colab GPU from your agent</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column, numbered steps on the left rail, code blocks with copy buttons. */
+:root {
+  --bg: #f6f7f5; --panel: #ffffff; --fg: #1d2421; --muted: #5b6662;
+  --line: #d9dfdb; --accent: #b4520e; --accent-soft: #fbeee3; --code: #eef1ee;
+  --ok: #2f6b45; --warn: #8a5a00;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #141816; --panel: #1b201e; --fg: #e4e9e6; --muted: #9aa5a0;
+  --line: #2e3633; --accent: #f0934e; --accent-soft: #33241a; --code: #222926;
+  --ok: #7cc495; --warn: #e3b75c; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #141816; --panel: #1b201e; --fg: #e4e9e6; --muted: #9aa5a0;
+  --line: #2e3633; --accent: #f0934e; --accent-soft: #33241a; --code: #222926;
+  --ok: #7cc495; --warn: #e3b75c; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 16px/1.6 var(--sans);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+main { max-width: 760px; margin: 0 auto; padding-block: 40px 80px; display: grid; gap: 36px; }
+h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; text-wrap: balance; }
+h2 { font-size: 1.3rem; margin: 0 0 10px; text-wrap: balance; }
+h3 { font-size: 1.05rem; margin: 18px 0 6px; }
+p, li { max-width: 68ch; }
+p { margin: 0 0 10px; }
+ul, ol { margin: 0 0 10px; padding-left: 22px; }
+a { color: var(--accent); }
+code { font-family: var(--mono); font-size: .9em; background: var(--code); padding: 1px 5px; border-radius: 4px; }
+.lead { color: var(--muted); font-size: 1.05rem; }
+.eyebrow { font: 600 .75rem var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+section.step { display: grid; grid-template-columns: 44px 1fr; gap: 0 14px; }
+section.step > * { min-width: 0; }
+.num { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--accent);
+  color: var(--accent); font: 700 1rem var(--mono); display: grid; place-items: center; }
+.block { position: relative; background: var(--code); border: 1px solid var(--line); border-radius: 8px; margin: 8px 0 12px; }
+.block pre { margin: 0; padding: 14px 16px; overflow-x: auto; font: .85rem/1.5 var(--mono); white-space: pre; }
+.block.wrap pre { white-space: pre-wrap; }
+.block.tall pre { max-height: 420px; overflow: auto; }
+.copy { position: absolute; top: 8px; right: 8px; font: 600 .8rem var(--sans); color: var(--fg);
+  background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+.copy:hover { border-color: var(--accent); }
+.copy:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.big { display: inline-flex; gap: 8px; align-items: center; font: 600 1rem var(--sans); color: #fff;
+  background: var(--accent); border: 0; border-radius: 8px; padding: 10px 18px; cursor: pointer; margin: 6px 0 10px; }
+:root[data-theme="dark"] .big { color: #1b1208; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .big { color: #1b1208; } }
+.note { border-left: 3px solid var(--warn); padding: 6px 0 6px 14px; margin: 10px 0; }
+.note b { color: var(--warn); }
+.ok { color: var(--ok); font-weight: 600; }
+details { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); padding: 10px 14px; margin: 10px 0; }
+summary { cursor: pointer; font-weight: 600; }
+table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+td, th { text-align: left; vertical-align: top; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--line); }
+.tablewrap { overflow-x: auto; }
+footer { color: var(--muted); font-size: .85rem; }
+</style>
+</head>
+<body>
+
+<main>
+<header>
+  <h1>Colab GPU from your agent</h1>
+  <p class="lead">You write and keep the code on your own computer with an AI agent
+  (Claude Code, Codex, …). When something needs a GPU, the agent sends the script to a
+  free Google Colab T4 with Google's official <code>colab</code> CLI and brings the
+  results back. Two skills tell the agent how: <b>colab-gpu-setup</b> (once) and
+  <b>colab-gpu</b> (every time).</p>
+</header>
+
+<section>
+  <h2>Why</h2>
+  <p>Coding agents work best on your own computer: they see the whole project, edit files,
+  run tests and keep everything in Git. Training a neural network, however, needs a GPU,
+  and most laptops do not have a usable one. Google Colab gives a GPU for free, but only
+  inside a notebook in the browser, where the agent cannot work and the code lives apart
+  from the project.</p>
+  <p>This setup joins the two. The agent writes and tests the code locally, then hands
+  only the heavy run to a Colab virtual machine with a GPU and downloads the results into
+  the project. You stay in one place, the code stays in your repository, and the GPU
+  costs nothing.</p>
+  <h3>How it works</h3>
+  <ol>
+    <li>The agent writes one self-contained job script and tries it on the CPU with a tiny
+      setting, so mistakes are found before any GPU time is used.</li>
+    <li><code>colab run --gpu T4 job.py</code> starts a fresh Colab VM, sends the script,
+      and streams its output back to the agent.</li>
+    <li>On the VM the script downloads its data from a public URL, trains, and writes the
+      model, metrics and plots into one zip file.</li>
+    <li>The agent downloads the zip and stops the VM, so no GPU time is wasted.</li>
+  </ol>
+  <p>The <code>colab</code> command is Google's official Colab CLI
+  (<code>google-colab-cli</code>), not a tunnel or a workaround, so it is within the Colab
+  rules.</p>
+  <h3>Limits to know</h3>
+  <ul>
+    <li>The free tier gives a T4 (16 GB) when one is available; how much GPU time you get
+      is not fixed and Google changes it with demand. When you run out, wait or use a
+      paid Colab plan.</li>
+    <li>A VM lives at most a few hours and everything on it is lost when it stops, so the
+      job must save its results and the agent must download them.</li>
+    <li>Data should come from a URL. Uploading from your disk works only for files up to
+      about 75 MB.</li>
+    <li>You log in to Google once per computer yourself; the agent cannot do it.</li>
+  </ul>
+</section>
+
+<section class="step"><div class="num">0</div><div>
+  <h2>What you need</h2>
+  <ul>
+    <li>A personal Google account (the free Colab tier is enough).</li>
+    <li>Python with <code>uv</code> (<code>pip install uv</code>) and an agent that can run
+      shell commands, opened in your project folder.</li>
+    <li>Windows: run everything in <b>Git Bash</b>. The CLI works there even though Google
+      lists only Linux and macOS.</li>
+  </ul>
+</div></section>
+
+<section class="step"><div class="num">1</div><div>
+  <h2>Install the skills with one prompt</h2>
+  <p>Copy the prompt and paste it into your agent. It contains both skills; the agent saves
+  them into the project and starts the setup.</p>
+  <button class="big" id="copy-install" type="button">Copy install prompt</button>
+  <details>
+    <summary>Show the prompt</summary>
+    <div class="block wrap tall"><pre id="install-prompt"></pre></div>
+  </details>
+  <p>Claude Code may ask to allow writing into <code>.claude/</code>: allow it. Other agents
+  save the files as <code>colab-gpu-setup.md</code> and <code>colab-gpu.md</code> and add a
+  line to <code>AGENTS.md</code>.</p>
+</div></section>
+
+<section class="step"><div class="num">2</div><div>
+  <h2>Log in to Google (you, once per computer)</h2>
+  <p>The agent stops and asks you to log in, because the login waits for a code typed by a
+  human. Open a <b>second terminal</b> (Git Bash on Windows) and run:</p>
+  <div class="block"><pre>colab sessions</pre><button class="copy" type="button">Copy</button></div>
+  <p>Open the printed URL, sign in, allow access, copy the code and paste it back into the
+  terminal. Then tell the agent “done”. It checks the login, runs a test on a T4
+  and should report <span class="ok">GPU: Tesla T4</span> with no session left running.</p>
+</div></section>
+
+<section class="step"><div class="num">3</div><div>
+  <h2>Use it</h2>
+  <p>Just ask for the work; the agent picks the <b>colab-gpu</b> skill when a GPU is needed
+  (in Claude Code you can also type <code>/colab-gpu</code>). For example:</p>
+  <div class="block wrap"><pre>Train a small CNN classifier on Imagenette (160 px, https://s3.amazonaws.com/fast-ai-imageclas/imagenette2-160.tgz) on the Colab GPU for 5 epochs. Test the script on the CPU first, then report the validation accuracy and save the model and metrics locally.</pre><button class="copy" type="button">Copy</button></div>
+  <p>What the agent does:</p>
+  <ol>
+    <li>writes one job script that downloads the data from the public URL, trains, and
+      writes everything into <code>/content/out</code>, packed as <code>results.zip</code>;</li>
+    <li>runs it on your CPU with 1 epoch to catch mistakes cheaply;</li>
+    <li>runs it on a T4: <code>colab run --gpu T4 --timeout 7200 --keep -s job job.py</code>;</li>
+    <li>downloads <code>results.zip</code> and stops the VM.</li>
+  </ol>
+</div></section>
+
+<section class="step"><div class="num">4</div><div>
+  <h2>Rules</h2>
+  <ul>
+    <li><b>Data come from a public URL</b> and are processed in code on the Colab VM. Do not
+      upload datasets from your disk (uploads over ~75 MB fail). Mounting Google Drive is
+      not recommended: it asks you to grant access in a browser on every new VM, so the
+      agent cannot run jobs on its own.</li>
+    <li><b>Always release the VM.</b> An idle VM uses up your free GPU time. At the end
+      <code>colab sessions</code> must say there are no active sessions.</li>
+    <li><b>One Google account.</b> Using several accounts to get more GPU time, SSH tunnels
+      and remote desktops are against the Colab rules. The <code>colab</code> CLI itself is
+      Google's official tool.</li>
+  </ul>
+</div></section>
+
+<section class="step"><div class="num">5</div><div>
+  <h2>When something goes wrong</h2>
+  <div class="tablewrap"><table>
+    <tr><th>You see</th><th>What to do</th></tr>
+    <tr><td><code>Allocation refused</code></td><td>No free T4 right now, or another of your
+      sessions is still running. <code>colab sessions</code>, stop leftovers, wait a few minutes.</td></tr>
+    <tr><td><code>TimeoutError: Timeout waiting for reply</code></td><td>The job ran longer than
+      <code>--timeout</code>. It has usually finished anyway; download the results.</td></tr>
+    <tr><td>Paths like <code>C:/Program Files/Git/content/…</code></td><td>Git Bash rewrote a
+      remote path. <code>export MSYS_NO_PATHCONV=1</code> first.</td></tr>
+    <tr><td><code>untrusted mount point (os error 448)</code> while installing</td>
+      <td><code>uv tool install google-colab-cli --python "$(uv python find)"</code></td></tr>
+    <tr><td><code>uv: command not found</code> after <code>pip install uv</code></td>
+      <td>Use <code>python -m uv tool install google-colab-cli</code>.</td></tr>
+    <tr><td><code>colab: command not found</code></td><td>Git Bash:
+      <code>export PATH="$(cygpath "$USERPROFILE")/.local/bin:$PATH"</code> (on school computers
+      <code>~</code> is a network drive). Or <code>uv tool update-shell</code> and a new terminal.</td></tr>
+    <tr><td>No PyTorch locally or a full disk</td><td>Let the agent run the smoke test on a Colab
+      CPU VM: <code>colab run --timeout 1200 job.py --epochs 1 --subset 512</code>.</td></tr>
+    <tr><td>The agent says the script finished but nothing works</td><td><code>colab exec</code>
+      returns success even after a Python error; ask it to read the output for
+      <code>Traceback</code>.</td></tr>
+  </table></div>
+</div></section>
+
+<section>
+  <h2>The skills</h2>
+  <p>The full text of both skills, if you want to read them or save them by hand
+  (Claude Code: <code>.claude/skills/&lt;name&gt;/SKILL.md</code> in the project folder).</p>
+  <details>
+    <summary>colab-gpu-setup — one-time setup</summary>
+    <div class="block tall"><pre id="skill-setup">---
+name: colab-gpu-setup
+description: One-time setup of the official Google Colab CLI (`colab`) so that code from this computer can run on a free Colab GPU. Use when the user asks to set up Colab or the GPU, or when `colab` is missing or not logged in.
+---
+
+# Setting up the Colab GPU
+
+Goal: the `colab` CLI is installed and logged in, and a test job ran on a
+Colab T4 GPU. Afterwards the skill `colab-gpu` describes how to run real
+work. Go step by step and tell the user what you are doing.
+
+## 1. Install the CLI
+
+1. Check whether it is already there: `colab version`.
+2. If not: `uv tool install google-colab-cli`. If `uv` is missing, install it
+   first (`pip install uv`, or the installer from https://docs.astral.sh/uv/).
+   If `uv` is then not found (pip put it into a `Scripts` folder that is not
+   on `PATH`), call it as `python -m uv tool install google-colab-cli`.
+3. If `colab` is then not found, the uv tool folder is not on `PATH` of the
+   running shell. Linux/macOS: `export PATH=&quot;$HOME/.local/bin:$PATH&quot;`.
+   Windows Git Bash: uv installs into the Windows profile, which is not always
+   `~` (on school computers `HOME` can be a network drive), so use
+   `export PATH=&quot;$(cygpath &quot;$USERPROFILE&quot;)/.local/bin:$PATH&quot;`. Repeat the
+   export in every new shell, or run `uv tool update-shell` once for new
+   terminals.
+   If `uv` fails with &quot;untrusted mount point (os error 448)&quot;, pass a Python
+   explicitly: `uv tool install google-colab-cli --python &quot;$(uv python find)&quot;`.
+4. Windows, Git Bash: before every `colab` command that names a remote path
+   (`/content/...`) run `export MSYS_NO_PATHCONV=1`; the skill `colab-gpu`
+   explains why.
+
+## 2. Login (the user does it, not you)
+
+The login waits for a code typed in by a human, so you cannot run it. Run
+every `colab` command yourself with `&lt; /dev/null`, so that nothing can hang
+waiting for input. Tell the
+user exactly this:
+
+&gt; Open a new terminal (on Windows: Git Bash) and run `colab sessions`. It
+&gt; prints a URL. Open it, sign in with your Google account, allow access, copy
+&gt; the code and paste it back into the terminal. Then tell me &quot;done&quot;.
+
+The token is saved in the user profile on this computer, so this is needed
+only once. When the user says done, check it without risking a
+prompt that waits forever:
+
+```bash
+timeout 30 colab sessions &lt; /dev/null
+```
+
+It must print &quot;No active sessions found on server.&quot; (or a list of sessions)
+without asking anything. If it prints a URL or times out, the login did not
+work: ask the user to repeat it.
+
+## 3. GPU check
+
+Write `gpu_check.py`:
+
+```python
+import torch
+print(&quot;CUDA:&quot;, torch.cuda.is_available())
+print(&quot;GPU:&quot;, torch.cuda.get_device_name(0))
+```
+
+and run it on a fresh GPU VM (without `--keep` the VM is released when the
+script ends):
+
+```bash
+colab run --gpu T4 --timeout 600 gpu_check.py
+```
+
+The output must contain `GPU: Tesla T4`. Then `colab sessions` must report no
+active sessions; stop any leftover one with `colab stop -s &lt;name&gt;`.
+
+If it fails with `Allocation refused`, no free GPU is available right now or
+another session of the same account is running: check `colab sessions`, wait
+a few minutes and retry. Never use a second Google account to get around it.
+
+## 4. Report
+
+Tell the user: the CLI version, that the login works, the GPU name, and that
+no session is left running. Check that the skill `colab-gpu` is installed
+next to this one (`.claude/skills/colab-gpu/SKILL.md`, or `colab-gpu.md` for
+other agents); it is needed for the real work.
+</pre><button class="copy" type="button">Copy</button></div>
+  </details>
+  <details>
+    <summary>colab-gpu — running code on the GPU</summary>
+    <div class="block tall"><pre id="skill-use">---
+name: colab-gpu
+description: Run training and other heavy Python code on a free Google Colab GPU (T4) from the local machine through the official `colab` CLI. Use when a script needs a GPU, when training would take too long on the CPU, or when the user asks to run something &quot;on Colab&quot; or &quot;on the GPU&quot;.
+---
+
+# Running code on a Colab GPU
+
+The code is written and kept locally; only the execution happens on a Colab
+virtual machine (VM). You drive the VM with the official Google Colab CLI
+(`colab`).
+
+## Before you start
+
+If `colab` is missing or not logged in (`timeout 30 colab sessions &lt; /dev/null`
+asks for a login or times out), follow the skill `colab-gpu-setup` first.
+
+**Windows, Git Bash:** always `export MSYS_NO_PATHCONV=1` before calling
+`colab`, otherwise Git Bash rewrites the remote `/content/x` to
+`C:/Program Files/Git/content/x`. With it set, give **local** paths as
+relative paths (`job.py`, `out/results.zip`) or as `C:/...`, never `/c/...`.
+
+## The rules
+
+1. **Data come from a public URL and are processed in code.** The job script
+   downloads the data itself into `/content/data/` (skip the download when the
+   file is already there), unpacks and preprocesses them on the VM. Do not
+   upload datasets from the local disk: `colab upload` sends a file in one
+   request, and above about 75 MB the server drops it. Mounting Google
+   Drive is not recommended: `colab drivemount` asks the user to grant
+   access in a browser on every new VM, so the job cannot run on its own.
+2. **One self-contained job script** (e.g. `job.py`): download data →
+   preprocess → train → evaluate → write everything to `/content/out/`
+   (model weights, `metrics.json`, plots as PNG) and at the end pack it:
+   `shutil.make_archive(&quot;/content/results&quot;, &quot;zip&quot;, &quot;/content/out&quot;)`.
+   It must also run on the CPU with a tiny setting, so that you can
+   smoke-test it locally first:
+   `device = &quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;`, and an
+   environment variable or argument such as `EPOCHS=1`.
+3. **Smoke-test on a CPU first** (1 epoch, small subset): locally, or, when
+   PyTorch is not installed locally or the disk is full, on a Colab CPU VM
+   (`colab run` without `--gpu`, no GPU quota used):
+   `colab run --timeout 1200 job.py --epochs 1 --subset 512`. Only a script
+   that passed the smoke test goes to the GPU.
+4. **`--timeout` is the total run time in seconds, and the default is only
+   30.** Always pass more than the whole job needs (e.g. `--timeout 7200`).
+   It is not an inactivity limit and it does not stop the script: when it
+   runs out, the output keeps streaming, the script finishes on the VM, and
+   only then may the CLI fail with `TimeoutError: Timeout waiting for reply`.
+   Print progress with `print(..., flush=True)` once per epoch so that you
+   (and the user) see it is alive.
+5. **Always release the VM**: `colab run` without `--keep` does it itself;
+   otherwise finish with `colab stop -s &lt;name&gt;`. Check `colab sessions` at
+   the end — it must say no active sessions. Idle VMs eat the user&#x27;s free GPU
+   quota.
+6. **Read the output for errors.** `colab exec` returns exit code 0 even when
+   the script raised an exception or called `sys.exit(3)`; look for
+   `Traceback` / `Error` in its output. `colab run` returns 1 on an exception
+   and N on `sys.exit(N)`. Tracebacks come with ANSI colour codes; strip them
+   with `2&gt;&amp;1 | sed &#x27;s/\x1b\[[0-9;]*m//g&#x27;`.
+7. **Call `colab` with `&lt; /dev/null`**, so that no command can hang waiting
+   for input.
+
+## Two ways to run
+
+**A. One-shot job (preferred)** — a fresh VM, run, download, release:
+
+```bash
+colab run --gpu T4 --timeout 7200 --keep -s job job.py --epochs 30
+colab download -s job /content/results.zip out/results.zip
+colab stop -s job
+```
+
+All `colab` options go **before** the script; everything after it is passed
+to the script as `sys.argv[1:]` — except `--timeout`, `--env`, `-s`,
+`--keep`, `--gpu`, which `colab` takes for itself even there, so do not give
+the script options with those names. `--keep` keeps the VM alive after the
+script so you can download the results; without it the VM (and
+`/content/out`) is gone when the script ends. `colab download` copies one
+file (no directories), hence the zip; `colab ls -s job /content/out` lists
+files. Script output goes to stdout, the `[colab]` messages to stderr.
+
+**B. Interactive session** — when you iterate on the same loaded data:
+
+```bash
+colab new -s work --gpu T4
+colab exec -s work --timeout 7200 -f job.py      # local file, sent to the kernel
+colab exec -s work --timeout 600 -f analyse.py   # variables from job.py are still there
+colab download -s work /content/results.zip out/results.zip
+colab stop -s work
+```
+
+In `exec` the code runs inside a Jupyter kernel: `sys.argv` is not the
+script&#x27;s, so pass settings via `--env KEY=VALUE` (sets `os.environ`, which
+then stays set for later `exec` calls) or variables in the code. Kernel state
+(imports, loaded data, the model) persists between `exec` calls in the same
+session; a `colab run --keep` session can be continued with `exec` the same
+way.
+
+## When something fails
+
+- `Allocation refused (precondition failed)` on `colab new`/`run`: a GPU is
+  not available right now or another session is still running. Run
+  `colab sessions`, stop what is left, wait a few minutes and retry. Do not
+  switch to another Google account (against the Colab rules). As a fallback
+  run on the CPU with a smaller setting and tell the user.
+- `TimeoutError: Timeout waiting for reply`: the job took longer than
+  `--timeout` (see rule 4). The script has most likely finished anyway: check
+  with `colab ls -s &lt;name&gt; /content/out` and download the results. Next time
+  pass a larger `--timeout`.
+- `exec`/`run` waits until the code ends, whatever `--timeout` says, so a
+  script stuck in a loop hangs the command, and the next `exec` waits behind
+  it (`colab status -s &lt;name&gt;` shows `BUSY`). Kill the command, then
+  `colab restart-kernel -s &lt;name&gt;` (loses the variables, keeps the files),
+  or `colab stop` and start again.
+- Never run `colab repl`, `colab console`, `colab auth` or `colab drivemount`
+  yourself: they wait for a human.
+- More commands: `colab help`, `colab &lt;command&gt; --help`, and Google&#x27;s own
+  agent guide `colab skill`.
+
+## Colab rules to respect
+
+Free Colab forbids SSH/remote-desktop tunnels and using several accounts to
+get around limits (https://research.google.com/colaboratory/faq.html). The
+`colab` CLI is Google&#x27;s official tool, so it is fine; do not install tunnel
+tools (ngrok, cloudflared, colab-ssh).
+</pre><button class="copy" type="button">Copy</button></div>
+  </details>
+</section>
+
+<footer>Tested on Windows 11 with Git Bash (including a computer with a network home drive) and on Linux,
+<code>google-colab-cli</code> 0.7.5, October–November 2026.</footer>
+</main>
+
+<script>
+const setup = document.getElementById("skill-setup").textContent;
+const use = document.getElementById("skill-use").textContent;
+const prompt = `Install two agent skills for this project, then set up the Colab GPU.
+
+1. Save the text between the lines BEGIN colab-gpu-setup and END colab-gpu-setup, exactly as it is, as \`.claude/skills/colab-gpu-setup/SKILL.md\`, and the text between BEGIN colab-gpu and END colab-gpu as \`.claude/skills/colab-gpu/SKILL.md\`. If you are not Claude Code, save them as \`colab-gpu-setup.md\` and \`colab-gpu.md\` in the project folder instead and add this line to \`AGENTS.md\`: "For work on a Google Colab GPU follow colab-gpu.md; for the one-time setup colab-gpu-setup.md."
+2. Then follow colab-gpu-setup step by step. When you need me to log in, tell me exactly what to run and wait until I say "done".
+
+BEGIN colab-gpu-setup
+${setup.trim()}
+END colab-gpu-setup
+
+BEGIN colab-gpu
+${use.trim()}
+END colab-gpu
+`;
+document.getElementById("install-prompt").textContent = prompt;
+
+async function copyText(text, btn) {
+  const label = btn.textContent;
+  try { await navigator.clipboard.writeText(text); btn.textContent = "Copied"; }
+  catch (e) {
+    const pre = btn.parentElement.querySelector("pre") || document.getElementById("install-prompt");
+    const r = document.createRange(); r.selectNodeContents(pre);
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    btn.textContent = "Selected, press Ctrl+C";
+  }
+  setTimeout(() => { btn.textContent = label; }, 2000);
+}
+document.getElementById("copy-install").addEventListener("click", e => {
+  document.querySelector("#install-prompt").closest("details").open = true;
+  copyText(prompt, e.currentTarget);
+});
+document.querySelectorAll(".copy").forEach(b => b.addEventListener("click",
+  () => copyText(b.parentElement.querySelector("pre").textContent, b)));
+</script>
+</body>
+</html>

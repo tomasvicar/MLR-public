@@ -121,6 +121,12 @@
         padding: 8px; border-radius: 8px; overflow-x: auto; white-space: pre; }
 
   footer { margin-top: 14px; color: var(--muted); font-size: 12px; }
+  .phone-link { margin: 18px 0 0; padding: 16px; text-align: center;
+    border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+  .phone-link h2 { margin: 0 0 6px; font-size: 17px; }
+  .phone-link p { margin: 6px 0; font-size: 13px; color: var(--muted); }
+  .phone-link img { display: block; width: 208px; height: 208px; max-width: 100%; margin: 8px auto; }
+  .phone-link a { color: var(--accent); overflow-wrap: anywhere; }
   code { font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; }
 
   @media (max-width: 400px) {
@@ -207,6 +213,14 @@ onnx.save(m, "my_model.onnx")</pre>
   <footer>
     MPA-MLR, lab 8 · ONNX Runtime Web (WASM) · nothing is uploaded.
   </footer>
+  <section class="phone-link" aria-labelledby="phone-link-title">
+    <h2 id="phone-link-title">Open on your phone</h2>
+    <p>Scan this QR code with your phone's camera.</p>
+    <a href="https://tomasvicar.github.io/MLR-public/apps/classifier/">
+      <img src="qr.svg" width="208" height="208" alt="QR code linking to the course camera classifier">
+      tomasvicar.github.io/MLR-public/apps/classifier/
+    </a>
+  </section>
 </div>
 
 <script>

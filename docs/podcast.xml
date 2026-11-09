@@ -6,7 +6,7 @@
     <atom:link href="https://tomasvicar.github.io/MLR-public/podcast.xml" rel="self" type="application/rss+xml"/>
     <description>Talk podcasts about the lectures and labs of the course Machine Learning (MPA-MLR), in English and Czech, read by a local text-to-speech engine. Slides and materials are on the course web.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 02 Nov 2026 12:31:00 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 07 Nov 2026 12:35:00 +0200</lastBuildDate>
     <image><url>https://tomasvicar.github.io/MLR-public/podcasts/cover.png</url><title>MPA-MLR · Machine Learning</title><link>https://tomasvicar.github.io/MLR-public/</link></image>
     <itunes:image href="https://tomasvicar.github.io/MLR-public/podcasts/cover.png"/>
     <itunes:author>Tomáš Vičar</itunes:author>
@@ -14,11 +14,51 @@
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
     <item>
+      <title>Lecture 9 · Convolutional networks 2 — special blocks — talk (EN)</title>
+      <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Skip connections and residual blocks. 1 × 1 convolution, bottlenecks, autoencoders. Dilated convolution and the receptive field. Up-sampling and transposed convolution. Channel and spatial attention, CBAM.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L9/L9-talk-en-054b155c52.m4a" length="18086536" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-11-07-l09-lecture-talk-en</guid>
+      <pubDate>Sat, 07 Nov 2026 12:35:00 +0200</pubDate>
+      <itunes:duration>1:12:40</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Lecture 9 · Convolutional networks 2 — special blocks — talk (CZ)</title>
+      <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. Skip connections and residual blocks. 1 × 1 convolution, bottlenecks, autoencoders. Dilated convolution and the receptive field. Up-sampling and transposed convolution. Channel and spatial attention, CBAM.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L9/L9-talk-cs-92358d852c.m4a" length="18555536" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-11-07-l09-lecture-talk-cs</guid>
+      <pubDate>Sat, 07 Nov 2026 12:34:00 +0200</pubDate>
+      <itunes:duration>1:14:32</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Exercise 9 · Deep-learning showcase with an agent — talk (EN)</title>
+      <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Includes the solutions of the lab. Seven tasks, one encoder: image and signal classification, segmentation, image-to-image and signal-to-signal regression. Softmax and cross-entropy by hand, one reference task (ECG noise type) worked through, then you pick a task, hand the specification to an agent and validate what comes back.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-EX9/EX9-talk-en-2c234bffb1.m4a" length="20753595" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-11-07-l09-lab-talk-en</guid>
+      <pubDate>Sat, 07 Nov 2026 12:17:00 +0200</pubDate>
+      <itunes:duration>1:23:26</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Exercise 9 · Deep-learning showcase with an agent — talk (CZ)</title>
+      <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. Includes the solutions of the lab. Seven tasks, one encoder: image and signal classification, segmentation, image-to-image and signal-to-signal regression. Softmax and cross-entropy by hand, one reference task (ECG noise type) worked through, then you pick a task, hand the specification to an agent and validate what comes back.</description>
+      <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-EX9/EX9-talk-cs-d9caa0e0c9.m4a" length="21849547" type="audio/mp4"/>
+      <guid isPermaLink="false">MPA-MLR/2026-11-07-l09-lab-talk-cs</guid>
+      <pubDate>Sat, 07 Nov 2026 12:16:00 +0200</pubDate>
+      <itunes:duration>1:27:43</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
       <title>Lecture 8 · Convolutional networks 1 — basics — talk (EN)</title>
       <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Shallow vs. deep networks and the price of depth. From fully connected to convolutional: local connections, shared weights, counting parameters. Convolutional layer, activation, pooling, dropout, batch norm; a typical CNN layer by layer.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L8/L8-talk-en-ff2a48f281.m4a" length="16671586" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-11-02-l08-lecture-talk-en</guid>
-      <pubDate>Mon, 02 Nov 2026 12:31:00 +0200</pubDate>
+      <pubDate>Mon, 02 Nov 2026 12:33:00 +0200</pubDate>
       <itunes:duration>1:07:03</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -28,7 +68,7 @@
       <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. Shallow vs. deep networks and the price of depth. From fully connected to convolutional: local connections, shared weights, counting parameters. Convolutional layer, activation, pooling, dropout, batch norm; a typical CNN layer by layer.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L8/L8-talk-cs-4ddf0b9041.m4a" length="18762579" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-11-02-l08-lecture-talk-cs</guid>
-      <pubDate>Mon, 02 Nov 2026 12:30:00 +0200</pubDate>
+      <pubDate>Mon, 02 Nov 2026 12:32:00 +0200</pubDate>
       <itunes:duration>1:15:24</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -78,7 +118,7 @@
       <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Perceptron and the artificial neuron; activation functions. Gradient for one neuron, matrix notation, the general network. Mini-batch gradient descent, Adam, saddle points. Loss functions. L1/L2 regularization, dropout, batch normalization.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L7/L7-talk-en-67f2b80280.m4a" length="19444534" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-10-20-l07-lecture-talk-en</guid>
-      <pubDate>Tue, 20 Oct 2026 12:29:00 +0200</pubDate>
+      <pubDate>Tue, 20 Oct 2026 12:31:00 +0200</pubDate>
       <itunes:duration>1:18:09</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -88,7 +128,7 @@
       <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. Perceptron and the artificial neuron; activation functions. Gradient for one neuron, matrix notation, the general network. Mini-batch gradient descent, Adam, saddle points. Loss functions. L1/L2 regularization, dropout, batch normalization.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L7/L7-talk-cs-ab14bc77b2.m4a" length="19352731" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-10-20-l07-lecture-talk-cs</guid>
-      <pubDate>Tue, 20 Oct 2026 12:28:00 +0200</pubDate>
+      <pubDate>Tue, 20 Oct 2026 12:30:00 +0200</pubDate>
       <itunes:duration>1:17:46</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -118,7 +158,7 @@
       <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Bias–variance trade-off and learning curves. CART for classification and regression: impurity, greedy splitting, stopping. Bagging, random forest and out-of-bag samples. AdaBoost step by step.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L6/L6-talk-en-b04a9260e8.m4a" length="14903047" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-10-14-l06-lecture-talk-en</guid>
-      <pubDate>Wed, 14 Oct 2026 12:27:00 +0200</pubDate>
+      <pubDate>Wed, 14 Oct 2026 12:29:00 +0200</pubDate>
       <itunes:duration>0:59:52</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -128,7 +168,7 @@
       <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. Bias–variance trade-off and learning curves. CART for classification and regression: impurity, greedy splitting, stopping. Bagging, random forest and out-of-bag samples. AdaBoost step by step.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L6/L6-talk-cs-c0fd1cae73.m4a" length="17351093" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-10-14-l06-lecture-talk-cs</guid>
-      <pubDate>Wed, 14 Oct 2026 12:26:00 +0200</pubDate>
+      <pubDate>Wed, 14 Oct 2026 12:28:00 +0200</pubDate>
       <itunes:duration>1:09:42</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -138,7 +178,7 @@
       <description>A conversation of two hosts, in English, read by a local text-to-speech engine. From a goal to a working artifact: models and harnesses, providers, context, MCP, skills and hooks. Practical Git/TDD and remote workflows; HTML reports, presentations, documents and 3D models. Verification, risks and BUT rules.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L5/L5-talk-en-bdda5d07bc.m4a" length="19154990" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-10-13-l05-lecture-talk-en</guid>
-      <pubDate>Tue, 13 Oct 2026 12:25:00 +0200</pubDate>
+      <pubDate>Tue, 13 Oct 2026 12:27:00 +0200</pubDate>
       <itunes:duration>1:16:58</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -158,7 +198,7 @@
       <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. From a goal to a working artifact: models and harnesses, providers, context, MCP, skills and hooks. Practical Git/TDD and remote workflows; HTML reports, presentations, documents and 3D models. Verification, risks and BUT rules.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L5/L5-talk-cs-63faca33dd.m4a" length="19453100" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-10-12-l05-lecture-talk-cs</guid>
-      <pubDate>Mon, 12 Oct 2026 12:24:00 +0200</pubDate>
+      <pubDate>Mon, 12 Oct 2026 12:26:00 +0200</pubDate>
       <itunes:duration>1:18:06</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -178,7 +218,7 @@
       <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Linear regression and linear classification as one equation. OLS, LAD, ridge and lasso; polynomial regression. The kernel trick, primal vs. dual ridge regression. LDA, MSE classifier, logistic regression, perceptron, SVM with hard and soft margin, kernel SVM.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L4/L4-talk-en-091aee34e6.m4a" length="20765973" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-10-01-l04-lecture-talk-en</guid>
-      <pubDate>Thu, 01 Oct 2026 12:23:00 +0200</pubDate>
+      <pubDate>Thu, 01 Oct 2026 12:25:00 +0200</pubDate>
       <itunes:duration>1:23:31</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -188,7 +228,7 @@
       <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. Linear regression and linear classification as one equation. OLS, LAD, ridge and lasso; polynomial regression. The kernel trick, primal vs. dual ridge regression. LDA, MSE classifier, logistic regression, perceptron, SVM with hard and soft margin, kernel SVM.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L4/L4-talk-cs-b0fd746e80.m4a" length="20201837" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-10-01-l04-lecture-talk-cs</guid>
-      <pubDate>Thu, 01 Oct 2026 12:22:00 +0200</pubDate>
+      <pubDate>Thu, 01 Oct 2026 12:24:00 +0200</pubDate>
       <itunes:duration>1:21:07</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -218,7 +258,7 @@
       <description>A conversation of two hosts, in English, read by a local text-to-speech engine. Curse of dimensionality. Filter methods (correlation, entropy, mutual information, mRMR), wrappers (forward selection, backward elimination), embedded methods. PCA, LDA, t-SNE and UMAP, feature expansion.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L3/L3-talk-en-a294535c1d.m4a" length="19541425" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-09-27-l03-lecture-talk-en</guid>
-      <pubDate>Sun, 27 Sep 2026 12:21:00 +0200</pubDate>
+      <pubDate>Sun, 27 Sep 2026 12:23:00 +0200</pubDate>
       <itunes:duration>1:18:34</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -228,7 +268,7 @@
       <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. Curse of dimensionality. Filter methods (correlation, entropy, mutual information, mRMR), wrappers (forward selection, backward elimination), embedded methods. PCA, LDA, t-SNE and UMAP, feature expansion.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L3/L3-talk-cs-381e48b5cb.m4a" length="18796623" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-09-27-l03-lecture-talk-cs</guid>
-      <pubDate>Sun, 27 Sep 2026 12:20:00 +0200</pubDate>
+      <pubDate>Sun, 27 Sep 2026 12:22:00 +0200</pubDate>
       <itunes:duration>1:15:25</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -258,7 +298,7 @@
       <description>A conversation of two hosts, in English, read by a local text-to-speech engine. The supervised pipeline; train / validation / test as two nested optimization problems. Confusion-matrix metrics, ROC, the operating point, calibration, R². Class imbalance, cross-validation, scaling, imputation, outliers, encodings, and where information leaks.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L2/L2-talk-en-82b428d27e.m4a" length="21216924" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-09-22-l02-lecture-talk-en</guid>
-      <pubDate>Tue, 22 Sep 2026 12:19:00 +0200</pubDate>
+      <pubDate>Tue, 22 Sep 2026 12:21:00 +0200</pubDate>
       <itunes:duration>1:25:17</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -268,7 +308,7 @@
       <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. The supervised pipeline; train / validation / test as two nested optimization problems. Confusion-matrix metrics, ROC, the operating point, calibration, R². Class imbalance, cross-validation, scaling, imputation, outliers, encodings, and where information leaks.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L2/L2-talk-cs-c0c03211e2.m4a" length="21090635" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-09-22-l02-lecture-talk-cs</guid>
-      <pubDate>Tue, 22 Sep 2026 12:18:00 +0200</pubDate>
+      <pubDate>Tue, 22 Sep 2026 12:20:00 +0200</pubDate>
       <itunes:duration>1:24:45</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -298,7 +338,7 @@
       <description>A conversation of two hosts, in English, read by a local text-to-speech engine. What machine learning is; supervised, unsupervised and reinforcement learning. Distances, 1-NN, k-NN, k-means, UPGMA. Optimization: convexity, closed-form vs. iterative solutions. Why we compute by hand and validate what an agent writes.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L1/L1-talk-en-256f382290.m4a" length="25669092" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-09-15-l01-lecture-talk-en</guid>
-      <pubDate>Tue, 15 Sep 2026 12:17:00 +0200</pubDate>
+      <pubDate>Tue, 15 Sep 2026 12:19:00 +0200</pubDate>
       <itunes:duration>1:43:11</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
@@ -308,7 +348,7 @@
       <description>A conversation of two hosts, in Czech, read by a local text-to-speech engine. What machine learning is; supervised, unsupervised and reinforcement learning. Distances, 1-NN, k-NN, k-means, UPGMA. Optimization: convexity, closed-form vs. iterative solutions. Why we compute by hand and validate what an agent writes.</description>
       <enclosure url="https://github.com/tomasvicar/MLR-public/releases/download/media-L1/L1-talk-cs-09fb83cd2e.m4a" length="26085881" type="audio/mp4"/>
       <guid isPermaLink="false">MPA-MLR/2026-09-15-l01-lecture-talk-cs</guid>
-      <pubDate>Tue, 15 Sep 2026 12:16:00 +0200</pubDate>
+      <pubDate>Tue, 15 Sep 2026 12:18:00 +0200</pubDate>
       <itunes:duration>1:44:46</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>

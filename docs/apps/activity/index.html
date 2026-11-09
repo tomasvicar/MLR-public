@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#12251a">
+<title>Activity timeline</title>
+<style>
+  :root {
+    --bg: #f6f7f4;
+    --card: #ffffff;
+    --ink: #17251c;
+    --muted: #5d6b62;
+    --line: #dfe4dd;
+    --accent: #2f7d4f;
+    --accent-ink: #ffffff;
+    --danger: #a3251f;
+    --bar-off: #e7ece6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    padding: calc(env(safe-area-inset-top) + 12px) calc(env(safe-area-inset-right) + 12px)
+             calc(env(safe-area-inset-bottom) + 24px) calc(env(safe-area-inset-left) + 12px);
+  }
+  .wrap { max-width: 560px; margin: 0 auto; }
+  header h1 { font-size: 20px; margin: 0 0 2px; }
+  p.sub { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
+  #status {
+    font-size: 13px; color: var(--muted); background: var(--card);
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: 8px 10px; margin-bottom: 12px; word-break: break-word;
+  }
+  #status.err { color: var(--danger); border-color: #ecc8c6; }
+  [hidden] { display: none !important; }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+  button, select {
+    font: inherit; flex: 1 1 130px; padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--card); color: var(--ink); min-height: 44px;
+  }
+  select { flex: 0 1 110px; }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  button:disabled { opacity: .5; }
+  .panel {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 12px; margin-top: 12px; font-size: 14px;
+  }
+  .panel h2 { font-size: 15px; margin: 0 0 8px; }
+  .panel label.file { display: block; color: var(--muted); font-size: 13px; margin-bottom: 6px; }
+  .panel input[type=file] { width: 100%; font-size: 14px; }
+  #now { font-size: 26px; font-weight: 650; display: flex; align-items: center; gap: 10px; min-height: 40px; }
+  #now .dot { width: 20px; height: 20px; border-radius: 50%; background: var(--bar-off); flex: none; }
+  #meta { font-size: 12px; color: var(--muted); margin: 2px 0 8px; font-variant-numeric: tabular-nums; }
+  canvas { display: block; width: 100%; border-radius: 8px; background: #fbfcfa; border: 1px solid var(--line); }
+  #liveCanvas { height: 120px; }
+  #fullCanvas { height: 190px; }
+  #liveXyzCanvas, #fullXyzCanvas { height: 120px; margin-top: 8px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 12px; }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; font-variant-numeric: tabular-nums; }
+  .legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+  details { margin-top: 8px; font-size: 14px; }
+  details summary { cursor: pointer; color: var(--muted); }
+  .settings { display: grid; gap: 8px; margin-top: 8px; }
+  .settings label { display: grid; gap: 3px; font-size: 13px; color: var(--muted); }
+  .settings input, .settings select {
+    font: 14px system-ui, sans-serif; padding: 8px; border: 1px solid var(--line);
+    border-radius: 8px; width: 100%; color: var(--ink); background: var(--card); min-height: 0;
+  }
+  pre { font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--bar-off);
+        padding: 8px; border-radius: 8px; overflow-x: auto; white-space: pre; }
+  code { font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; }
+  footer { margin-top: 14px; color: var(--muted); font-size: 12px; }
+  footer a, .phone-link a { color: var(--accent); overflow-wrap: anywhere; }
+  .phone-link { margin: 18px 0 0; padding: 16px; text-align: center;
+    border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+  .phone-link h2 { margin: 0 0 6px; font-size: 17px; }
+  .phone-link p { margin: 6px 0; font-size: 13px; color: var(--muted); }
+  .phone-link img { display: block; width: 208px; height: 208px; max-width: 100%; margin: 8px auto; }
+  @media (max-width: 400px) { header h1 { font-size: 18px; } button { flex: 1 1 100%; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Activity timeline</h1>
+    <p class="sub">Reads the phone's accelerometer in the browser, labels every sample with your ONNX model
+      (lab 9) and draws a colour-coded timeline. Runs entirely on your device, nothing is uploaded.</p>
+  </header>
+
+  <div class="panel">
+    <div class="controls" style="margin-top:0">
+      <button id="demoBtn">Use the demo activity model</button>
+    </div>
+    <label class="file" for="modelInput">…or your own model (an <code>.onnx</code> file with <code>model_info</code>):</label>
+    <input type="file" id="modelInput">
+    <details id="settingsBox">
+      <summary>Classes and preprocessing</summary>
+      <p class="sub">Read from the model file (<code>model_info</code>); you may edit them and press Apply.</p>
+      <div class="settings">
+        <label>Classes, in the order of the network outputs, comma-separated
+          <input type="text" id="setClasses"></label>
+        <label>Colours (CSS), comma-separated, optional
+          <input type="text" id="setColors"></label>
+        <label>Units the model expects
+          <select id="setUnits"><option value="g">g (divide m/s² by 9.80665)</option>
+            <option value="m/s2">m/s² (as the browser gives them)</option></select></label>
+        <label>Sampling rate the model expects (Hz)
+          <input type="number" id="setRate" min="1" max="1000" value="50"></label>
+        <label>Window (samples per network input)
+          <input type="number" id="setWindow" min="8" max="100000" value="256"></label>
+        <label>Axis order of the input channels (e.g. x, y, z)
+          <input type="text" id="setAxes" value="x, y, z"></label>
+        <label>Axis signs (e.g. 1, 1, 1)
+          <input type="text" id="setSigns" value="1, 1, 1"></label>
+        <button id="applyBtn" disabled>Apply</button>
+      </div>
+    </details>
+    <details>
+      <summary>How to export your model</summary>
+<pre>import json, onnx, torch
+model.eval().cpu()
+torch.onnx.export(model, (torch.zeros(1, 3, 256),), "activity_model.onnx",
+                  input_names=["acc"], output_names=["logits"],
+                  external_data=False)
+info = {"classes": ["walking", "upstairs", "downstairs", "sitting",
+                    "standing", "lying", "transition"],
+        "units": "g",          # what the network was trained on
+        "sample_rate": 50,     # Hz
+        "window": 256,         # samples, the length exported above
+        "axes": ["x", "y", "z"]}
+m = onnx.load("activity_model.onnx")
+m.metadata_props.add(key="model_info", value=json.dumps(info))
+onnx.save(m, "activity_model.onnx")</pre>
+      <p class="sub">The network takes <code>1 × 3 × window</code> and returns
+        <code>1 × classes × window</code> logits (one class per sample). Copy the file to your phone
+        (e.g. through Google Drive or iCloud Drive) and choose it above.</p>
+    </details>
+  </div>
+
+  <div id="status" role="status" aria-live="polite" style="margin-top:12px">Loading…</div>
+
+  <div class="controls">
+    <button id="startBtn" class="primary" disabled>Start recording</button>
+    <button id="stopBtn" disabled>Stop</button>
+  </div>
+  <div class="controls" style="margin-top:0">
+    <button id="simBtn" disabled>Simulate (replay a HAPT recording)</button>
+    <select id="simSpeed" aria-label="Replay speed">
+      <option value="1">1×</option><option value="4" selected>4×</option><option value="20">20×</option>
+    </select>
+  </div>
+
+  <section class="panel">
+    <h2>Live</h2>
+    <div id="now"><span class="dot" id="nowDot"></span><span id="nowText">—</span></div>
+    <div id="meta">waiting for model</div>
+    <canvas id="liveCanvas"></canvas>
+    <canvas id="liveXyzCanvas"></canvas>
+    <p class="sub" style="margin:6px 0 0">The last 60 s: |a| with the predicted class below it, then the
+      three axes <span style="color:#c0392b">x</span>, <span style="color:#1e8449">y</span>,
+      <span style="color:#1f5fa8">z</span> (−2 g … +2 g).</p>
+  </section>
+
+  <section class="panel" id="fullPanel" hidden>
+    <h2>Whole recording</h2>
+    <div id="fullMeta" class="sub" style="margin-bottom:8px"></div>
+    <canvas id="fullCanvas"></canvas>
+    <canvas id="fullXyzCanvas"></canvas>
+    <div class="legend" id="legend"></div>
+    <div class="controls">
+      <button id="rawCsvBtn">Download raw CSV</button>
+      <button id="predCsvBtn">Download predictions CSV</button>
+    </div>
+  </section>
+
+  <footer>
+    MPA-MLR, lab 9 · ONNX Runtime Web (WASM) · nothing is uploaded. Motion sensors need HTTPS: open the course
+    web, not <code>http://&lt;ip&gt;:8000</code>. Simulate mode and the demo model use the
+    <a href="https://archive.ics.uci.edu/dataset/341">UCI HAPT dataset</a> (J. L. Reyes-Ortiz, L. Oneto,
+    A. Samà, X. Parra, D. Anguita), licensed CC BY 4.0.
+  </footer>
+  <section class="phone-link" aria-labelledby="phone-link-title">
+    <h2 id="phone-link-title">Open on your phone</h2>
+    <p>Scan this QR code with your phone's camera.</p>
+    <a href="https://tomasvicar.github.io/MLR-public/apps/activity/">
+      <img src="qr.svg" width="208" height="208" alt="QR code linking to the course activity app">
+      tomasvicar.github.io/MLR-public/apps/activity/
+    </a>
+  </section>
+</div>
+
+<script>
+const ORT_VERSION = '1.31.1';
+const ORT_BASE = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@' + ORT_VERSION + '/dist/';
+const G = 9.80665;
+const LIVE_EVERY_S = 1;          // one live inference per second of recording
+const LIVE_SPAN_S = 60;          // the live strip shows the last minute
+const DEFAULT_COLORS = ['#2a9d8f', '#e76f51', '#f4a261', '#457b9d', '#8ab17d', '#9b5de5', '#adb5bd',
+                        '#e9c46a', '#264653', '#d62828'];
+
+// Test hooks
+window.modelReady = false;
+window.lastError = null;
+window.lastTimeline = null;      // per resampled sample, class index
+window.lastStats = null;
+window.simDone = false;
+
+let ort = null, session = null, info = null, inputName = null, outputName = null;
+// raw samples as received: time in ms, acceleration including gravity in m/s²
+let rawT = [], rawA = [[], [], []];
+let recording = false, source = null, wakeLock = null;
+let liveLab = [], liveBusy = false, liveTimer = null, sim = null, sensorCheck = null;
+let trueLab = null;              // per resampled sample, only in simulate mode
+let lastFull = null;
+
+const $ = (id) => document.getElementById(id);
+const statusEl = $('status'), metaEl = $('meta');
+const startBtn = $('startBtn'), stopBtn = $('stopBtn'), simBtn = $('simBtn'), demoBtn = $('demoBtn');
+
+function setStatus(msg, isErr) { statusEl.textContent = msg; statusEl.classList.toggle('err', !!isErr); }
+function fail(msg, err) {
+  window.lastError = String((err && err.message) || msg || 'unknown error');
+  setStatus(msg + (err ? ' — ' + err.message : ''), true);
+  console.error(msg, err);
+}
+
+/* ------------------------------------------------------------------ *
+ * Preprocessing: irregular raw samples -> regular grid at sample_rate
+ * (linear interpolation) -> axis order and signs -> units
+ * ------------------------------------------------------------------ */
+function gridLength() {
+  if (rawT.length < 2) return 0;
+  return Math.floor((rawT[rawT.length - 1] - rawT[0]) * info.sample_rate / 1000) + 1;
+}
+// Resampled samples [i0, i1) as three Float32Arrays in model units and axis order.
+function resample(i0, i1) {
+  const n = i1 - i0, out = [new Float32Array(n), new Float32Array(n), new Float32Array(n)];
+  const axIdx = info.axes.map((a) => 'xyz'.indexOf(a));
+  const scale = info.units === 'g' ? 1 / G : 1;
+  const dt = 1000 / info.sample_rate, t0 = rawT[0];
+  // binary search for the first grid time, then walk forward
+  let lo = 0, hi = rawT.length - 1, tq = t0 + i0 * dt;
+  while (lo < hi) { const m = (lo + hi) >> 1; if (rawT[m] < tq) lo = m + 1; else hi = m; }
+  let j = Math.max(lo - 1, 0);
+  for (let k = 0; k < n; k++) {
+    const t = t0 + (i0 + k) * dt;
+    while (j < rawT.length - 2 && rawT[j + 1] < t) j++;
+    const ta = rawT[j], tb = rawT[j + 1];
+    const w = tb > ta ? Math.min(Math.max((t - ta) / (tb - ta), 0), 1) : 0;
+    for (let c = 0; c < 3; c++) {
+      const a = rawA[axIdx[c]];
+      out[c][k] = (a[j] + w * (a[j + 1] - a[j])) * info.axis_signs[c] * scale;
+    }
+  }
+  return out;
+}
+
+async function runWindow(ch) {       // ch: 3 Float32Arrays of length window -> logits (C*W)
+  const W = info.window, x = new Float32Array(3 * W);
+  x.set(ch[0], 0); x.set(ch[1], W); x.set(ch[2], 2 * W);
+  const feeds = {}; feeds[inputName] = new ort.Tensor('float32', x, [1, 3, W]);
+  return (await session.run(feeds))[outputName].data;
+}
+function argmaxPerSample(logits, a, b, C, W, out, offset) {
+  for (let t = a; t < b; t++) {
+    let best = 0, bv = logits[t];
+    for (let c = 1; c < C; c++) { const v = logits[c * W + t]; if (v > bv) { bv = v; best = c; } }
+    out[offset + t] = best;
+  }
+}
+
+// Whole recording: windows with hop W/2, the central half of each kept (as in demo.py).
+async function predictAll(N) {
+  const W = info.window, C = info.classes.length, hop = W >> 1, q = W >> 2;
+  const out = new Int16Array(N).fill(-1);
+  if (N < W) return out;
+  const starts = [];
+  for (let s = 0; s + W <= N; s += hop) starts.push(s);
+  if (starts[starts.length - 1] + W < N) starts.push(N - W);
+  let done = 0;                        // samples [0, done) are already labelled
+  for (let k = 0; k < starts.length; k++) {
+    const s = starts[k], logits = await runWindow(resample(s, s + W));
+    const a = Math.max(done - s, k === 0 ? 0 : q);
+    const b = k === starts.length - 1 ? W : W - q;
+    argmaxPerSample(logits, a, b, C, W, out, s);
+    done = s + b;
+  }
+  return out;
+}
+
+/* ------------------------------------------------------------------ *
+ * Live: once per second, the newest window; its newest samples are
+ * written into the live timeline
+ * ------------------------------------------------------------------ */
+async function liveStep() {
+  if (!recording || liveBusy || !session) return;
+  const N = gridLength(), W = info.window;
+  if (N < W) {
+    metaEl.textContent = rateText() + ' · collecting the first window: ' +
+      (N / info.sample_rate).toFixed(1) + ' / ' + (W / info.sample_rate).toFixed(1) + ' s';
+    drawLive();
+    return;
+  }
+  liveBusy = true;
+  try {
+    const t0 = performance.now();
+    const logits = await runWindow(resample(N - W, N));
+    const ms = performance.now() - t0;
+    const from = Math.max(liveLab.length, N - W);
+    while (liveLab.length < N - W) liveLab.push(-1);
+    const tmp = new Int16Array(N);
+    argmaxPerSample(logits, from - (N - W), W, info.classes.length, W, tmp, N - W);
+    for (let i = from; i < N; i++) liveLab[i] = tmp[i];
+    const lastS = Math.round(info.sample_rate * LIVE_EVERY_S), counts = new Array(info.classes.length).fill(0);
+    for (let i = Math.max(0, N - lastS); i < N; i++) counts[liveLab[i]]++;
+    const c = counts.indexOf(Math.max(...counts));
+    $('nowText').textContent = info.classes[c];
+    $('nowDot').style.background = info.colors[c];
+    metaEl.textContent = rateText() + ' · inference ' + ms.toFixed(1) + ' ms · mean |a| ' +
+      meanNorm(N - W, N).toFixed(2) + ' ' + (info.units === 'g' ? 'g' : 'm/s²');
+    drawLive();
+  } catch (e) {
+    fail('Inference failed', e);
+  } finally { liveBusy = false; }
+}
+function rateText() {
+  const n = rawT.length;
+  if (n < 2) return 'no samples yet';
+  const dur = (rawT[n - 1] - rawT[0]) / 1000;
+  return (source === 'sim' ? 'simulated ' : '') + 'sensor ' + ((n - 1) / dur).toFixed(0) + ' Hz → ' +
+    info.sample_rate + ' Hz · ' + dur.toFixed(0) + ' s';
+}
+function meanNorm(i0, i1) {
+  const r = resample(i0, i1); let s = 0;
+  for (let k = 0; k < r[0].length; k++) s += Math.hypot(r[0][k], r[1][k], r[2][k]);
+  return s / r[0].length;
+}
+
+/* ------------------------------------------------------------------ *
+ * Drawing
+ * ------------------------------------------------------------------ */
+function prepCanvas(cv) {
+  const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+  return [ctx, w, h];
+}
+function drawStrip(ctx, lab, i0, i1, x0, w, y, h) {
+  const n = i1 - i0; if (n <= 0) return;
+  let s = i0;
+  for (let i = i0 + 1; i <= i1; i++) {
+    if (i === i1 || lab[i] !== lab[s]) {
+      if (lab[s] >= 0) {
+        ctx.fillStyle = info.colors[lab[s]] || '#999';
+        ctx.fillRect(x0 + (s - i0) / n * w, y, Math.max((i - s) / n * w, 0.5), h);
+      }
+      s = i;
+    }
+  }
+}
+function drawSignal(ctx, i0, i1, x0, w, y, h) {
+  const n = i1 - i0; if (n < 2) return;
+  const r = resample(i0, i1), norm = new Float32Array(n);
+  for (let k = 0; k < n; k++) norm[k] = Math.hypot(r[0][k], r[1][k], r[2][k]);
+  const one = info.units === 'g' ? 1 : G, top = 3 * one;      // 0 … 3 g
+  ctx.strokeStyle = '#c5ccc6'; ctx.lineWidth = 1; ctx.beginPath();
+  ctx.moveTo(x0, y + h - one / top * h); ctx.lineTo(x0 + w, y + h - one / top * h); ctx.stroke();
+  ctx.strokeStyle = '#17251c'; ctx.lineWidth = 1; ctx.beginPath();
+  const step = Math.max(1, Math.floor(n / (w * 2)));
+  for (let k = 0; k < n; k += step) {
+    const px = x0 + k / n * w, py = y + h - Math.min(norm[k] / top, 1) * h;
+    k === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+  ctx.fillStyle = '#5d6b62'; ctx.font = '10px system-ui'; ctx.fillText('1 g', x0 + 2, y + h - one / top * h - 2);
+}
+// The three axes, each clipped to ±2 g, with a zero line and a small legend.
+const AXIS_COLORS = ['#c0392b', '#1e8449', '#1f5fa8'];
+function drawXYZ(ctx, i0, i1, x0, w, y, h) {
+  const n = i1 - i0; if (n < 2) return;
+  const r = resample(i0, i1), one = info.units === 'g' ? 1 : G, lim = 2 * one;
+  const yOf = v => y + h / 2 - Math.max(-1, Math.min(1, v / lim)) * h / 2;
+  ctx.strokeStyle = '#c5ccc6'; ctx.lineWidth = 1; ctx.beginPath();
+  for (const v of [-one, 0, one]) { ctx.moveTo(x0, yOf(v)); ctx.lineTo(x0 + w, yOf(v)); }
+  ctx.stroke();
+  const step = Math.max(1, Math.floor(n / (w * 2)));
+  for (let a = 0; a < 3; a++) {
+    ctx.strokeStyle = AXIS_COLORS[a]; ctx.beginPath();
+    for (let k = 0; k < n; k += step) {
+      const px = x0 + k / n * w, py = yOf(r[a][k]);
+      k === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+  }
+  ctx.font = '10px system-ui'; ctx.fillStyle = '#5d6b62';
+  ctx.fillText('+1 g', x0 + 2, yOf(one) - 2); ctx.fillText('−1 g', x0 + 2, yOf(-one) - 2);
+}
+function drawXYZLegend(ctx, x, y) {
+  ctx.font = '11px system-ui';
+  ['x', 'y', 'z'].forEach((t, a) => { ctx.fillStyle = AXIS_COLORS[a]; ctx.fillText(t, x + a * 14, y); });
+}
+function drawLive() {
+  const [ctx, w, h] = prepCanvas($('liveCanvas'));
+  const N = gridLength(); if (!info || N < 2) return;
+  const span = Math.round(LIVE_SPAN_S * info.sample_rate), i0 = Math.max(0, N - span);
+  const wFrac = (N - i0) / span;           // fill from the left until a minute is recorded
+  drawSignal(ctx, i0, N, 0, w * wFrac, 4, h - 40);
+  drawStrip(ctx, liveLab, i0, Math.min(N, liveLab.length), 0, w * (Math.min(N, liveLab.length) - i0) / span, h - 30, 26);
+  const [cx, wx, hx] = prepCanvas($('liveXyzCanvas'));
+  drawXYZ(cx, i0, N, 0, wx * wFrac, 4, hx - 8);
+  drawXYZLegend(cx, wx - 44, 14);
+}
+function drawFull(pred) {
+  $('fullPanel').hidden = false;
+  const [ctx, w, h] = prepCanvas($('fullCanvas'));
+  const N = pred.length, rows = trueLab ? 2 : 1, lw = 62, sw = w - lw;
+  const stripH = 24, sigH = h - rows * (stripH + 6) - 18;
+  drawSignal(ctx, 0, N, lw, sw, 2, sigH);
+  ctx.fillStyle = '#5d6b62'; ctx.font = '11px system-ui';
+  ctx.fillText('|a|', 4, 14);
+  let y = sigH + 8;
+  ctx.fillText('predicted', 4, y + 16); drawStrip(ctx, pred, 0, N, lw, sw, y, stripH);
+  if (trueLab) {
+    y += stripH + 6;
+    ctx.fillStyle = '#5d6b62'; ctx.fillText('true', 4, y + 16);
+    drawStrip(ctx, trueLab, 0, Math.min(N, trueLab.length), lw, sw * Math.min(N, trueLab.length) / N, y, stripH);
+  }
+  const dur = N / info.sample_rate;
+  ctx.fillStyle = '#5d6b62';
+  ctx.fillText('0 s', lw, h - 3);
+  ctx.textAlign = 'right'; ctx.fillText(dur.toFixed(0) + ' s', w, h - 3); ctx.textAlign = 'left';
+  const [cx, wx, hx] = prepCanvas($('fullXyzCanvas'));
+  drawXYZ(cx, 0, N, lw, wx - lw, 4, hx - 8);
+  drawXYZLegend(cx, 4, 14);
+  // legend with the share of time per class
+  const counts = new Array(info.classes.length).fill(0); let nl = 0;
+  for (const c of pred) if (c >= 0) { counts[c]++; nl++; }
+  const leg = $('legend'); leg.innerHTML = '';
+  info.classes.forEach((name, c) => {
+    const s = document.createElement('span'), i = document.createElement('i');
+    i.style.background = info.colors[c];
+    s.append(i, document.createTextNode(name + ' ' + (nl ? (100 * counts[c] / nl).toFixed(0) : 0) + ' %'));
+    leg.append(s);
+  });
+}
+
+/* ------------------------------------------------------------------ *
+ * Recording: real sensor or simulation
+ * ------------------------------------------------------------------ */
+function resetRecording() {
+  rawT = []; rawA = [[], [], []]; liveLab = []; trueLab = null; lastFull = null;
+  window.lastTimeline = null; window.lastStats = null; window.simDone = false;
+  $('fullPanel').hidden = true;
+  $('nowText').textContent = '—'; $('nowDot').style.background = '';
+}
+function pushSample(t, x, y, z) {
+  if (rawT.length && t <= rawT[rawT.length - 1]) return;     // keep times strictly increasing
+  rawT.push(t); rawA[0].push(x); rawA[1].push(y); rawA[2].push(z);
+}
+function onMotion(e) {
+  const a = e.accelerationIncludingGravity;
+  if (!a || a.x === null) return;
+  pushSample(e.timeStamp || performance.now(), a.x, a.y, a.z);
+}
+async function requestWakeLock() {
+  try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) { /* optional */ }
+}
+function beginRecording(kind) {
+  resetRecording();
+  source = kind; recording = true;
+  startBtn.disabled = true; simBtn.disabled = true; stopBtn.disabled = false;
+  demoBtn.disabled = true; $('modelInput').disabled = true;
+  const speed = kind === 'sim' ? Number($('simSpeed').value) : 1;
+  liveTimer = setInterval(liveStep, LIVE_EVERY_S * 1000 / speed);
+}
+
+async function startSensor() {
+  if (!window.isSecureContext) {
+    fail('Motion sensors need HTTPS (or localhost). Open the course web, not http://<ip>:8000.'); return;
+  }
+  if (typeof DeviceMotionEvent === 'undefined') { fail('This browser has no motion sensor support.'); return; }
+  try {
+    // iOS 13+: permission only from a tap
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+      const r = await DeviceMotionEvent.requestPermission();
+      if (r !== 'granted') { fail('Motion permission denied — allow "Motion & Orientation Access" and tap again.'); return; }
+    }
+  } catch (e) { fail('Could not ask for the motion permission', e); return; }
+  beginRecording('sensor');
+  window.addEventListener('devicemotion', onMotion);
+  await requestWakeLock();
+  setStatus('Recording — put the phone on your waist and follow your script. The screen stays on.');
+  sensorCheck = setTimeout(() => {
+    if (recording && source === 'sensor' && rawT.length < 5) {
+      fail('No accelerometer samples arrive — this device has no motion sensor (try Simulate).');
+    }
+  }, 2500);
+}
+
+// Simulation: the 50 Hz HAPT recording is replayed as irregular "browser"
+// samples at about 60 Hz with jitter, so the resampling is exercised.
+async function startSim() {
+  try {
+    setStatus('Loading the demo recording…');
+    const txt = await (await fetch('demo/demo_recording.csv')).text();
+    const rows = txt.split('\n').filter((l) => l && !l.startsWith('#') && !l.startsWith('t_s'))
+      .map((l) => l.split(',').map(Number));
+    const n = rows.length, xs = rows.map((r) => r.slice(1, 4)), lab = rows.map((r) => r[4]);
+    beginRecording('sim');
+    const speed = Number($('simSpeed').value);
+    let simT = 0;                               // ms of recording time
+    const wall0 = performance.now(), end = (n - 1) * 20;
+    sim = setInterval(() => {
+      const target = Math.min((performance.now() - wall0) * speed, end);
+      while (simT < target) {
+        const f = simT / 20, i = Math.min(Math.floor(f), n - 2), w = f - i;
+        pushSample(simT, ...[0, 1, 2].map((c) => xs[i][c] + w * (xs[i + 1][c] - xs[i][c])));
+        simT += 1000 / 60 * (0.6 + 0.8 * Math.random());
+      }
+      if (target >= end) {
+        // the true labels on the model grid (the CSV is at 50 Hz)
+        const Nm = gridLength(); trueLab = new Int16Array(Nm);
+        for (let k = 0; k < Nm; k++) trueLab[k] = lab[Math.min(n - 1, Math.round(k / info.sample_rate * 50))];
+        stopRecording().then(() => { window.simDone = true; });
+      }
+    }, 30);
+    setStatus('Simulating ' + (n / 50).toFixed(0) + ' s of a held-out HAPT user (phone on the waist) at ' +
+      speed + '× speed…');
+  } catch (e) { fail('Could not start the simulation', e); }
+}
+
+async function stopRecording() {
+  if (!recording) return;
+  recording = false;
+  clearInterval(liveTimer); clearInterval(sim); clearTimeout(sensorCheck); sim = null;
+  window.removeEventListener('devicemotion', onMotion);
+  if (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; }
+  stopBtn.disabled = true;
+  const N = gridLength();
+  try {
+    if (N < info.window) {
+      setStatus('Too short: at least ' + (info.window / info.sample_rate).toFixed(1) + ' s are needed.', true);
+    } else {
+      setStatus('Labelling the whole recording…');
+      const t0 = performance.now(), pred = await predictAll(N);
+      lastFull = pred;
+      drawFull(pred);
+      const n = rawT.length, dur = (rawT[n - 1] - rawT[0]) / 1000;
+      const dts = []; for (let i = 1; i < n; i++) dts.push(rawT[i] - rawT[i - 1]);
+      const md = dts.reduce((a, b) => a + b, 0) / dts.length;
+      const sd = Math.sqrt(dts.reduce((a, b) => a + (b - md) ** 2, 0) / dts.length);
+      let agree = null;
+      if (trueLab) {
+        let ok = 0, m = 0;
+        for (let i = 0; i < Math.min(N, trueLab.length); i++) if (trueLab[i] >= 0) { m++; ok += pred[i] === trueLab[i]; }
+        agree = ok / m;
+      }
+      const stats = { seconds: dur, raw_samples: n, raw_rate_hz: (n - 1) / dur, raw_dt_std_ms: sd,
+                      grid_samples: N, mean_norm: meanNorm(0, N), units: info.units,
+                      accuracy_vs_true: agree, ms: performance.now() - t0 };
+      window.lastStats = stats; window.lastTimeline = Array.from(pred);
+      $('fullMeta').textContent = dur.toFixed(1) + ' s · ' + n + ' sensor samples at ' + stats.raw_rate_hz.toFixed(1) +
+        ' Hz (interval jitter ±' + sd.toFixed(1) + ' ms) → ' + N + ' samples at ' + info.sample_rate + ' Hz · mean |a| ' +
+        stats.mean_norm.toFixed(2) + ' ' + (info.units === 'g' ? 'g (≈ 1 expected)' : 'm/s² (≈ 9.81 expected)') +
+        (agree !== null ? ' · agreement with the true labels ' + (100 * agree).toFixed(1) + ' %' : '');
+      setStatus('Done. ' + (source === 'sim' ? 'Simulated recording labelled.' : 'Recording labelled.'));
+    }
+  } catch (e) { fail('Labelling failed', e); }
+  startBtn.disabled = !session; simBtn.disabled = !session; demoBtn.disabled = false; $('modelInput').disabled = false;
+}
+
+function download(name, text) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type: 'text/csv' }));
+  a.download = name; document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+$('rawCsvBtn').addEventListener('click', () => {
+  const t0 = rawT[0], lines = ['# accelerationIncludingGravity in m/s2, device axes, as received (' + source + ')',
+    't_ms,ax,ay,az'];
+  for (let i = 0; i < rawT.length; i++)
+    lines.push((rawT[i] - t0).toFixed(1) + ',' + rawA[0][i].toFixed(4) + ',' + rawA[1][i].toFixed(4) + ',' + rawA[2][i].toFixed(4));
+  download('activity_raw.csv', lines.join('\n') + '\n');
+});
+$('predCsvBtn').addEventListener('click', () => {
+  const N = lastFull.length, r = resample(0, N);
+  const lines = ['# resampled to ' + info.sample_rate + ' Hz, axes ' + info.axes.join('') + ', units ' + info.units +
+    ' (the network input)', 't_s,' + info.axes.map((a) => 'a' + a).join(',') + ',class_index,class'];
+  for (let i = 0; i < N; i++)
+    lines.push((i / info.sample_rate).toFixed(3) + ',' + r[0][i].toFixed(4) + ',' + r[1][i].toFixed(4) + ',' +
+      r[2][i].toFixed(4) + ',' + lastFull[i] + ',' + (info.classes[lastFull[i]] || ''));
+  download('activity_predictions.csv', lines.join('\n') + '\n');
+});
+
+/* ------------------------------------------------------------------ *
+ * Model loading; classes and preprocessing from the ONNX metadata
+ * ------------------------------------------------------------------ */
+function onnxMetadata(bytes) {     // metadata_props = field 14 of ModelProto (key 1, value 2)
+  const out = {}, dec = new TextDecoder();
+  function varint(buf, pos) { let v = 0, mul = 1, b; do { b = buf[pos++]; v += (b & 0x7f) * mul; mul *= 128; } while (b & 0x80); return [v, pos]; }
+  function fields(buf, start, end, cb) {
+    let pos = start;
+    while (pos < end) {
+      let tag; [tag, pos] = varint(buf, pos);
+      const field = Math.floor(tag / 8), wire = tag % 8;
+      if (wire === 0) { [, pos] = varint(buf, pos); }
+      else if (wire === 1) { pos += 8; }
+      else if (wire === 5) { pos += 4; }
+      else if (wire === 2) { let len; [len, pos] = varint(buf, pos); cb(field, pos, pos + len); pos += len; }
+      else throw new Error('not an ONNX file (wire type ' + wire + ')');
+    }
+  }
+  fields(bytes, 0, bytes.length, (field, s, e) => {
+    if (field !== 14) return;
+    let key = '', value = '';
+    fields(bytes, s, e, (f, a, b) => { if (f === 1) key = dec.decode(bytes.subarray(a, b)); if (f === 2) value = dec.decode(bytes.subarray(a, b)); });
+    out[key] = value;
+  });
+  return out;
+}
+const parseList = (s) => s.split(',').map((x) => x.trim()).filter((x) => x.length);
+function infoToForm(i) {
+  $('setClasses').value = i.classes.join(', '); $('setColors').value = i.colors.join(', ');
+  $('setUnits').value = i.units; $('setRate').value = i.sample_rate; $('setWindow').value = i.window;
+  $('setAxes').value = i.axes.join(', '); $('setSigns').value = i.axis_signs.join(', ');
+}
+function formToInfo() {
+  return { classes: parseList($('setClasses').value), colors: parseList($('setColors').value),
+    units: $('setUnits').value, sample_rate: Number($('setRate').value), window: parseInt($('setWindow').value, 10),
+    axes: parseList($('setAxes').value), axis_signs: parseList($('setSigns').value).map(Number) };
+}
+async function applyInfo(raw) {
+  const i = Object.assign({ units: 'm/s2', axes: ['x', 'y', 'z'], axis_signs: [1, 1, 1], colors: [] }, raw);
+  if (!(i.sample_rate > 0)) throw new Error('model_info needs "sample_rate" (Hz)');
+  if (!(i.window >= 8)) throw new Error('model_info needs "window" (samples)');
+  if (!['g', 'm/s2'].includes(i.units)) throw new Error('"units" must be "g" or "m/s2", got ' + JSON.stringify(i.units));
+  if (i.axes.length !== 3 || i.axes.some((a) => !'xyz'.includes(a) || a.length !== 1)) throw new Error('"axes" must be three of x, y, z');
+  if (i.axis_signs.length !== 3 || i.axis_signs.some(isNaN)) throw new Error('"axis_signs" needs three numbers');
+  const W = i.window, feeds = {};
+  feeds[inputName] = new ort.Tensor('float32', new Float32Array(3 * W), [1, 3, W]);
+  let n;
+  try { n = (await session.run(feeds))[outputName].data.length; }
+  catch (e) { throw new Error('the model does not accept a 1 × 3 × ' + W + ' input — check "window"'); }
+  if (n % W) throw new Error('the model returns ' + n + ' values, not classes × ' + W + ' (one class per sample)');
+  const C = n / W;
+  if (!i.classes || !i.classes.length) i.classes = Array.from({ length: C }, (_, k) => 'class ' + k);
+  if (i.classes.length !== C) throw new Error('the model has ' + C + ' classes per sample but ' + i.classes.length + ' names are given');
+  i.colors = i.classes.map((_, k) => i.colors[k] || DEFAULT_COLORS[k % DEFAULT_COLORS.length]);
+  info = i;
+  infoToForm(info);
+  metaEl.textContent = 'ready · ' + C + ' classes · ' + info.sample_rate + ' Hz · window ' + W + ' (' +
+    (W / info.sample_rate).toFixed(2) + ' s) · units ' + info.units + ' · axes ' + info.axes.join('');
+}
+
+let ortReady = null;
+function loadOrt() {
+  if (!ortReady) {
+    ortReady = (async () => {
+      setStatus('Downloading ONNX Runtime Web ' + ORT_VERSION + ' (WASM, a few MB, cached afterwards)…');
+      ort = await import(ORT_BASE + 'ort.bundle.min.mjs');
+      ort.env.wasm.wasmPaths = ORT_BASE;
+      if (!window.crossOriginIsolated) ort.env.wasm.numThreads = 1;
+    })();
+  }
+  return ortReady;
+}
+async function loadModel(bytes, name) {
+  window.modelReady = false; startBtn.disabled = true; simBtn.disabled = true; $('applyBtn').disabled = true;
+  try {
+    let meta = {};
+    try { meta = onnxMetadata(bytes); } catch (e) { throw new Error(name + ' is not an ONNX file'); }
+    await loadOrt();
+    setStatus('Preparing ' + name + '…');
+    session = await ort.InferenceSession.create(bytes, { executionProviders: ['wasm'], graphOptimizationLevel: 'all' });
+    inputName = session.inputNames[0]; outputName = session.outputNames[0];
+    const fromFile = !!meta.model_info;
+    await applyInfo(fromFile ? JSON.parse(meta.model_info) : formToInfo());
+    $('applyBtn').disabled = false; window.modelReady = true;
+    startBtn.disabled = false; simBtn.disabled = false;
+    setStatus(fromFile
+      ? 'Ready: ' + name + ' — settings read from the model file. Start a recording or simulate.'
+      : 'Ready: ' + name + ' — the file has no model_info; check "Classes and preprocessing" below.', !fromFile);
+    $('settingsBox').open = !fromFile;
+    drawLive();
+  } catch (e) { fail('Could not load the model', e); }
+}
+
+demoBtn.addEventListener('click', async () => {
+  demoBtn.disabled = true;
+  try {
+    setStatus('Downloading the demo activity model…');
+    const r = await fetch('demo/activity_model.onnx');
+    if (!r.ok) throw new Error('demo/activity_model.onnx -> HTTP ' + r.status);
+    await loadModel(new Uint8Array(await r.arrayBuffer()), 'the demo activity model');
+  } catch (e) { fail('Could not load the demo model', e); }
+  finally { demoBtn.disabled = false; }
+});
+$('modelInput').addEventListener('change', async (ev) => {
+  const file = ev.target.files && ev.target.files[0];
+  if (!file) return;
+  await loadModel(new Uint8Array(await file.arrayBuffer()), file.name);
+  ev.target.value = '';
+});
+$('applyBtn').addEventListener('click', async () => {
+  try { await applyInfo(formToInfo()); setStatus('Settings applied.'); } catch (e) { fail('Settings not applied', e); }
+});
+startBtn.addEventListener('click', startSensor);     // iOS: the permission prompt needs a tap
+simBtn.addEventListener('click', startSim);
+stopBtn.addEventListener('click', stopRecording);
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && recording && source === 'sensor') requestWakeLock();
+});
+window.addEventListener('resize', () => { if (info) { drawLive(); if (lastFull) drawFull(lastFull); } });
+loadOrt().then(() => setStatus('Choose a model: the demo activity model or your own .onnx file.'))
+  .catch((e) => fail('Could not load ONNX Runtime Web', e));
+</script>
+</body>
+</html>

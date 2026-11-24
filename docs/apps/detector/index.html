@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#12251a">
+<title>Live object detector</title>
+<style>
+  :root {
+    --bg: #f6f7f4;
+    --card: #ffffff;
+    --ink: #17251c;
+    --muted: #5d6b62;
+    --line: #dfe4dd;
+    --accent: #2f7d4f;
+    --accent-ink: #ffffff;
+    --danger: #a3251f;
+    --soft: #e7ece6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    padding: calc(env(safe-area-inset-top) + 12px) calc(env(safe-area-inset-right) + 12px)
+             calc(env(safe-area-inset-bottom) + 24px) calc(env(safe-area-inset-left) + 12px);
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  header h1 { font-size: 20px; margin: 0 0 2px; }
+  p.sub { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
+
+  #status {
+    font-size: 13px; color: var(--muted); background: var(--card);
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: 8px 10px; margin-bottom: 12px; word-break: break-word;
+  }
+  #status.err { color: var(--danger); border-color: #ecc8c6; }
+
+  .stage {
+    position: relative; width: 100%; aspect-ratio: 4 / 3; max-height: 72vh;
+    background: #0d1410; border-radius: 14px; overflow: hidden;
+  }
+  .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+  .stage video { display: none; }
+  .stage .hint {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    color: #cfe0d5; font-size: 14px; text-align: center; padding: 16px;
+  }
+  .stage .badge {
+    position: absolute; right: 8px; top: 8px; font-size: 12px;
+    background: rgba(8, 14, 10, .62); color: #eaf3ec; padding: 3px 8px; border-radius: 999px;
+  }
+  [hidden] { display: none !important; }
+
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+  button {
+    font: inherit; flex: 1 1 130px; padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--card); color: var(--ink); min-height: 44px;
+  }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  button:disabled { opacity: .5; }
+
+  .panel {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 12px; margin-top: 12px; font-size: 14px;
+  }
+  .panel label { color: var(--muted); font-size: 13px; }
+  .slider { display: grid; grid-template-columns: 7.5em 1fr 3.2em; gap: 10px; align-items: center; }
+  .slider + .slider { margin-top: 8px; }
+  .slider input { width: 100%; }
+  .slider output { font-variant-numeric: tabular-nums; text-align: right; }
+  .switch { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+  .switch input { width: 20px; height: 20px; flex: none; }
+  .seg { display: flex; gap: 8px; margin-top: 10px; }
+  .seg button { flex: 1 1 0; padding: 8px 10px; font-size: 14px; }
+  p.note { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+  .counts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0 0 8px; }
+  .counts div { background: var(--soft); border-radius: 8px; padding: 6px 8px; }
+  .counts b { display: block; font-size: 20px; font-variant-numeric: tabular-nums; }
+  .counts span { font-size: 12px; color: var(--muted); }
+  #meta { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  #list { margin: 6px 0 0; padding-left: 18px; font-size: 13px; max-height: 9.5em; overflow-y: auto; }
+  .file label { display: block; margin-bottom: 6px; }
+  .file input[type=file] { width: 100%; font-size: 14px; }
+
+  footer { margin-top: 14px; color: var(--muted); font-size: 12px; }
+  footer p { margin: 4px 0; }
+  a { color: var(--accent); overflow-wrap: anywhere; }
+  .phone-link { margin: 18px 0 0; padding: 16px; text-align: center;
+    border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+  .phone-link h2 { margin: 0 0 6px; font-size: 17px; }
+  .phone-link p { margin: 6px 0; font-size: 13px; color: var(--muted); }
+  .phone-link img { display: block; width: 208px; height: 208px; max-width: 100%; margin: 8px auto; }
+
+  @media (max-width: 400px) {
+    header h1 { font-size: 18px; }
+    button { flex: 1 1 100%; }
+    .counts { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Live object detector</h1>
+    <p class="sub">YOLO11n (80 COCO classes) at 320 × 320 px, decoded and filtered with NMS in
+      plain JavaScript. Runs entirely in your browser — no image leaves your device.</p>
+  </header>
+
+  <div id="status" role="status" aria-live="polite">Loading…</div>
+
+  <div class="stage">
+    <video id="video" playsinline muted autoplay></video>
+    <canvas id="view"></canvas>
+    <div class="badge" id="badge" hidden>live</div>
+    <div class="hint" id="hint">Press <b>Start camera</b>, or try the <b>test image</b>.</div>
+  </div>
+
+  <div class="controls">
+    <button id="startBtn" class="primary" disabled>Start camera</button>
+    <button id="freezeBtn" disabled>Freeze frame</button>
+    <button id="testBtn" disabled>Test image</button>
+  </div>
+
+  <section class="panel">
+    <div class="slider">
+      <label for="conf">Confidence</label>
+      <input type="range" id="conf" min="0.05" max="0.95" step="0.05" value="0.25">
+      <output id="confOut">0.25</output>
+    </div>
+    <div class="slider">
+      <label for="iou">NMS IoU threshold</label>
+      <input type="range" id="iou" min="0.1" max="0.95" step="0.05" value="0.5">
+      <output id="iouOut">0.50</output>
+    </div>
+    <div class="switch">
+      <input type="checkbox" id="nms" checked>
+      <label for="nms">Suppress boxes with IoU &gt; <span id="iouTxt"></span> against a kept box
+        <span id="scopeTxt">of the same class</span></label>
+    </div>
+    <div class="seg" role="group" aria-label="NMS mode">
+      <button id="perClassBtn" class="on" aria-pressed="true">Per-class NMS</button>
+      <button id="agnosticBtn" aria-pressed="false">Class-agnostic NMS</button>
+    </div>
+    <p class="note">The notebook uses class-agnostic NMS.</p>
+  </section>
+
+  <section class="panel">
+    <div class="counts">
+      <div><b id="nRaw">—</b><span>candidates</span></div>
+      <div><b id="nConf">—</b><span>above confidence</span></div>
+      <div><b id="nNms">—</b><span>after NMS</span></div>
+      <div><b id="nFps">—</b><span>frames / s</span></div>
+    </div>
+    <div id="meta">waiting for the model</div>
+    <ol id="list"></ol>
+  </section>
+
+  <section class="panel file">
+    <label for="fileInput">No camera, or camera blocked? Detect objects in a photo:</label>
+    <input type="file" id="fileInput" accept="image/*" disabled>
+  </section>
+
+  <footer>
+    <p>MPA-MLR, lab 10 · ONNX Runtime Web <span id="ortVer"></span> (WASM, MIT) · nothing is uploaded.</p>
+    <p><b>Model:</b> YOLO11n by <a href="https://github.com/ultralytics/ultralytics">Ultralytics</a>,
+      licensed under <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPL-3.0</a>
+      (<a href="https://www.ultralytics.com/license">Ultralytics licence page</a>), exported to ONNX
+      unchanged. Source of this page: the GitHub repository
+      <a href="https://github.com/tomasvicar/mlr-detector">tomasvicar/mlr-detector</a>; the model
+      <a href="model/yolo11n_320.onnx">yolo11n_320.onnx</a> and its export script
+      <a href="make_model.py">make_model.py</a>. Test image <code>bus.jpg</code> from the Ultralytics
+      package (AGPL-3.0).</p>
+  </footer>
+
+  <section class="phone-link" aria-labelledby="phone-link-title">
+    <h2 id="phone-link-title">Open on your phone</h2>
+    <p>Scan this QR code with your phone's camera.</p>
+    <a href="https://tomasvicar.github.io/mlr-detector/">
+      <img src="qr.svg" width="208" height="208" alt="QR code linking to the course object detector">
+      tomasvicar.github.io/mlr-detector/
+    </a>
+  </section>
+</div>
+
+<script>
+/* ------------------------------------------------------------------ *
+ * Config
+ * ------------------------------------------------------------------ */
+const ORT_VERSION = '1.31.1';
+// The runtime comes from jsDelivr; if that fails, from the copy next to this page.
+const ORT_SOURCES = [
+  { name: 'jsDelivr', base: 'https://cdn.jsdelivr.net/npm/onnxruntime-web@' + ORT_VERSION + '/dist/' },
+  { name: 'this site', base: new URL('vendor/onnxruntime-web-' + ORT_VERSION + '/', location.href).href },
+];
+const MODEL_URL = 'model/yolo11n_320.onnx';
+const SIZE = 320;          // network input: SIZE x SIZE, letterboxed
+const IOU_DEFAULT = 0.5;    // as in the lecture and the lab notebook (the slider starts here)
+
+const COCO = ['person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat',
+  'traffic light', 'fire hydrant', 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse',
+  'sheep', 'cow', 'elephant', 'bear', 'zebra', 'giraffe', 'backpack', 'umbrella', 'handbag', 'tie',
+  'suitcase', 'frisbee', 'skis', 'snowboard', 'sports ball', 'kite', 'baseball bat', 'baseball glove',
+  'skateboard', 'surfboard', 'tennis racket', 'bottle', 'wine glass', 'cup', 'fork', 'knife', 'spoon',
+  'bowl', 'banana', 'apple', 'sandwich', 'orange', 'broccoli', 'carrot', 'hot dog', 'pizza', 'donut',
+  'cake', 'chair', 'couch', 'potted plant', 'bed', 'dining table', 'toilet', 'tv', 'laptop', 'mouse',
+  'remote', 'keyboard', 'cell phone', 'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 'book',
+  'clock', 'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush'];
+
+// Test hooks for automated checks.
+window.modelReady = false;
+window.ortSource = null;
+window.lastResult = null;
+window.lastError = null;
+
+const $ = (id) => document.getElementById(id);
+const stage = document.querySelector('.stage');
+const video = $('video'), view = $('view'), hint = $('hint'), badge = $('badge');
+const startBtn = $('startBtn'), freezeBtn = $('freezeBtn'), testBtn = $('testBtn'), fileInput = $('fileInput');
+const confIn = $('conf'), nmsIn = $('nms'), iouIn = $('iou');
+const perClassBtn = $('perClassBtn'), agnosticBtn = $('agnosticBtn');
+let perClass = true;      // per-class NMS (default) or class-agnostic
+const viewCtx = view.getContext('2d');
+
+let ort = null, session = null;
+let stream = null, running = false, frozen = false, busy = false;
+let last = null;          // the last processed frame: {image, w, h, output, N, letterbox, source, inferMs}
+let fpsEma = null, lastDoneAt = null;
+
+function setStatus(msg, isErr) {
+  $('status').textContent = msg;
+  $('status').classList.toggle('err', !!isErr);
+}
+function fail(msg, err) {
+  window.lastError = String((err && err.message) || msg);
+  setStatus(msg + (err ? ' — ' + err.message : ''), true);
+  console.error(msg, err);
+}
+
+/* ------------------------------------------------------------------ *
+ * Preprocessing: letterbox to SIZE x SIZE (keep the aspect ratio, pad
+ * with grey 114 as Ultralytics does), RGB in [0, 1], NCHW float32.
+ * ------------------------------------------------------------------ */
+const prep = document.createElement('canvas');
+prep.width = prep.height = SIZE;
+const prepCtx = prep.getContext('2d', { willReadFrequently: true });
+
+function makeTensor(image, w, h) {
+  const scale = Math.min(SIZE / w, SIZE / h);
+  const nw = Math.round(w * scale), nh = Math.round(h * scale);
+  const padX = (SIZE - nw) / 2, padY = (SIZE - nh) / 2;
+  prepCtx.fillStyle = 'rgb(114,114,114)';
+  prepCtx.fillRect(0, 0, SIZE, SIZE);
+  prepCtx.imageSmoothingQuality = 'high';
+  prepCtx.drawImage(image, 0, 0, w, h, padX, padY, nw, nh);
+  const px = prepCtx.getImageData(0, 0, SIZE, SIZE).data;   // RGBA
+  const n = SIZE * SIZE, t = new Float32Array(3 * n);
+  for (let i = 0, j = 0; i < n; i++, j += 4) {
+    t[i] = px[j] / 255;
+    t[n + i] = px[j + 1] / 255;
+    t[2 * n + i] = px[j + 2] / 255;
+  }
+  return { tensor: new ort.Tensor('float32', t, [1, 3, SIZE, SIZE]), letterbox: { scale, padX, padY } };
+}
+
+/* ------------------------------------------------------------------ *
+ * Decoding the raw output. The tensor is 1 x 84 x N (N = 2100 at 320 px):
+ * for every candidate n, rows 0-3 are cx, cy, w, h in input pixels and
+ * rows 4-83 the 80 class scores. Element (row, n) is out[row * N + n].
+ * A candidate keeps its best class; it is kept if that score >= conf.
+ * ------------------------------------------------------------------ */
+function decode(out, N, conf, lb, w, h) {
+  const boxes = [];
+  for (let n = 0; n < N; n++) {
+    let cls = 0, score = out[4 * N + n];
+    for (let c = 1; c < 80; c++) {
+      const s = out[(4 + c) * N + n];
+      if (s > score) { score = s; cls = c; }
+    }
+    if (score < conf) continue;
+    const cx = out[n], cy = out[N + n], bw = out[2 * N + n], bh = out[3 * N + n];
+    // from the 320 x 320 letterboxed input back to the pixels of the original image
+    const x1 = (cx - bw / 2 - lb.padX) / lb.scale, y1 = (cy - bh / 2 - lb.padY) / lb.scale;
+    const x2 = (cx + bw / 2 - lb.padX) / lb.scale, y2 = (cy + bh / 2 - lb.padY) / lb.scale;
+    boxes.push({
+      x1: Math.max(0, x1), y1: Math.max(0, y1), x2: Math.min(w, x2), y2: Math.min(h, y2), score, cls,
+    });
+  }
+  return boxes;
+}
+
+/* ------------------------------------------------------------------ *
+ * Non-maximum suppression (greedy):
+ *   1. sort the boxes by score, highest first;
+ *   2. take the best remaining box and keep it;
+ *   3. remove every remaining box whose IoU with it is above the
+ *      threshold (per class: only boxes of the same class;
+ *      class-agnostic: any box);
+ *   4. repeat from 2 until no box remains.
+ * ------------------------------------------------------------------ */
+function iou(a, b) {
+  const iw = Math.max(0, Math.min(a.x2, b.x2) - Math.max(a.x1, b.x1));
+  const ih = Math.max(0, Math.min(a.y2, b.y2) - Math.max(a.y1, b.y1));
+  const inter = iw * ih;
+  const union = (a.x2 - a.x1) * (a.y2 - a.y1) + (b.x2 - b.x1) * (b.y2 - b.y1) - inter;
+  return union > 0 ? inter / union : 0;
+}
+
+function nms(boxes, iouThreshold, sameClassOnly) {
+  const remaining = boxes.slice().sort((a, b) => b.score - a.score);
+  const kept = [];
+  while (remaining.length > 0) {
+    const best = remaining.shift();
+    kept.push(best);
+    for (let i = remaining.length - 1; i >= 0; i--) {
+      if ((!sameClassOnly || remaining[i].cls === best.cls) && iou(best, remaining[i]) > iouThreshold) {
+        remaining.splice(i, 1);
+      }
+    }
+  }
+  return kept;
+}
+
+/* ------------------------------------------------------------------ *
+ * Drawing and the numbers. Re-run on every slider / switch change too,
+ * so a frozen frame or a photo can be explored without new inference.
+ * ------------------------------------------------------------------ */
+function colour(cls) { return 'hsl(' + ((cls * 47) % 360) + ', 85%, 55%)'; }
+
+function show() {
+  if (!last) return;
+  const conf = parseFloat(confIn.value), useNms = nmsIn.checked, iouThr = parseFloat(iouIn.value);
+  const candidates = decode(last.output, last.N, conf, last.letterbox, last.w, last.h);
+  const afterNms = nms(candidates, iouThr, perClass);
+  const shown = useNms ? afterNms : candidates;
+
+  if (view.width !== last.w || view.height !== last.h) {
+    view.width = last.w; view.height = last.h;
+    stage.style.aspectRatio = last.w + ' / ' + last.h;   // the stage takes the shape of the image
+  }
+  viewCtx.drawImage(last.image, 0, 0, last.w, last.h);
+  // the canvas is shown scaled (object-fit: contain): size the lines and labels in screen pixels
+  const k = Math.min(view.clientWidth / last.w, view.clientHeight / last.h) || 1;
+  const lw = 2 / k, fs = 13 / k;
+  viewCtx.lineWidth = lw;
+  viewCtx.font = fs + 'px system-ui, sans-serif';
+  viewCtx.textBaseline = 'top';
+  for (const b of shown) {
+    viewCtx.strokeStyle = colour(b.cls);
+    viewCtx.strokeRect(b.x1, b.y1, b.x2 - b.x1, b.y2 - b.y1);
+  }
+  for (const b of shown) {       // labels on top of all boxes
+    const text = COCO[b.cls] + ' ' + b.score.toFixed(2);
+    const tw = viewCtx.measureText(text).width + 2 * lw, th = fs * 1.3;
+    const ty = b.y1 - th >= 0 ? b.y1 - th : b.y1;
+    const tx = Math.max(0, Math.min(b.x1, last.w - tw));   // keep the label inside the image
+    viewCtx.fillStyle = colour(b.cls);
+    viewCtx.fillRect(tx, ty, tw, th);
+    viewCtx.fillStyle = '#000';
+    viewCtx.fillText(text, tx + lw, ty + 0.15 * fs);
+  }
+
+  $('nRaw').textContent = last.N;
+  $('nConf').textContent = candidates.length;
+  $('nNms').textContent = useNms ? afterNms.length : '(off)';
+  $('nFps').textContent = last.source === 'camera' && fpsEma ? fpsEma.toFixed(1) : '—';
+  $('meta').textContent = (frozen ? 'frozen ' : '') + last.source + ' · ' + last.w + ' × ' + last.h +
+    ' px · inference ' + last.inferMs.toFixed(0) + ' ms · showing ' + shown.length + ' boxes' +
+    (useNms ? '' : ' (NMS off: all ' + candidates.length + ' candidates above the confidence)');
+  const list = $('list');
+  list.innerHTML = '';
+  for (const b of shown.slice().sort((a, c) => c.score - a.score).slice(0, 50)) {
+    const li = document.createElement('li');
+    li.textContent = COCO[b.cls] + ' ' + b.score.toFixed(2);
+    list.appendChild(li);
+  }
+
+  window.lastResult = {
+    source: last.source, frozen, conf, nms: useNms, iou: iouThr, perClass, candidates: last.N,
+    aboveConf: candidates.length, afterNms: afterNms.length, fps: fpsEma, inferMs: last.inferMs,
+    detections: shown.map((b) => ({ name: COCO[b.cls], score: b.score,
+      box: [b.x1, b.y1, b.x2, b.y2].map(Math.round) })),
+  };
+}
+
+async function detect(image, w, h, source) {
+  const { tensor, letterbox } = makeTensor(image, w, h);
+  const t0 = performance.now();
+  const result = await session.run({ [session.inputNames[0]]: tensor });
+  const inferMs = performance.now() - t0;
+  const out = result[session.outputNames[0]];
+  if (source === 'camera' && !running) return;   // the camera was stopped meanwhile (e.g. a photo was opened)
+  // keep a copy of the frame, so that freezing and the slider redraw the same image
+  const copy = document.createElement('canvas');
+  copy.width = w; copy.height = h;
+  copy.getContext('2d').drawImage(image, 0, 0, w, h);
+  last = { image: copy, w, h, output: out.data, N: out.dims[2], letterbox, source, inferMs };
+  show();
+}
+
+/* ------------------------------------------------------------------ *
+ * Camera loop: the next frame starts when the previous one is done.
+ * ------------------------------------------------------------------ */
+function tick() {
+  if (!running) return;
+  requestAnimationFrame(tick);
+  if (busy || frozen || video.readyState < 2 || !video.videoWidth) return;
+  busy = true;
+  detect(video, video.videoWidth, video.videoHeight, 'camera')
+    .then(() => {
+      const now = performance.now();
+      if (lastDoneAt !== null) {
+        const fps = 1000 / (now - lastDoneAt);
+        fpsEma = fpsEma === null ? fps : 0.8 * fpsEma + 0.2 * fps;
+        $('nFps').textContent = fpsEma.toFixed(1);
+        if (window.lastResult) window.lastResult.fps = fpsEma;
+      }
+      lastDoneAt = now;
+    })
+    .catch((e) => fail('Inference failed', e))
+    .finally(() => { busy = false; });
+}
+
+function setFrozen(on) {
+  frozen = on;
+  freezeBtn.textContent = on ? 'Resume' : 'Freeze frame';
+  freezeBtn.classList.toggle('on', on);
+  badge.textContent = on ? 'frozen' : 'live';
+  lastDoneAt = null;
+  show();
+}
+
+async function startCamera() {
+  if (stream) { stopCamera(); return; }
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    fail('This browser has no camera support — use the photo upload below.');
+    return;
+  }
+  if (!window.isSecureContext) {
+    fail('The camera needs HTTPS (or localhost) — use the photo upload below.');
+    return;
+  }
+  startBtn.disabled = true;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: 'environment' }, width: { ideal: 640 }, height: { ideal: 480 } },
+      audio: false,
+    });
+    video.srcObject = stream;
+    await video.play().catch(() => {});
+    running = true;
+    fpsEma = null; lastDoneAt = null;
+    setFrozen(false);
+    hint.hidden = true;
+    badge.hidden = false;
+    freezeBtn.disabled = false;
+    startBtn.textContent = 'Stop camera';
+    setStatus('Camera on. Freeze a frame to explore the confidence and NMS on it.');
+    requestAnimationFrame(tick);
+  } catch (e) {
+    stream = null;
+    fail(e && e.name === 'NotAllowedError'
+      ? 'Camera permission denied — allow it in the site settings, or use the photo upload below.'
+      : 'Could not start the camera — use the photo upload below', e);
+  } finally {
+    startBtn.disabled = false;
+  }
+}
+
+function stopCamera() {
+  running = false;
+  if (stream) stream.getTracks().forEach((t) => t.stop());
+  stream = null;
+  video.srcObject = null;
+  freezeBtn.disabled = true;
+  badge.hidden = true;
+  startBtn.textContent = 'Start camera';
+  setStatus('Camera stopped.');
+}
+
+// a still image (test image or photo): pause the camera loop and show the image
+async function detectStill(bitmap, label) {
+  if (stream) { running = false; stopCamera(); }
+  hint.hidden = true;
+  badge.hidden = false;
+  badge.textContent = 'photo';
+  frozen = false;
+  await detect(bitmap, bitmap.width, bitmap.height, label);
+}
+
+testBtn.addEventListener('click', async () => {
+  testBtn.disabled = true;
+  try {
+    const r = await fetch('test/bus.jpg');
+    if (!r.ok) throw new Error('test/bus.jpg -> HTTP ' + r.status);
+    await detectStill(await createImageBitmap(await r.blob()), 'test image');
+    setStatus('Test image: at confidence 0.25 with NMS on, the expected result is 1 bus + 4 persons.');
+  } catch (e) {
+    fail('Test image failed', e);
+  } finally {
+    testBtn.disabled = false;
+  }
+});
+
+fileInput.addEventListener('change', async (ev) => {
+  const file = ev.target.files && ev.target.files[0];
+  if (!file) return;
+  try {
+    let bmp;
+    try { bmp = await createImageBitmap(file, { imageOrientation: 'from-image' }); }
+    catch (e) { bmp = await createImageBitmap(file); }
+    await detectStill(bmp, 'photo');
+    setStatus('Photo: ' + file.name);
+  } catch (e) {
+    fail('Could not read that image', e);
+  } finally {
+    fileInput.value = '';
+  }
+});
+
+confIn.addEventListener('input', () => { $('confOut').textContent = (+confIn.value).toFixed(2); show(); });
+nmsIn.addEventListener('change', () => { syncNmsUi(); show(); });
+iouIn.addEventListener('input', () => { syncNmsUi(); show(); });
+function setMode(on) { perClass = on; syncNmsUi(); show(); }
+perClassBtn.addEventListener('click', () => setMode(true));
+agnosticBtn.addEventListener('click', () => setMode(false));
+function syncNmsUi() {
+  const v = (+iouIn.value).toFixed(2);
+  $('iouOut').textContent = v;
+  $('iouTxt').textContent = v;
+  $('scopeTxt').textContent = perClass ? 'of the same class' : 'of any class';
+  perClassBtn.classList.toggle('on', perClass);
+  agnosticBtn.classList.toggle('on', !perClass);
+  perClassBtn.setAttribute('aria-pressed', perClass);
+  agnosticBtn.setAttribute('aria-pressed', !perClass);
+  iouIn.disabled = perClassBtn.disabled = agnosticBtn.disabled = !nmsIn.checked;
+}
+window.addEventListener('resize', show);   // the label size follows the size on screen
+freezeBtn.addEventListener('click', () => setFrozen(!frozen));
+startBtn.addEventListener('click', startCamera);   // the camera is requested only on a click
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) running = false;
+  else if (stream && !running) { running = true; lastDoneAt = null; requestAnimationFrame(tick); }
+});
+iouIn.value = IOU_DEFAULT;
+syncNmsUi();
+$('ortVer').textContent = ORT_VERSION;
+
+/* ------------------------------------------------------------------ *
+ * Loading: the runtime (jsDelivr, else the local copy), then the model
+ * ------------------------------------------------------------------ */
+(async () => {
+  try {
+    setStatus('Downloading the model (10 MB) and ONNX Runtime Web (15 MB, cached afterwards)…');
+    const modelBytes = fetch(MODEL_URL).then((r) => {
+      if (!r.ok) throw new Error(MODEL_URL + ' -> HTTP ' + r.status);
+      return r.arrayBuffer();
+    });
+    let lastErr = null;
+    for (const src of ORT_SOURCES) {
+      try {
+        ort = await import(src.base + 'ort.wasm.bundle.min.mjs');
+        ort.env.wasm.wasmPaths = src.base;
+        // GitHub Pages is not cross-origin isolated: one thread, no failed attempt at more
+        if (!window.crossOriginIsolated) ort.env.wasm.numThreads = 1;
+        session = await ort.InferenceSession.create(new Uint8Array(await modelBytes),
+          { executionProviders: ['wasm'], graphOptimizationLevel: 'all' });
+        window.ortSource = src.name;
+        break;
+      } catch (e) {
+        lastErr = e;
+        console.warn('ONNX Runtime from ' + src.name + ' failed', e);
+      }
+    }
+    if (!session) throw lastErr;
+    window.modelReady = true;
+    startBtn.disabled = testBtn.disabled = fileInput.disabled = false;
+    setStatus('Ready (runtime from ' + window.ortSource + '). Start the camera, or try the test image.');
+  } catch (e) {
+    fail('Could not load the detector', e);
+  }
+})();
+</script>
+</body>
+</html>
